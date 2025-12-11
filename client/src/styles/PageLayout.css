@@ -1,0 +1,107 @@
+/* Estilos compartidos para páginas internas */
+.page-container {
+  position: relative;
+  padding: 2rem 0;
+  background: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.page-section {
+  position: relative;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(21, 87, 36, 0.25), 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 3px solid #28a745;
+  border-left: 8px solid #155724;
+  transition: all 0.3s ease;
+  margin-bottom: 2rem;
+  z-index: 1;
+}
+
+.page-section:hover {
+  box-shadow: 0 4px 20px rgba(21, 87, 36, 0.15);
+  transform: translateY(-2px);
+}
+
+.page-section h2 {
+  color: #155724;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #28a745;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.page-section h2::before {
+  content: '';
+  width: 6px;
+  height: 30px;
+  background: linear-gradient(180deg, #28a745 0%, #20c997 100%);
+  border-radius: 3px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #155724 0%, #28a745 50%, #20c997 100%);
+  border-radius: 16px;
+  border-left: 6px solid #f4ff10;
+  box-shadow: 0 8px 24px rgba(21, 87, 36, 0.3);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  color: #ffffff;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(244, 255, 16, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-section {
+    padding: 1.5rem;
+  }
+  
+  .page-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+}
+

@@ -1,0 +1,166 @@
+.pqrsd-page {
+  padding: 2rem 0;
+}
+
+.pqrsd-info {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border-left: 4px solid #28a745;
+}
+
+.pqrsd-info p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.pqrsd-info ul {
+  margin-left: 1.5rem;
+  margin-top: 1rem;
+}
+
+.pqrsd-info li {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.pqrsd-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #155724;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #28a745;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  margin-top: 0.2rem;
+  cursor: pointer;
+}
+
+.checkbox-group a {
+  color: #28a745;
+  text-decoration: underline;
+}
+
+.btn-primary {
+  background: #28a745;
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-primary:hover {
+  background: #155724;
+}
+
+.pqrsd-success {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.pqrsd-success h2 {
+  color: #155724;
+  margin-bottom: 1rem;
+}
+
+.pqrsd-success p {
+  margin-bottom: 0.5rem;
+}
+
+.pqrsd-contact {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.pqrsd-contact h3 {
+  color: #155724;
+  margin-bottom: 1rem;
+}
+
+.pqrsd-contact p {
+  line-height: 1.8;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .pqrsd-form {
+    padding: 1.5rem;
+  }
+}
+
+
+
+
+
+
+
+

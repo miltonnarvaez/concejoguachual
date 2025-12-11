@@ -1,0 +1,93 @@
+.logo-texto-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.logo-texto-image {
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.logo-texto-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  padding: 15px 25px;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.logo-texto-line {
+  line-height: 1;
+  font-weight: bold;
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  margin: 0;
+}
+
+.logo-texto-line-1 {
+  font-size: 42px;
+  color: #28a745;
+  margin-bottom: 2px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+
+.logo-texto-line-2 {
+  font-size: 30px;
+  color: #28a745;
+  margin-bottom: 10px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 3px;
+}
+
+.logo-texto-line-3 {
+  font-size: 0;
+  line-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.logo-texto-bar {
+  display: inline-block;
+  background: #ffc107;
+  color: #000;
+  padding: 10px 25px;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  line-height: 1.2;
+  box-shadow: none;
+  text-shadow: none;
+  /* El texto amarillo sobre barra amarilla - mismo color pero más oscuro para contraste */
+  color: #cc9900;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .logo-texto-image {
+    height: 50px;
+  }
+  
+  .logo-texto-line-1 {
+    font-size: 22px;
+  }
+  
+  .logo-texto-line-2 {
+    font-size: 18px;
+  }
+  
+  .logo-texto-line-3 {
+    font-size: 16px;
+  }
+}
+

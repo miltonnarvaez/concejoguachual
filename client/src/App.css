@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 0;
+}
+
+/* Estilos de accesibilidad */
+body.high-contrast {
+  background: #000;
+  color: #fff;
+}
+
+body.high-contrast a {
+  color: #ffff00;
+}
+
+/* Alto contraste - Header y menú */
+body.high-contrast .header {
+  background: #000 !important;
+  border-bottom: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .header-top-bar {
+  background: #000 !important;
+  border-bottom: 1px solid #ffff00 !important;
+}
+
+body.high-contrast .header-nav {
+  background: #000 !important;
+  border-top: 1px solid #ffff00 !important;
+  border-bottom: 1px solid #ffff00 !important;
+}
+
+body.high-contrast .nav-link {
+  color: #ffff00 !important;
+  background: #000 !important;
+}
+
+body.high-contrast .nav-link:hover,
+body.high-contrast .nav-item.active .nav-link {
+  color: #000 !important;
+  background: #ffff00 !important;
+}
+
+body.high-contrast .nav-submenu {
+  background: #000 !important;
+  border: 2px solid #ffff00 !important;
+}
+
+body.high-contrast .nav-sublink {
+  color: #ffff00 !important;
+  background: #000 !important;
+  border-bottom: 1px solid #ffff00 !important;
+}
+
+body.high-contrast .nav-sublink:hover {
+  color: #000 !important;
+  background: #ffff00 !important;
+}
+
+body.high-contrast .top-bar-phone,
+body.high-contrast .top-bar-email,
+body.high-contrast .gov-co-logo {
+  color: #ffff00 !important;
+}
+
+body.readable-font {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+}
+
+body.underline-links a {
+  text-decoration: underline;
+}
+
+body.underline-links a:hover {
+  text-decoration: underline;
+}

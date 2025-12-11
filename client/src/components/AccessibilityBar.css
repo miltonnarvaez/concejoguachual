@@ -1,0 +1,209 @@
+.accessibility-bar {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.accessibility-toggle {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.6rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  letter-spacing: 0.2px;
+  position: relative;
+  z-index: 2001;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  line-height: 1;
+}
+
+.accessibility-toggle::before {
+  content: '♿';
+  font-size: 0.75rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.accessibility-toggle:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 123, 255, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.accessibility-toggle:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.accessibility-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  min-width: 240px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  z-index: 2002;
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.accessibility-option {
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #212529;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: 0.1px;
+  font-weight: 500;
+}
+
+.accessibility-option svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.accessibility-option:hover {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-color: #007bff;
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+}
+
+.accessibility-option.active {
+  background: linear-gradient(135deg, #e7f3ff 0%, #d0e7ff 100%);
+  border-color: #007bff;
+  font-weight: 600;
+  color: #0056b3;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.15);
+}
+
+.accessibility-option.reset {
+  background: #ffc107;
+  color: #155724;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.accessibility-option.reset:hover {
+  background: #ffca2c;
+}
+
+.voice-indicator {
+  color: #28a745;
+  margin-left: 0.5rem;
+  animation: pulse 1.5s ease infinite;
+}
+
+.voice-listening-text {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #e7f3e7;
+  border: 1px solid #28a745;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.voice-listening-label {
+  font-weight: 600;
+  color: #155724;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.voice-listening-content {
+  color: #155724;
+  font-style: italic;
+  min-height: 1.2rem;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 768px) {
+  .accessibility-bar {
+    top: 10px;
+    right: 10px;
+    align-items: flex-end;
+  }
+
+  .accessibility-toggle {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.6rem;
+    width: auto;
+    min-width: auto;
+    border-radius: 50px;
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+  }
+
+  .accessibility-toggle::before {
+    font-size: 0.7rem;
+  }
+
+  .accessibility-menu {
+    min-width: calc(100vw - 20px);
+    max-width: 300px;
+    right: 0;
+    left: auto;
+    bottom: calc(100% + 0.5rem);
+    border-radius: 12px;
+    padding: 0.75rem;
+  }
+
+  .accessibility-option {
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .accessibility-option svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+

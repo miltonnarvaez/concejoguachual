@@ -1,0 +1,136 @@
+.noticias-page {
+  position: relative;
+  background: #ffffff;
+}
+
+.page-header-icon {
+  font-size: 4rem;
+  opacity: 0.9;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.page-header h1 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.page-header p {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.noticias-page {
+  padding: 2rem 0;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  color: #155724;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.search-bar {
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: block;
+  padding: 1rem;
+  font-size: 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #28a745;
+}
+
+.noticias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.noticia-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.noticia-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.noticia-card-image {
+  width: 100%;
+  height: 250px;
+}
+
+.noticia-card-image .noticia-image,
+.noticia-card-image .noticia-image-placeholder {
+  height: 250px;
+}
+
+.noticia-content {
+  padding: 1.5rem;
+}
+
+.noticia-fechas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.noticia-fecha {
+  color: #6c757d;
+  font-size: 0.9rem;
+  display: block;
+}
+
+.noticia-actualizacion {
+  color: #28a745;
+  font-size: 0.85rem;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.noticia-content h2 {
+  color: #155724;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.noticia-content p {
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.loading,
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+@media (max-width: 768px) {
+  .noticias-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
