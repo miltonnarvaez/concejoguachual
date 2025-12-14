@@ -109,7 +109,7 @@ const Footer = () => {
           <div className="footer-bottom-links">
             <Link to="/acerca" onClick={handleLinkClick}>Acerca del Concejo</Link>
             <Link to="/noticias" onClick={handleLinkClick}>Noticias</Link>
-            <Link to="/#contacto" onClick={handleLinkClick}>Contáctenos</Link>
+            <Link to="/contacto" onClick={handleLinkClick}>Contáctenos</Link>
             <Link to="/mapa-sitio" onClick={handleLinkClick}>Mapa del sitio</Link>
             <Link to="/politica-privacidad" onClick={handleLinkClick}>Política de Privacidad</Link>
             <Link to="/tratamiento-datos" onClick={handleLinkClick}>Tratamiento de Datos</Link>

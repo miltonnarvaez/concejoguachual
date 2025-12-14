@@ -17,3 +17,6 @@ ADD COLUMN IF NOT EXISTS documentos_adicionales TEXT DEFAULT NULL COMMENT 'JSON 
 
 
 
+
+
+

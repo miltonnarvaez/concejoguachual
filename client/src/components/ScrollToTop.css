@@ -4,7 +4,7 @@
   right: 2rem;
   width: 50px;
   height: 50px;
-  background: #045518;
+  background: var(--color-primary, #155724);
   color: #ffffff;
   border: none;
   border-radius: 50%;
@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  box-shadow: 0 4px 12px rgba(4, 85, 24, 0.4);
+  box-shadow: 0 4px 12px rgba(21, 87, 36, 0.4);
   z-index: 1000;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 0;
@@ -27,9 +27,9 @@
 }
 
 .scroll-to-top:hover {
-  background: #2e7d32;
+  background: var(--color-primary-dark, #0d3d1a);
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(4, 85, 24, 0.5);
+  box-shadow: 0 6px 16px rgba(21, 87, 36, 0.5);
 }
 
 .scroll-to-top:active {
@@ -50,6 +50,9 @@
     font-size: 1.3rem;
   }
 }
+
+
+
 
 
 

@@ -136,7 +136,7 @@ const Header = () => {
     },
     {
       label: t('menu.contacto'),
-      path: '/#contacto',
+      path: '/contacto',
       hasSubmenu: false
     }
   ];
@@ -286,7 +286,6 @@ const Header = () => {
 
   return (
     <header className={`header ${isScrolled ? 'header-hidden' : ''}`} ref={menuRef}>
-      <TexturePattern />
       {/* Franja superior delgada */}
       <div className="header-top-bar">
         <div className="top-bar-container">

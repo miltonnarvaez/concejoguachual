@@ -278,10 +278,117 @@ Este es un email automático, por favor no responda a este mensaje.
   }
 }
 
+/**
+ * Enviar email de contacto general
+ */
+async function enviarEmailContacto(datos) {
+  const { nombre, email, telefono, asunto, mensaje, ipAddress, fecha } = datos;
+
+  // Si no hay configuración de email, no intentar enviar
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
+    console.log('⚠️  Email no enviado: configuración SMTP no disponible');
+    return { enviado: false, motivo: 'Configuración SMTP no disponible' };
+  }
+
+  const emailFrom = process.env.SMTP_FROM || process.env.SMTP_USER;
+  const emailContacto = process.env.EMAIL_CONTACTO || process.env.SMTP_USER;
+  const nombreConcejo = process.env.NOMBRE_CONCEJO || 'Concejo Municipal de Guachucal';
+
+  const mailOptions = {
+    from: `"${nombreConcejo}" <${emailFrom}>`,
+    to: emailContacto,
+    replyTo: email,
+    subject: `Nuevo mensaje de contacto: ${asunto}`,
+    html: `
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Nuevo Mensaje de Contacto</title>
+      </head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #155724 0%, #28a745 100%); color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+          <h1 style="margin: 0; font-size: 24px;">${nombreConcejo}</h1>
+          <p style="margin: 10px 0 0 0; font-size: 14px;">Nuevo Mensaje de Contacto</p>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 8px 8px; border: 1px solid #e0e0e0;">
+          <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+            <h2 style="margin-top: 0; color: #155724;">Información del Remitente</h2>
+            <p style="margin: 10px 0;"><strong>Nombre:</strong> ${nombre}</p>
+            <p style="margin: 10px 0;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            <p style="margin: 10px 0;"><strong>Teléfono:</strong> ${telefono}</p>
+            <p style="margin: 10px 0;"><strong>Fecha:</strong> ${fecha}</p>
+            <p style="margin: 10px 0;"><strong>IP:</strong> ${ipAddress}</p>
+          </div>
+          
+          <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #007bff;">
+            <h3 style="margin-top: 0; color: #004085;">Asunto:</h3>
+            <p style="font-size: 18px; font-weight: bold; color: #333;">${asunto}</p>
+          </div>
+          
+          <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 20px;">
+            <h3 style="margin-top: 0; color: #004085;">Mensaje:</h3>
+            <div style="white-space: pre-wrap; color: #333; line-height: 1.8;">${mensaje}</div>
+          </div>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="mailto:${email}" 
+               style="background: #155724; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+              Responder a ${nombre}
+            </a>
+          </div>
+          
+          <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">
+          
+          <p style="font-size: 12px; color: #999; margin-top: 30px; text-align: center;">
+            Este es un email automático generado desde el formulario de contacto del sitio web.
+          </p>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+${nombreConcejo}
+Nuevo Mensaje de Contacto
+
+Información del Remitente:
+Nombre: ${nombre}
+Email: ${email}
+Teléfono: ${telefono}
+Fecha: ${fecha}
+IP: ${ipAddress}
+
+Asunto: ${asunto}
+
+Mensaje:
+${mensaje}
+
+---
+Responder a: ${email}
+    `
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('✅ Email de contacto enviado desde:', email);
+    console.log('   Asunto:', asunto);
+    return { enviado: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('❌ Error enviando email de contacto:', error.message);
+    return { enviado: false, error: error.message };
+  }
+}
+
 module.exports = {
   enviarConfirmacionPQRSD,
-  enviarRespuestaPQRSD
+  enviarRespuestaPQRSD,
+  enviarEmailContacto
 };
+
+
+
 
 
 

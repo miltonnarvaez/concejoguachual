@@ -170,7 +170,17 @@ const Home = () => {
       </AnimatedSection>
 
       {/* Contacto */}
-      <AnimatedSection id="contacto" className="section contacto" animationType="fadeInUp">
+      <AnimatedSection 
+        id="contacto" 
+        className="section contacto" 
+        animationType="fadeInUp"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3840&q=100')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="container">
           <h2 className="section-title">{t('home.contacto')}</h2>
           <div className="contacto-content">
@@ -180,11 +190,19 @@ const Home = () => {
               <p>✉️ contacto@concejo.guachucal.gov.co</p>
               <p>🕐 Lunes a Viernes: 8:00 AM - 12:00 PM y 2:00 PM - 6:00 PM</p>
             </div>
-            <div className="contacto-pqrs">
-              <p className="contacto-pqrs-text">¿Tiene alguna petición, queja, reclamo, sugerencia o denuncia?</p>
-              <Link to="/pqrsd" className="btn btn-pqrs">
-                Envíe su PQRS aquí →
-              </Link>
+            <div className="contacto-actions">
+              <div className="contacto-pqrs">
+                <p className="contacto-pqrs-text">¿Tiene alguna petición, queja, reclamo, sugerencia o denuncia?</p>
+                <Link to="/pqrsd" className="btn btn-pqrs">
+                  Envíe su PQRS aquí →
+                </Link>
+              </div>
+              <div className="contacto-form-link">
+                <p className="contacto-form-text">¿Tiene alguna consulta o mensaje general?</p>
+                <Link to="/contacto" className="btn btn-contacto">
+                  Enviar Mensaje de Contacto →
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -426,7 +444,16 @@ const Home = () => {
       </AnimatedSection>
 
       {/* Ubicación */}
-      <AnimatedSection className="section ubicacion" animationType="slideUpFade">
+      <AnimatedSection 
+        className="section ubicacion" 
+        animationType="slideUpFade"
+        style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3840&q=100')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
         <div className="container">
           <div className="ubicacion-content">
             <div className="ubicacion-left">

@@ -32,6 +32,7 @@ app.use('/api/tramites', require('./routes/tramites'));
 app.use('/api/busqueda', require('./routes/busqueda'));
 app.use('/api/opiniones', require('./routes/opiniones'));
 app.use('/api/foros', require('./routes/foros'));
+app.use('/api/contacto', require('./routes/contacto'));
 
 // Ruta raíz
 app.get('/', (req, res) => {

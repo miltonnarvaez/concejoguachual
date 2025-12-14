@@ -52,6 +52,7 @@ import AdminForos from './pages/admin/AdminForos';
 import Tramites from './pages/Tramites';
 import Foros from './pages/Foros';
 import ForoDetalle from './pages/ForoDetalle';
+import Contacto from './pages/Contacto';
 
 function App() {
   return (
@@ -85,6 +86,7 @@ function App() {
           <Route path="/tratamiento-datos" element={<TratamientoDatos />} />
           <Route path="/mapa-sitio" element={<MapaSitio />} />
           <Route path="/busqueda" element={<Busqueda />} />
+          <Route path="/contacto" element={<Contacto />} />
           
           {/* Rutas de administración */}
           <Route path="/admin/login" element={<AdminLogin />} />

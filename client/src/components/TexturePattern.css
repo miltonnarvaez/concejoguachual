@@ -6,11 +6,10 @@
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.15;
+  opacity: 0.08;
 }
 
 .header .texture-pattern {
-  z-index: 1;
-  opacity: 0.2;
+  display: none; /* Ocultar en el header para que se vea más limpio */
 }
 

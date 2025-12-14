@@ -1,6 +1,6 @@
 .language-selector {
   position: relative;
-  z-index: 10002;
+  z-index: 10010;
   isolation: isolate;
 }
 
@@ -50,7 +50,7 @@
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
   min-width: 180px;
-  z-index: 10003;
+  z-index: 10011;
   overflow: visible;
   display: flex;
   flex-direction: column;

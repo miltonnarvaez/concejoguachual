@@ -81,3 +81,6 @@ sudo tail -f /var/log/nginx/error.log  # Ver logs de errores
 - Verifica que el backend esté corriendo: `pm2 list`
 - Verifica el puerto: `sudo netstat -tlnp | grep 5000`
 
+
+
+
