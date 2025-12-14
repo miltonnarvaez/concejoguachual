@@ -96,8 +96,15 @@ sudo mysql -u concejo_user -p concejo_guachucal < transparencia_categorias.sql
 
 ```bash
 cd /var/www/concejoguachual/client
-npm run build
+npm run build:prod
 ```
+
+**Nota:** Si el build falla por falta de memoria, usar:
+```bash
+NODE_OPTIONS="--max-old-space-size=4096" npm run build
+```
+
+Esto aumenta el límite de memoria de Node.js a 4GB para evitar errores durante el proceso de compilación.
 
 Esto creará la carpeta `build` con los archivos estáticos.
 
@@ -197,9 +204,15 @@ sudo tail -f /var/log/nginx/concejo_error.log
 ```bash
 cd /var/www/concejoguachual
 git pull origin main
-cd client && npm install && npm run build
+cd client && npm install && npm run build:prod
 cd ../server && npm install
 pm2 restart concejo-backend
+```
+
+**Nota:** Si el build falla por falta de memoria, usar:
+```bash
+cd client
+NODE_OPTIONS="--max-old-space-size=4096" npm run build
 ```
 
 

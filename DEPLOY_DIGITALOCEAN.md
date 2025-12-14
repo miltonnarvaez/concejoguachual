@@ -102,8 +102,15 @@ sudo mysql -u tu_usuario -p concejo_guachucal < usuarios_permisos.sql
 
 ```bash
 cd /var/www/concejoguachual/client
-npm run build
+npm run build:prod
 ```
+
+**Nota:** Si el build falla por falta de memoria, usar:
+```bash
+NODE_OPTIONS="--max-old-space-size=4096" npm run build
+```
+
+Esto aumenta el límite de memoria de Node.js a 4GB para evitar errores durante el proceso de compilación.
 
 ### 9. Configurar Nginx (Recomendado)
 
@@ -187,7 +194,7 @@ cd server
 npm install
 cd ../client
 npm install
-npm run build
+npm run build:prod
 pm2 restart concejo-backend
 echo "Actualización completada"
 ```
