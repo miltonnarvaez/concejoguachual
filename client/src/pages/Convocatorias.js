@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import api from '../services/api';
 import NoticiaImage from '../components/NoticiaImage';
 import { getImageByIndex } from '../utils/exampleImages';
+import { FaStar } from 'react-icons/fa';
 import './Convocatorias.css';
 
 const Convocatorias = () => {
@@ -40,7 +41,7 @@ const Convocatorias = () => {
                   />
                   <div className="convocatoria-content">
                     {convocatoria.destacada && (
-                      <span className="convocatoria-destacada">⭐ Destacada</span>
+                      <span className="convocatoria-destacada"><FaStar /> Destacada</span>
                     )}
                     <h2>{convocatoria.titulo}</h2>
                     <p>{convocatoria.descripcion}</p>

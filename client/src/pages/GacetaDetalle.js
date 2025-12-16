@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '../services/api';
 import { getFileUrl } from '../utils/fileUtils';
 import FormularioOpinionProyecto from '../components/FormularioOpinionProyecto';
+import { FaFileAlt } from 'react-icons/fa';
 import './GacetaDetalle.css';
 
 const GacetaDetalle = () => {
@@ -80,7 +81,7 @@ const GacetaDetalle = () => {
                 rel="noopener noreferrer"
                 className="btn btn-download"
               >
-                📄 Ver/Descargar Documento
+                <FaFileAlt /> Ver/Descargar Documento
               </a>
             </div>
           )}
@@ -153,6 +154,10 @@ const GacetaDetalle = () => {
 };
 
 export default GacetaDetalle;
+
+
+
+
 
 
 

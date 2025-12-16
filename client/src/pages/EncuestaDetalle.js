@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import api from '../services/api';
+import FormField from '../components/FormField';
+import { useToast } from '../context/ToastContext';
 import './EncuestaDetalle.css';
 
 const EncuestaDetalle = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [respuestas, setRespuestas] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formProgress, setFormProgress] = useState(0);
 
   const { data: encuesta, isLoading } = useQuery({
     queryKey: ['encuesta', id],
@@ -32,14 +36,23 @@ const EncuestaDetalle = () => {
       return await api.post(`/encuestas/${id}/respuestas`, data);
     },
     onSuccess: () => {
-      alert('¡Gracias por participar! Tus respuestas han sido registradas.');
+      showToast('¡Gracias por participar! Tus respuestas han sido registradas.', 'success');
       navigate('/encuestas');
     },
     onError: (error) => {
       console.error('Error enviando respuestas:', error);
-      alert('Error al enviar las respuestas. Por favor, intenta nuevamente.');
+      const errorMsg = error.response?.data?.error || 'Error al enviar las respuestas. Por favor, intenta nuevamente.';
+      showToast(errorMsg, 'error');
     }
   });
+
+  // Calcular progreso del formulario
+  useEffect(() => {
+    if (!encuesta || !encuesta.preguntas) return;
+    const requiredQuestions = encuesta.preguntas.filter(p => p.requerida);
+    const answeredRequired = requiredQuestions.filter(p => respuestas[p.id] && respuestas[p.id].toString().trim() !== '').length;
+    setFormProgress(requiredQuestions.length > 0 ? Math.round((answeredRequired / requiredQuestions.length) * 100) : 0);
+  }, [respuestas, encuesta]);
 
   const handleRespuestaChange = (preguntaId, valor) => {
     setRespuestas(prev => ({
@@ -200,6 +213,18 @@ const EncuestaDetalle = () => {
           )}
 
           <form onSubmit={handleSubmit} className="encuesta-form">
+            {/* Progress Indicator */}
+            {formProgress > 0 && (
+              <div className="form-progress-container">
+                <div className="form-progress-bar">
+                  <div 
+                    className="form-progress-fill" 
+                    style={{ width: `${formProgress}%` }}
+                  ></div>
+                </div>
+                <span className="form-progress-text">{formProgress}% completado</span>
+              </div>
+            )}
             {encuesta.preguntas && encuesta.preguntas.map((pregunta, index) => (
               <div key={pregunta.id} className="pregunta-item">
                 <label className="pregunta-label">

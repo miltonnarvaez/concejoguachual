@@ -16,15 +16,23 @@ const AdminLogin = () => {
     setError('');
     setLoading(true);
 
-    const result = await login(email, password);
+    try {
+      const result = await login(email, password);
 
-    if (result.success) {
-      navigate('/admin');
-    } else {
-      setError(result.error);
+      if (result.success) {
+        navigate('/admin');
+      } else {
+        // Mostrar mensaje de error más específico
+        const errorMsg = result.error || 'Error al iniciar sesión. Verifica tus credenciales.';
+        setError(errorMsg);
+        console.error('Error de login:', result.error);
+      }
+    } catch (err) {
+      console.error('Error inesperado:', err);
+      setError('Error de conexión. Verifica que el servidor esté corriendo.');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -63,6 +71,10 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
+
+
+
+
 
 
 

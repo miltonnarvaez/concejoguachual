@@ -7,6 +7,15 @@ import Escudo from './Escudo';
 import LogoTexto from './LogoTexto';
 import TexturePattern from './TexturePattern';
 import api from '../services/api';
+import { 
+  FaHome, FaBuilding, FaNewspaper, FaFileAlt, FaSearch, FaUsers, FaCog,
+  FaBullseye, FaEye, FaUserFriends, FaHistory, FaPhone, FaMonument,
+  FaList, FaGavel, FaFileContract, FaBook, FaBalanceScale, FaClipboardList,
+  FaDollarSign, FaHandshake, FaChartLine, FaFileInvoiceDollar, FaShieldAlt,
+  FaFileSignature, FaSitemap, FaProjectDiagram, FaGavel as FaLaw, FaUserCog,
+  FaClipboardCheck, FaLandmark, FaUser, FaImages, FaCalendarAlt, FaComments, FaEnvelope,
+  FaCheckCircle, FaTimes, FaBars
+} from 'react-icons/fa';
 import './Header.css';
 
 const Header = () => {
@@ -16,9 +25,12 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [focusedIndex, setFocusedIndex] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileActiveSubmenu, setMobileActiveSubmenu] = useState(null);
   const menuRef = useRef(null);
   const timeoutRef = useRef(null);
   const menuItemRefs = useRef([]);
+  const megaMenuRefs = useRef([]);
 
   const { data: config = {} } = useQuery({
     queryKey: ['configuracion'],
@@ -32,142 +44,176 @@ const Header = () => {
     {
       label: t('menu.inicio'),
       path: '/',
-      hasSubmenu: false
+      hasSubmenu: false,
+      icon: FaHome
     },
     {
       label: t('menu.acerca'),
       path: '/acerca',
       hasSubmenu: true,
+      icon: FaBuilding,
+      description: 'Conoce el Concejo',
       submenu: [
-        { label: '🎯 Misión', path: '/acerca#mision' },
-        { label: '🌟 Visión', path: '/acerca#vision' },
-        { label: '👥 Autoridades', path: '/acerca#autoridades' },
-        { label: '📜 Historia', path: '/acerca#historia' },
-        { label: '📞 Contacto', path: '/acerca#contacto' },
-        { label: '🏛️ Símbolos', path: '/acerca#simbolos' }
+        { label: 'Misión', path: '/acerca#mision', icon: FaBullseye },
+        { label: 'Visión', path: '/acerca#vision', icon: FaEye },
+        { label: 'Estructura Jerárquica', path: '/acerca#estructura', icon: FaSitemap },
+        { label: 'Autoridades', path: '/acerca#autoridades', icon: FaUserFriends },
+        { label: 'Historia', path: '/historia', icon: FaHistory },
+        { label: 'Plan de Acción 2025', path: '/plan-accion', icon: FaFileAlt },
+        { label: 'Contacto', path: '/acerca#contacto', icon: FaPhone },
+        { label: 'Símbolos', path: '/acerca#simbolos', icon: FaMonument }
       ]
     },
     {
       label: t('menu.noticias'),
       path: '/noticias',
       hasSubmenu: true,
+      icon: FaNewspaper,
+      description: 'Información y actualidad',
       submenu: [
-        { label: '📰 Todas las Noticias', path: '/noticias' },
-        { label: '📄 Noticias Generales', path: '/noticias?categoria=Noticias' },
-        { label: '📋 Sesiones del Concejo', path: '/noticias?categoria=Sesiones' },
-        { label: '📜 Acuerdos y Resoluciones', path: '/noticias?categoria=Acuerdos' },
-        { label: '📢 Comunicados Oficiales', path: '/noticias?categoria=Comunicados' },
-        { label: '🎉 Eventos y Actividades', path: '/noticias?categoria=Eventos' },
-        { label: '🏛️ Institucional', path: '/noticias?categoria=Institucional' }
+        { label: 'Todas las Noticias', path: '/noticias', icon: FaNewspaper },
+        { label: 'Noticias Generales', path: '/noticias?categoria=Noticias', icon: FaFileAlt },
+        { label: 'Sesiones del Concejo', path: '/noticias?categoria=Sesiones', icon: FaList },
+        { label: 'Acuerdos y Resoluciones', path: '/noticias?categoria=Acuerdos', icon: FaGavel },
+        { label: 'Comunicados Oficiales', path: '/noticias?categoria=Comunicados', icon: FaFileContract },
+        { label: 'Eventos y Actividades', path: '/noticias?categoria=Eventos', icon: FaCalendarAlt },
+        { label: 'Institucional', path: '/noticias?categoria=Institucional', icon: FaBuilding }
       ]
     },
     {
-      label: t('menu.convocatorias'),
-      path: '/convocatorias',
-      hasSubmenu: false
-    },
-    {
-      label: t('menu.gaceta'),
+      label: 'Documentos',
       path: '/gaceta',
       hasSubmenu: true,
+      icon: FaFileAlt,
+      description: 'Gaceta y documentos oficiales',
       submenu: [
-        { label: '📄 ACUERDOS', path: '/gaceta?tipo=acuerdo' },
-        { label: '📋 ACTAS DE SESIÓN', path: '/gaceta?tipo=acta' },
-        { label: '📜 DECRETOS', path: '/gaceta?tipo=decreto' },
-        { label: '📝 PROYECTOS', path: '/gaceta?tipo=proyecto' },
-        { label: '📚 MANUALES', path: '/gaceta?tipo=manual' },
-        { label: '⚖️ LEYES', path: '/gaceta?tipo=ley' },
-        { label: '📋 POLÍTICAS', path: '/gaceta?tipo=politica' }
+        { label: 'Gaceta Municipal', path: '/gaceta', icon: FaFileAlt },
+        { label: 'ACUERDOS', path: '/gaceta?tipo=acuerdo', icon: FaGavel },
+        { label: 'ACTAS DE SESIÓN', path: '/gaceta?tipo=acta', icon: FaClipboardList },
+        { label: 'DECRETOS', path: '/gaceta?tipo=decreto', icon: FaFileContract },
+        { label: 'PROYECTOS', path: '/gaceta?tipo=proyecto', icon: FaProjectDiagram },
+        { label: 'MANUALES', path: '/gaceta?tipo=manual', icon: FaBook },
+        { label: 'LEYES', path: '/gaceta?tipo=ley', icon: FaLaw },
+        { label: 'POLÍTICAS', path: '/gaceta?tipo=politica', icon: FaClipboardList }
       ]
-    },
-    {
-      label: 'Sesiones',
-      path: '/sesiones',
-      hasSubmenu: false
     },
     {
       label: t('menu.transparencia'),
       path: '/transparencia',
       hasSubmenu: true,
+      icon: FaSearch,
+      description: 'Acceso a la información pública',
       submenu: [
-        { label: '💰 Presupuesto', path: '/transparencia?categoria=presupuesto' },
-        { label: '📋 Contratación Pública', path: '/transparencia?categoria=contratacion' },
-        { label: '📊 Plan Anual de Compras', path: '/transparencia?categoria=plan_compras' },
-        { label: '📈 Rendición de Cuentas', path: '/transparencia?categoria=rendicion_cuentas' },
-        { label: '💵 Estados Financieros', path: '/transparencia?categoria=estados_financieros' },
-        { label: '🔍 Control Interno', path: '/transparencia?categoria=control_interno' },
-        { label: '📑 Declaración de Renta', path: '/transparencia?categoria=declaracion_renta' },
-        { label: '🏢 Estructura Organizacional', path: '/transparencia?categoria=estructura_organizacional' },
-        { label: '📐 Plan de Desarrollo', path: '/transparencia?categoria=plan_desarrollo' },
-        { label: '⚖️ Normatividad', path: '/transparencia?categoria=normatividad' },
-        { label: '👥 Servicios Ciudadanos', path: '/transparencia?categoria=servicios_ciudadanos' },
-        { label: '🔎 Auditorías', path: '/transparencia?categoria=auditorias' },
-        { label: '🏛️ Bienes Inmuebles', path: '/transparencia?categoria=bienes_inmuebles' },
-        { label: '👤 Personal', path: '/transparencia?categoria=personal' }
+        { label: 'Presupuesto', path: '/transparencia?categoria=presupuesto', icon: FaDollarSign },
+        { label: 'Contratación Pública', path: '/transparencia?categoria=contratacion', icon: FaHandshake },
+        { label: 'Plan Anual de Compras', path: '/transparencia?categoria=plan_compras', icon: FaChartLine },
+        { label: 'Rendición de Cuentas', path: '/transparencia?categoria=rendicion_cuentas', icon: FaFileInvoiceDollar },
+        { label: 'Estados Financieros', path: '/transparencia?categoria=estados_financieros', icon: FaDollarSign },
+        { label: 'Control Interno', path: '/transparencia?categoria=control_interno', icon: FaShieldAlt },
+        { label: 'Declaración de Renta', path: '/transparencia?categoria=declaracion_renta', icon: FaFileSignature },
+        { label: 'Estructura Organizacional', path: '/transparencia?categoria=estructura_organizacional', icon: FaSitemap },
+        { label: 'Plan de Desarrollo', path: '/transparencia?categoria=plan_desarrollo', icon: FaProjectDiagram },
+        { label: 'Normatividad', path: '/transparencia?categoria=normatividad', icon: FaGavel },
+        { label: 'Servicios Ciudadanos', path: '/transparencia?categoria=servicios_ciudadanos', icon: FaUserCog },
+        { label: 'Auditorías', path: '/transparencia?categoria=auditorias', icon: FaClipboardCheck },
+        { label: 'Bienes Inmuebles', path: '/transparencia?categoria=bienes_inmuebles', icon: FaLandmark },
+        { label: 'Personal', path: '/transparencia?categoria=personal', icon: FaUser }
       ]
     },
     {
-      label: 'Galería',
-      path: '/galeria',
-      hasSubmenu: true,
-      submenu: [
-        { label: '📸 Todas', path: '/galeria' },
-        { label: '📋 Sesiones', path: '/galeria?categoria=sesiones' },
-        { label: '🎉 Eventos', path: '/galeria?categoria=eventos' },
-        { label: '👥 Autoridades', path: '/galeria?categoria=autoridades' },
-        { label: '🏛️ Actividades', path: '/galeria?categoria=actividades' },
-        { label: '📸 Otros', path: '/galeria?categoria=otros' }
-      ]
-    },
-    {
-      label: 'Encuestas',
+      label: 'Participación',
       path: '/encuestas',
-      hasSubmenu: false
+      hasSubmenu: true,
+      icon: FaUsers,
+      description: 'Participa y opina',
+      submenu: [
+        { label: 'Encuestas', path: '/encuestas', icon: FaChartLine },
+        { label: 'Foros', path: '/foros', icon: FaComments },
+        { label: 'Sesiones', path: '/sesiones', icon: FaList },
+        { label: 'Convocatorias', path: '/convocatorias', icon: FaCalendarAlt }
+      ]
     },
     {
-      label: 'Trámites',
+      label: 'Servicios',
       path: '/tramites',
-      hasSubmenu: false
-    },
-    {
-      label: 'Foros',
-      path: '/foros',
-      hasSubmenu: false
-    },
-    {
-      label: t('menu.contacto'),
-      path: '/contacto',
-      hasSubmenu: false
+      hasSubmenu: true,
+      icon: FaCog,
+      description: 'Trámites y servicios',
+      submenu: [
+        { label: 'Trámites', path: '/tramites', icon: FaFileAlt },
+        { label: 'Galería', path: '/galeria', icon: FaImages },
+        { label: 'Contacto', path: '/contacto', icon: FaEnvelope }
+      ]
     }
   ];
 
   const handleMouseEnter = (index) => {
+    // Limpiar cualquier timeout existente inmediatamente
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
-    setActiveMenu(index);
+    // Si hay otro menú activo, cerrarlo inmediatamente antes de abrir el nuevo
+    if (activeMenu !== null && activeMenu !== index) {
+      setActiveMenu(null);
+      // Pequeño delay para asegurar que el menú anterior se cierre antes de abrir el nuevo
+      setTimeout(() => {
+        setActiveMenu(index);
+      }, 50);
+    } else {
+      // Establecer el menú activo
+      setActiveMenu(index);
+    }
   };
 
-  const handleMouseLeave = () => {
+  // Actualizar posición del mega-menu cuando cambia activeMenu o se hace scroll
+  useEffect(() => {
+    if (activeMenu !== null && menuItemRefs.current[activeMenu] && megaMenuRefs.current[activeMenu]) {
+      const updatePosition = () => {
+        const rect = menuItemRefs.current[activeMenu].getBoundingClientRect();
+        if (megaMenuRefs.current[activeMenu]) {
+          // Posicionar el mega-menu justo debajo del nav-item
+          megaMenuRefs.current[activeMenu].style.top = `${rect.bottom}px`;
+        }
+      };
+      updatePosition();
+      window.addEventListener('scroll', updatePosition, { passive: true });
+      window.addEventListener('resize', updatePosition);
+      return () => {
+        window.removeEventListener('scroll', updatePosition);
+        window.removeEventListener('resize', updatePosition);
+      };
+    }
+  }, [activeMenu]);
+
+  const handleMouseLeave = (index) => {
+    // Aumentar el timeout para evitar flickering al mover el mouse
     timeoutRef.current = setTimeout(() => {
-      setActiveMenu(null);
-    }, 200);
+      // Solo cerrar si el menú activo sigue siendo el mismo
+      if (activeMenu === index) {
+        setActiveMenu(null);
+      }
+    }, 500);
   };
 
   const handleSubmenuClick = () => {
     setActiveMenu(null);
     setFocusedIndex(null);
-    // Scroll al top después de un pequeño delay para permitir la navegación
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
+    setMobileMenuOpen(false);
+    setMobileActiveSubmenu(null);
   };
 
   const handleNavClick = () => {
-    // Scroll al top cuando se hace clic en un enlace del menú principal
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
+    setActiveMenu(null);
+    setFocusedIndex(null);
+    setMobileMenuOpen(false);
+    setMobileActiveSubmenu(null);
+  };
+
+  const handleMobileSubmenuToggle = (index, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setMobileActiveSubmenu(mobileActiveSubmenu === index ? null : index);
   };
 
   // Navegación por teclado
@@ -258,6 +304,27 @@ const Header = () => {
     };
   }, []);
 
+  // Cerrar menú móvil cuando cambia la ruta
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setMobileActiveSubmenu(null);
+  }, [location.pathname]);
+
+  // Prevenir scroll del body cuando el menú móvil está abierto
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('menu-open');
+    } else {
+      document.body.style.overflow = '';
+      document.body.classList.remove('menu-open');
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.classList.remove('menu-open');
+    };
+  }, [mobileMenuOpen]);
+
   // Detectar scroll para ocultar/mostrar menú en móvil
   useEffect(() => {
     const handleScroll = () => {
@@ -298,19 +365,19 @@ const Header = () => {
               aria-label="Portal Único del Estado - Gobierno de Colombia"
             >
               <img 
-                src="/images/logoGovCO.png" 
+                src={`${process.env.PUBLIC_URL || ''}/images/logoGovCO.png`}
                 alt="Gobierno de Colombia"
                 className="gov-co-logo-img"
                 onError={(e) => {
                   // Intentar con diferentes extensiones
                   const extensions = ['.jpg', '.jpeg', '.svg', '.webp'];
-                  const baseName = '/images/logoGovCO';
+                  const baseName = `${process.env.PUBLIC_URL || ''}/images/logoGovCO`;
                   const currentSrc = e.target.src;
                   const currentExt = currentSrc.substring(currentSrc.lastIndexOf('.'));
                   const currentIndex = extensions.indexOf(currentExt);
                   
                   if (currentIndex < extensions.length - 1) {
-                    e.target.src = baseName + extensions[currentIndex + 1];
+                    e.target.src = `${baseName}${extensions[currentIndex + 1]}`;
                   } else {
                     // Fallback a texto si ninguna extensión funciona
                     e.target.style.display = 'none';
@@ -360,13 +427,22 @@ const Header = () => {
       </div>
       <nav className="header-nav">
         <div className="nav-container">
+          {/* Botón hamburguesa solo para móvil */}
+          <button 
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+          
+          {/* Menú desktop - funciona con hover */}
           <ul className="nav-menu">
             {menuItems.map((item, index) => (
               <li
                 key={index}
-                className={`nav-item ${location.pathname === item.path ? 'active' : ''} ${activeMenu === index ? 'active-menu' : ''}`}
-                onMouseEnter={() => item.hasSubmenu && handleMouseEnter(index)}
-                onMouseLeave={() => item.hasSubmenu && handleMouseLeave()}
+                className={`nav-item ${item.hasSubmenu ? 'has-submenu' : ''} ${location.pathname === item.path ? 'active' : ''}`}
               >
                 <Link 
                   to={item.path} 
@@ -375,32 +451,114 @@ const Header = () => {
                   onKeyDown={(e) => handleKeyDown(e, index, item.hasSubmenu)}
                   onClick={handleNavClick}
                   onFocus={() => setFocusedIndex(index)}
-                  aria-haspopup={item.hasSubmenu ? 'true' : undefined}
-                  aria-expanded={item.hasSubmenu ? (activeMenu === index ? 'true' : 'false') : undefined}
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={() => handleMouseLeave(index)}
                 >
-                  {item.label}
+                  {item.icon && <item.icon className="nav-link-icon" />}
+                  <span className="nav-link-text">{item.label}</span>
                 </Link>
-                {item.hasSubmenu && activeMenu === index && (
-                  <ul 
-                    className="nav-submenu" 
-                    onMouseEnter={() => handleMouseEnter(index)} 
-                    onMouseLeave={handleMouseLeave}
-                    role="menu"
+                {item.hasSubmenu && (
+                  <div 
+                    ref={el => megaMenuRefs.current[index] = el}
+                    className={`mega-menu ${activeMenu === index ? 'active' : ''}`}
+                    onMouseEnter={(e) => {
+                      e.stopPropagation();
+                      // Cancelar cualquier cierre pendiente inmediatamente
+                      if (timeoutRef.current) {
+                        clearTimeout(timeoutRef.current);
+                        timeoutRef.current = null;
+                      }
+                      // Si hay otro menú activo, cerrarlo primero
+                      if (activeMenu !== null && activeMenu !== index) {
+                        setActiveMenu(null);
+                        setTimeout(() => {
+                          setActiveMenu(index);
+                        }, 50);
+                      } else {
+                        // Mantener el menú abierto
+                        setActiveMenu(index);
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.stopPropagation();
+                      // No cerrar inmediatamente, dar tiempo para mover el mouse
+                      handleMouseLeave(index);
+                    }}
+                    style={{ 
+                      pointerEvents: activeMenu === index ? 'auto' : 'none'
+                    }}
                   >
-                    {item.submenu.map((subItem, subIndex) => (
-                      <li key={subIndex} role="none">
-                        <Link 
-                          to={subItem.path} 
-                          onClick={handleSubmenuClick} 
-                          className="nav-sublink"
-                          onKeyDown={(e) => handleSubmenuKeyDown(e, index, subIndex, item.submenu.length)}
-                          role="menuitem"
-                        >
-                          {subItem.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                    <div className="mega-menu-content">
+                      <div className="mega-menu-header">
+                        <div className="mega-menu-icon">
+                          {item.icon && <item.icon />}
+                        </div>
+                        <div>
+                          <h3 className="mega-menu-title">{item.label}</h3>
+                          {item.description && <p className="mega-menu-description">{item.description}</p>}
+                        </div>
+                      </div>
+                      <div className="mega-menu-grid">
+                        {item.submenu.map((subItem, subIndex) => (
+                          <Link 
+                            key={subIndex}
+                            to={subItem.path} 
+                            onClick={handleSubmenuClick} 
+                            className="mega-menu-item"
+                            onKeyDown={(e) => handleSubmenuKeyDown(e, index, subIndex, item.submenu.length)}
+                          >
+                            {subItem.icon && <subItem.icon className="mega-menu-item-icon" />}
+                            <span className="mega-menu-item-text">{subItem.label}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          {/* Menú móvil - funciona con clics */}
+          <ul className={`mobile-nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
+            {menuItems.map((item, index) => (
+              <li key={index} className="mobile-nav-item">
+                {item.hasSubmenu ? (
+                  <>
+                    <button
+                      className={`mobile-nav-link ${mobileActiveSubmenu === index ? 'active' : ''}`}
+                      onClick={(e) => handleMobileSubmenuToggle(index, e)}
+                    >
+                      {item.icon && <item.icon className="mobile-nav-icon" />}
+                      <span>{item.label}</span>
+                      <span className="mobile-nav-arrow">{mobileActiveSubmenu === index ? <FaTimes /> : <FaBars />}</span>
+                    </button>
+                    {mobileActiveSubmenu === index && (
+                      <ul className="mobile-nav-submenu">
+                        {item.submenu.map((subItem, subIndex) => (
+                          <li key={subIndex}>
+                            <Link 
+                              to={subItem.path} 
+                              onClick={handleSubmenuClick}
+                              className="mobile-nav-sublink"
+                            >
+                              {subItem.icon && <subItem.icon className="mobile-nav-sublink-icon" />}
+                              <span>{subItem.label}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <Link 
+                    to={item.path} 
+                    className={`mobile-nav-link ${location.pathname === item.path ? 'active' : ''}`}
+                    onClick={handleNavClick}
+                  >
+                    {item.icon && <item.icon className="mobile-nav-icon" />}
+                    <span>{item.label}</span>
+                  </Link>
                 )}
               </li>
             ))}

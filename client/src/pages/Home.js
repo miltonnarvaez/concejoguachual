@@ -16,11 +16,69 @@ import PresidenciaLogo from '../components/logos/PresidenciaLogo';
 import TexturePattern from '../components/TexturePattern';
 import { OrganizationSchema, WebSiteSchema } from '../components/SchemaMarkup';
 import AnimatedSection from '../components/AnimatedSection';
+import {
+  FaCalendarAlt, FaHandshake, FaFileSignature, FaDollarSign, FaChartLine,
+  FaShieldAlt, FaFileAlt, FaBook, FaClipboardCheck, FaBalanceScale, FaSitemap,
+  FaGavel, FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaFileContract,
+  FaClipboardList, FaProjectDiagram, FaFemale, FaUserClock, FaGraduationCap,
+  FaWheelchair, FaGlobeAmericas, FaBriefcase, FaChevronDown, FaUsers, FaNewspaper,
+  FaComments, FaFileAlt as FaDocument
+} from 'react-icons/fa';
+import CountUp from '../components/CountUp';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import './Home.css';
+
+// Registrar componentes de Chart.js
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Home = () => {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
+
+  // Precargar imagen de fondo del hero
+  useEffect(() => {
+    const img = new Image();
+    const imagePath = `${process.env.PUBLIC_URL || ''}/images/hero-grupo-personas.jpg`;
+    img.src = imagePath;
+    img.onload = () => {
+      setHeroImageLoaded(true);
+    };
+    img.onerror = () => {
+      // Intentar con la segunda imagen
+      const img2 = new Image();
+      img2.src = `${process.env.PUBLIC_URL || ''}/images/hero-grupo-personas2.jpg`;
+      img2.onload = () => {
+        setHeroImageLoaded(true);
+      };
+      img2.onerror = () => {
+        setHeroImageLoaded(false);
+      };
+    };
+  }, []);
 
   const { data: noticias = [] } = useQuery({
     queryKey: ['noticias'],
@@ -41,6 +99,18 @@ const Home = () => {
   const destacadas = convocatorias.filter(c => c.destacada).slice(0, 3);
   const ultimasNoticias = noticias.slice(0, 3);
 
+  // Animación de entrada
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const scrollToNext = () => {
+    const nextSection = document.querySelector('.anuncios, .acceso-rapido');
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const { data: config = {} } = useQuery({
     queryKey: ['configuracion'],
     queryFn: async () => {
@@ -48,6 +118,122 @@ const Home = () => {
       return response.data;
     }
   });
+
+  // Obtener estadísticas para la sección de métricas
+  const { data: sesiones = [] } = useQuery({
+    queryKey: ['sesiones'],
+    queryFn: async () => {
+      const response = await api.get('/sesiones');
+      return response.data;
+    }
+  });
+
+  const { data: pqrsd = [] } = useQuery({
+    queryKey: ['pqrsd'],
+    queryFn: async () => {
+      const response = await api.get('/pqrsd');
+      return response.data;
+    }
+  });
+
+  const { data: documentos = [] } = useQuery({
+    queryKey: ['gaceta'],
+    queryFn: async () => {
+      const response = await api.get('/gaceta');
+      return response.data;
+    }
+  });
+
+  // Calcular estadísticas
+  const stats = {
+    sesiones: sesiones.length,
+    pqrsdResueltas: pqrsd.filter(p => p.estado === 'resuelto').length,
+    documentos: documentos.length,
+    noticias: noticias.length
+  };
+
+  // Datos para gráficos
+  const pqrsdPorEstado = {
+    resuelto: pqrsd.filter(p => p.estado === 'resuelto').length,
+    enProceso: pqrsd.filter(p => p.estado === 'en_proceso').length,
+    pendiente: pqrsd.filter(p => p.estado === 'pendiente').length,
+    cerrado: pqrsd.filter(p => p.estado === 'cerrado').length
+  };
+
+  // Gráfico de barras - PQRSD por estado
+  const chartDataPQRSD = {
+    labels: ['Resueltas', 'En Proceso', 'Pendientes', 'Cerradas'],
+    datasets: [{
+      label: 'PQRSD por Estado',
+      data: [
+        pqrsdPorEstado.resuelto,
+        pqrsdPorEstado.enProceso,
+        pqrsdPorEstado.pendiente,
+        pqrsdPorEstado.cerrado
+      ],
+      backgroundColor: [
+        'rgba(40, 167, 69, 0.8)',
+        'rgba(255, 193, 7, 0.8)',
+        'rgba(220, 53, 69, 0.8)',
+        'rgba(108, 117, 125, 0.8)'
+      ],
+      borderColor: [
+        'rgba(40, 167, 69, 1)',
+        'rgba(255, 193, 7, 1)',
+        'rgba(220, 53, 69, 1)',
+        'rgba(108, 117, 125, 1)'
+      ],
+      borderWidth: 2
+    }]
+  };
+
+  // Gráfico de dona - Distribución general
+  const chartDataDona = {
+    labels: ['Sesiones', 'PQRSD Resueltas', 'Documentos', 'Noticias'],
+    datasets: [{
+      data: [stats.sesiones, stats.pqrsdResueltas, stats.documentos, stats.noticias],
+      backgroundColor: [
+        'rgba(40, 167, 69, 0.8)',
+        'rgba(0, 123, 255, 0.8)',
+        'rgba(255, 193, 7, 0.8)',
+        'rgba(220, 53, 69, 0.8)'
+      ],
+      borderColor: [
+        'rgba(40, 167, 69, 1)',
+        'rgba(0, 123, 255, 1)',
+        'rgba(255, 193, 7, 1)',
+        'rgba(220, 53, 69, 1)'
+      ],
+      borderWidth: 2
+    }]
+  };
+
+  // Opciones de gráficos
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          padding: 15,
+          font: {
+            size: 12
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 12,
+        titleFont: {
+          size: 14
+        },
+        bodyFont: {
+          size: 12
+        }
+      }
+    }
+  };
 
   return (
     <div className="home">
@@ -67,13 +253,18 @@ const Home = () => {
         <div 
           className="hero-background" 
           style={{
-            backgroundImage: `url('/images/hero-grupo-personas.jpg'), linear-gradient(135deg, #155724 0%, #28a745 100%)`
+            backgroundImage: heroImageLoaded
+              ? `url('${process.env.PUBLIC_URL || ''}/images/hero-grupo-personas.jpg'), linear-gradient(135deg, rgba(21, 87, 36, 0.7) 0%, rgba(40, 167, 69, 0.7) 100%)`
+              : 'linear-gradient(135deg, #155724 0%, #28a745 100%)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 40%',
+            backgroundRepeat: 'no-repeat'
           }}
         ></div>
         <div className="hero-overlay"></div>
-        <div className="hero-content">
-          <h1>Concejo Municipal de Guachucal</h1>
-          <p>Transparencia, participación ciudadana y servicio público</p>
+        <div className={`hero-content ${isVisible ? 'visible' : ''}`}>
+          <h1 className="hero-title">Concejo Municipal de Guachucal</h1>
+          <p className="hero-subtitle">Transparencia, participación ciudadana y servicio público</p>
           <div className="hero-actions">
             <Link to="/pqrsd" className="btn btn-hero-primary">
               Enviar PQRSD
@@ -83,6 +274,13 @@ const Home = () => {
             </Link>
           </div>
         </div>
+        <button 
+          className="hero-scroll-indicator" 
+          onClick={scrollToNext}
+          aria-label="Desplazarse hacia abajo"
+        >
+          <FaChevronDown />
+        </button>
       </section>
 
       {/* Anuncios Importantes */}
@@ -118,51 +316,51 @@ const Home = () => {
           <h2 className="section-title">{t('home.buscar')}</h2>
           <div className="acceso-grid">
             <Link to="/gaceta" className="acceso-item">
-              <span className="acceso-icon">📅</span>
+              <span className="acceso-icon"><FaCalendarAlt /></span>
               <h3>Agenda CMP</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">📋</span>
+              <span className="acceso-icon"><FaHandshake /></span>
               <h3>Contratación</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">📊</span>
+              <span className="acceso-icon"><FaFileSignature /></span>
               <h3>Dec. Renta</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">💰</span>
+              <span className="acceso-icon"><FaDollarSign /></span>
               <h3>Ejec. Presupuestal</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">📈</span>
+              <span className="acceso-icon"><FaChartLine /></span>
               <h3>Est. Financieros</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">📑</span>
+              <span className="acceso-icon"><FaShieldAlt /></span>
               <h3>Informes Control Interno</h3>
             </Link>
             <Link to="/pqrsd" className="acceso-item">
-              <span className="acceso-icon">📝</span>
+              <span className="acceso-icon"><FaFileAlt /></span>
               <h3>PQRSD</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">📖</span>
+              <span className="acceso-icon"><FaBook /></span>
               <h3>Libro de registro</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">💵</span>
+              <span className="acceso-icon"><FaDollarSign /></span>
               <h3>Presupuesto</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">📊</span>
+              <span className="acceso-icon"><FaChartLine /></span>
               <h3>Rendición de cuentas</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">🏢</span>
+              <span className="acceso-icon"><FaSitemap /></span>
               <h3>Entidades</h3>
             </Link>
             <Link to="/transparencia" className="acceso-item">
-              <span className="acceso-icon">⚖️</span>
+              <span className="acceso-icon"><FaBalanceScale /></span>
               <h3>Entes de control</h3>
             </Link>
           </div>
@@ -185,22 +383,22 @@ const Home = () => {
           <h2 className="section-title">{t('home.contacto')}</h2>
           <div className="contacto-content">
             <div className="contacto-info">
-              <p>📍 Calle Principal, Guachucal, Nariño</p>
-              <p>📞 +57 (2) XXX-XXXX</p>
-              <p>✉️ contacto@concejo.guachucal.gov.co</p>
-              <p>🕐 Lunes a Viernes: 8:00 AM - 12:00 PM y 2:00 PM - 6:00 PM</p>
+              <p><FaMapMarkerAlt /> Calle Principal, Guachucal, Nariño</p>
+              <p><FaPhone /> +57 (2) XXX-XXXX</p>
+              <p><FaEnvelope /> contacto@concejo.guachucal.gov.co</p>
+              <p><FaClock /> Lunes a Viernes: 8:00 AM - 12:00 PM y 2:00 PM - 6:00 PM</p>
             </div>
             <div className="contacto-actions">
               <div className="contacto-pqrs">
                 <p className="contacto-pqrs-text">¿Tiene alguna petición, queja, reclamo, sugerencia o denuncia?</p>
                 <Link to="/pqrsd" className="btn btn-pqrs">
-                  Envíe su PQRS aquí →
+                  Envíe su PQRS aquí
                 </Link>
               </div>
               <div className="contacto-form-link">
                 <p className="contacto-form-text">¿Tiene alguna consulta o mensaje general?</p>
                 <Link to="/contacto" className="btn btn-contacto">
-                  Enviar Mensaje de Contacto →
+                  Enviar Mensaje de Contacto
                 </Link>
               </div>
             </div>
@@ -215,31 +413,31 @@ const Home = () => {
           <h2 className="section-title">{t('home.gaceta')}</h2>
           <div className="gaceta-grid">
             <Link to="/gaceta?tipo=acuerdo" className="gaceta-item">
-              <span className="gaceta-icon">📄</span>
+              <span className="gaceta-icon"><FaGavel /></span>
               <span className="gaceta-text">ACUERDOS</span>
             </Link>
             <Link to="/gaceta?tipo=acta" className="gaceta-item">
-              <span className="gaceta-icon">📋</span>
+              <span className="gaceta-icon"><FaClipboardList /></span>
               <span className="gaceta-text">ACTAS DE SESIÓN</span>
             </Link>
             <Link to="/gaceta?tipo=decreto" className="gaceta-item">
-              <span className="gaceta-icon">📜</span>
+              <span className="gaceta-icon"><FaFileContract /></span>
               <span className="gaceta-text">DECRETOS</span>
             </Link>
             <Link to="/gaceta?tipo=proyecto" className="gaceta-item">
-              <span className="gaceta-icon">📝</span>
+              <span className="gaceta-icon"><FaProjectDiagram /></span>
               <span className="gaceta-text">PROYECTOS</span>
             </Link>
             <Link to="/gaceta?tipo=manual" className="gaceta-item">
-              <span className="gaceta-icon">📚</span>
+              <span className="gaceta-icon"><FaBook /></span>
               <span className="gaceta-text">MANUALES</span>
             </Link>
             <Link to="/gaceta?tipo=ley" className="gaceta-item">
-              <span className="gaceta-icon">⚖️</span>
+              <span className="gaceta-icon"><FaBalanceScale /></span>
               <span className="gaceta-text">LEYES</span>
             </Link>
             <Link to="/gaceta?tipo=politica" className="gaceta-item">
-              <span className="gaceta-icon">📋</span>
+              <span className="gaceta-icon"><FaClipboardCheck /></span>
               <span className="gaceta-text">POLÍTICAS</span>
             </Link>
           </div>
@@ -382,7 +580,7 @@ const Home = () => {
           <div className="grupos-grid">
             {/* Dupla Naranja */}
             <div className="grupo-card grupo-dupla-naranja">
-              <div className="grupo-icon">👩</div>
+              <div className="grupo-icon"><FaFemale /></div>
               <h3>Dupla Naranja</h3>
               <p>Ruta de Atención integral para las mujeres</p>
               <Link to="/pqrsd" className="grupo-btn">
@@ -392,7 +590,7 @@ const Home = () => {
 
             {/* Adultos Mayores */}
             <div className="grupo-card grupo-adultos-mayores">
-              <div className="grupo-icon">👴</div>
+              <div className="grupo-icon"><FaUserClock /></div>
               <h3>Adultos Mayores</h3>
               <p>Servicios y programas especializados para personas mayores</p>
               <Link to="/pqrsd" className="grupo-btn">
@@ -402,7 +600,7 @@ const Home = () => {
 
             {/* Jóvenes */}
             <div className="grupo-card grupo-jovenes">
-              <div className="grupo-icon">👨‍🎓</div>
+              <div className="grupo-icon"><FaGraduationCap /></div>
               <h3>Jóvenes</h3>
               <p>Programas, convocatorias y oportunidades para jóvenes</p>
               <Link to="/pqrsd" className="grupo-btn">
@@ -412,7 +610,7 @@ const Home = () => {
 
             {/* Personas con Discapacidad */}
             <div className="grupo-card grupo-discapacidad">
-              <div className="grupo-icon">♿</div>
+              <div className="grupo-icon"><FaWheelchair /></div>
               <h3>Personas con Discapacidad</h3>
               <p>Accesibilidad, inclusión y servicios especializados</p>
               <Link to="/pqrsd" className="grupo-btn">
@@ -422,7 +620,7 @@ const Home = () => {
 
             {/* Comunidades Étnicas */}
             <div className="grupo-card grupo-etnicas">
-              <div className="grupo-icon">🌍</div>
+              <div className="grupo-icon"><FaGlobeAmericas /></div>
               <h3>Comunidades Étnicas</h3>
               <p>Información y servicios para comunidades indígenas y afrodescendientes</p>
               <Link to="/pqrsd" className="grupo-btn">
@@ -432,7 +630,7 @@ const Home = () => {
 
             {/* Empresarios */}
             <div className="grupo-card grupo-empresarios">
-              <div className="grupo-icon">💼</div>
+              <div className="grupo-icon"><FaBriefcase /></div>
               <h3>Empresarios</h3>
               <p>Información sobre contratación, licitaciones y oportunidades de negocio</p>
               <Link to="/pqrsd" className="grupo-btn">
@@ -459,7 +657,7 @@ const Home = () => {
             <div className="ubicacion-left">
               <div className="ubicacion-escudo-container">
                 <img 
-                  src="/images/escudo.png" 
+                  src={`${process.env.PUBLIC_URL || ''}/images/escudo.png`}
                   alt="Escudo de Guachucal"
                   className="ubicacion-escudo"
                   onError={(e) => {
@@ -474,11 +672,11 @@ const Home = () => {
               <h2 className="ubicacion-section-title">Ubicación</h2>
               <div className="ubicacion-info">
                 <p className="ubicacion-item">
-                  <span className="ubicacion-icon">📍</span>
+                  <span className="ubicacion-icon"><FaMapMarkerAlt /></span>
                   Calle Principal, Guachucal, Nariño
                 </p>
                 <p className="ubicacion-item">
-                  <span className="ubicacion-icon">📞</span>
+                  <span className="ubicacion-icon"><FaPhone /></span>
                   +57 (2) XXX-XXXX
                 </p>
                 <p className="ubicacion-item">
@@ -501,6 +699,78 @@ const Home = () => {
               referrerPolicy="no-referrer-when-downgrade"
               title="Ubicación Concejo Municipal de Guachucal"
             ></iframe>
+          </div>
+        </div>
+      </AnimatedSection>
+
+      {/* Sección de Estadísticas - Antes del Footer */}
+      <AnimatedSection className="section estadisticas-section" animationType="fadeInUp">
+        <div className="container">
+          <h2 className="section-title">Estadísticas del Concejo</h2>
+          <p className="section-subtitle">Datos y métricas de nuestra gestión</p>
+          
+          {/* Tarjetas de estadísticas */}
+          <div className="estadisticas-grid">
+            <div className="estadistica-card">
+              <div className="estadistica-icon">
+                <FaCalendarAlt />
+              </div>
+              <div className="estadistica-content">
+                <h3 className="estadistica-numero">
+                  <CountUp end={stats.sesiones} duration={2000} />
+                </h3>
+                <p className="estadistica-label">Sesiones Realizadas</p>
+              </div>
+            </div>
+            <div className="estadistica-card">
+              <div className="estadistica-icon">
+                <FaClipboardCheck />
+              </div>
+              <div className="estadistica-content">
+                <h3 className="estadistica-numero">
+                  <CountUp end={stats.pqrsdResueltas} duration={2000} />
+                </h3>
+                <p className="estadistica-label">PQRSD Resueltas</p>
+              </div>
+            </div>
+            <div className="estadistica-card">
+              <div className="estadistica-icon">
+                <FaDocument />
+              </div>
+              <div className="estadistica-content">
+                <h3 className="estadistica-numero">
+                  <CountUp end={stats.documentos} duration={2000} />
+                </h3>
+                <p className="estadistica-label">Documentos Publicados</p>
+              </div>
+            </div>
+            <div className="estadistica-card">
+              <div className="estadistica-icon">
+                <FaNewspaper />
+              </div>
+              <div className="estadistica-content">
+                <h3 className="estadistica-numero">
+                  <CountUp end={stats.noticias} duration={2000} />
+                </h3>
+                <p className="estadistica-label">Noticias Publicadas</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Gráficos */}
+          <div className="estadisticas-graficos">
+            <div className="grafico-container">
+              <h3 className="grafico-titulo">PQRSD por Estado</h3>
+              <div className="grafico-wrapper">
+                <Bar data={chartDataPQRSD} options={chartOptions} />
+              </div>
+            </div>
+            <div className="grafico-container">
+              <h3 className="grafico-titulo">Distribución General</h3>
+              <div className="grafico-wrapper">
+                <Doughnut data={chartDataDona} options={chartOptions} />
+              </div>
+            </div>
           </div>
         </div>
       </AnimatedSection>

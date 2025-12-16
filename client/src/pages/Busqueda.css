@@ -14,6 +14,7 @@
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .busqueda-input {
@@ -37,11 +38,21 @@
   color: #ffffff;
   border: none;
   border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
+}
+
+.busqueda-btn svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
 }
 
 .busqueda-btn:hover {
@@ -134,10 +145,61 @@
 .busqueda-query {
   color: #666;
   font-size: 1rem;
+  margin-top: 1rem;
 }
 
 .busqueda-query strong {
   color: #045518;
+}
+
+.filtros-activos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.filtro-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.filtro-chip button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+  width: 20px;
+  height: 20px;
+}
+
+.filtro-chip button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.filtro-chip button svg {
+  font-size: 0.75rem;
+}
+
+.search-highlight {
+  background: var(--color-secondary);
+  color: var(--color-primary);
+  padding: 0.1rem 0.2rem;
+  border-radius: 3px;
+  font-weight: 600;
 }
 
 .busqueda-loading,
@@ -252,7 +314,28 @@
   .resultados-grid {
     grid-template-columns: 1fr;
   }
+
+  .busqueda-suggestions {
+    max-height: 250px;
+  }
+
+  .suggestion-item {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .suggestion-text {
+    font-size: 0.85rem;
+  }
+
+  .suggestion-type {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+  }
 }
+
+
+
+
 
 
 

@@ -20,7 +20,17 @@
 }
 
 .page-header-icon {
-  font-size: 3rem;
+  font-size: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.page-header-icon svg {
+  width: 4rem;
+  height: 4rem;
 }
 
 .page-header h1 {

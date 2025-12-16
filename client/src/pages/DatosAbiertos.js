@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../services/api';
+import { FaFileAlt } from 'react-icons/fa';
 import './DatosAbiertos.css';
 
 const DatosAbiertos = () => {
@@ -65,17 +66,17 @@ const DatosAbiertos = () => {
             <h2>Formatos Disponibles</h2>
             <div className="formatos-grid">
               <div className="formato-card">
-                <span className="formato-icon">📄</span>
+                <span className="formato-icon"><FaFileAlt /></span>
                 <h3>CSV</h3>
                 <p>Formato de texto plano separado por comas, ideal para análisis en hojas de cálculo</p>
               </div>
               <div className="formato-card">
-                <span className="formato-icon">📋</span>
+                <span className="formato-icon"><FaFileAlt /></span>
                 <h3>JSON</h3>
                 <p>Formato estructurado con metadatos Schema.org, ideal para aplicaciones web</p>
               </div>
               <div className="formato-card">
-                <span className="formato-icon">📊</span>
+                <span className="formato-icon"><FaFileAlt /></span>
                 <h3>XML</h3>
                 <p>Formato estructurado con esquema DCAT, ideal para integración con sistemas gubernamentales</p>
               </div>

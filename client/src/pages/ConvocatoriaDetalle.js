@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '../services/api';
 import NoticiaImage from '../components/NoticiaImage';
 import { getImageByIndex } from '../utils/exampleImages';
+import { FaStar } from 'react-icons/fa';
 import './ConvocatoriaDetalle.css';
 
 const ConvocatoriaDetalle = () => {
@@ -46,7 +47,7 @@ const ConvocatoriaDetalle = () => {
 
           <div className="convocatoria-header">
             {convocatoria.destacada && (
-              <span className="convocatoria-destacada-badge">⭐ Destacada</span>
+              <span className="convocatoria-destacada-badge"><FaStar /> Destacada</span>
             )}
             <h1>{convocatoria.titulo}</h1>
             <div className="convocatoria-fechas-detalle">

@@ -47,7 +47,11 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     console.error('Error en login:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error('Stack:', error.stack);
+    res.status(500).json({ 
+      error: 'Error interno del servidor',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
@@ -69,6 +73,10 @@ router.get('/verify', async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+
 
 
 

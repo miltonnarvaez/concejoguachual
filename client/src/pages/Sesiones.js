@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import { FaClipboardList, FaBolt, FaStar } from 'react-icons/fa';
 import './Sesiones.css';
 
 const Sesiones = () => {
@@ -140,12 +141,12 @@ const Sesiones = () => {
                 <div key={sesion.id} className="sesion-card">
                   <div className="sesion-header">
                     <span className={`sesion-tipo ${sesion.tipo}`}>
-                      {sesion.tipo === 'ordinaria' ? '📋 Ordinaria' :
-                       sesion.tipo === 'extraordinaria' ? '⚡ Extraordinaria' :
-                       '⭐ Especial'}
+                      {sesion.tipo === 'ordinaria' ? <><FaClipboardList /> Ordinaria</> :
+                       sesion.tipo === 'extraordinaria' ? <><FaBolt /> Extraordinaria</> :
+                       <><FaStar /> Especial</>}
                     </span>
                     {sesion.destacada && (
-                      <span className="sesion-destacada">⭐ Destacada</span>
+                      <span className="sesion-destacada"><FaStar /> Destacada</span>
                     )}
                   </div>
                   
@@ -211,6 +212,10 @@ const Sesiones = () => {
 };
 
 export default Sesiones;
+
+
+
+
 
 
 

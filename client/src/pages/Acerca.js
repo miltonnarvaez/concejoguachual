@@ -8,6 +8,11 @@ import Timeline from '../components/Timeline';
 import api from '../services/api';
 import { getFileUrl } from '../utils/fileUtils';
 import { OrganizationSchema } from '../components/SchemaMarkup';
+import {
+  FaBullseye, FaEye, FaBuilding, FaMapMarkerAlt, FaPhone, FaEnvelope,
+  FaClock, FaFileAlt, FaDownload, FaSitemap, FaGavel, FaUserTie,
+  FaUserSecret, FaUsers, FaClipboardList, FaTasks, FaUserCog
+} from 'react-icons/fa';
 import './Acerca.css';
 
 const Acerca = () => {
@@ -88,20 +93,22 @@ const Acerca = () => {
 
           <div className="acerca-content">
             <div id="mision" className="acerca-section mision-section">
-              <div className="section-icon">🎯</div>
+              <div className="section-icon">
+                <FaBullseye />
+              </div>
               <h2>Misión</h2>
               <div className="section-content-with-image">
                 <div className="section-text">
                   <p>
-                    El Concejo Municipal de Guachucal tiene como misión ejercer el control político
-                    sobre la administración municipal, aprobar los planes y programas de desarrollo
-                    económico y social, y ejercer las demás funciones que le asigna la Constitución
-                    y la ley, en beneficio de la comunidad guachucaleña.
+                    El Concejo Municipal de Guachucal es una Corporación Administrativa Pública de elección popular y de carácter deliberante, 
+                    encargada de ejercer el control político, facilitar y consolidar la democracia local, decidir lo conveniente para el buen vivir, 
+                    el desarrollo humano sostenible y el crecimiento de municipio, fortaleciendo la participación comunitaria y con ello velar por 
+                    el buen uso de los recursos y bienes, como patrimonio que nos pertenece a todos los habitantes del municipio de Guachucal.
                   </p>
                 </div>
                 <div className="section-image-placeholder">
                   <div className="image-placeholder">
-                    <span className="placeholder-icon">🏛️</span>
+                    <span className="placeholder-icon"><FaBuilding /></span>
                     <p>Gobierno Local</p>
                   </div>
                 </div>
@@ -109,21 +116,102 @@ const Acerca = () => {
             </div>
 
             <div id="vision" className="acerca-section vision-section">
-              <div className="section-icon">🌟</div>
+              <div className="section-icon">
+                <FaEye />
+              </div>
               <h2>Visión</h2>
               <div className="section-content-with-image">
                 <div className="section-image-placeholder">
                   <div className="image-placeholder">
-                    <span className="placeholder-icon">🌟</span>
+                    <span className="placeholder-icon"><FaEye /></span>
                     <p>Futuro Promisorio</p>
                   </div>
                 </div>
                 <div className="section-text">
                   <p>
-                    Ser reconocido como un concejo transparente, eficiente y comprometido con el
-                    desarrollo integral del municipio de Guachucal, promoviendo la participación
-                    ciudadana y el bienestar de todos sus habitantes.
+                    Como corporación político-administrativa del municipio de Guachucal proyecta consolidarse como el órgano colegiado representante 
+                    de la voluntad popular, que busca en forma permanente desarrollar una administración regida bajo claros principios éticos, que 
+                    permitan orientar su gestión en beneficio de las comunidades, permitiéndole ser voceros e intérpretes de los diferentes sectores 
+                    ciudadanos, orientando su trabajo hacia un control político efectivo, con el objeto de desarrollar una administración de calidad.
                   </p>
+                </div>
+              </div>
+            </div>
+
+            <div id="estructura" className="acerca-section estructura-section">
+              <h2><FaSitemap /> Estructura Jerárquica</h2>
+              <p className="section-description">
+                Organización y jerarquía institucional del Concejo Municipal de Guachucal
+              </p>
+              <div className="estructura-organigrama">
+                {/* Nivel 1: Presidencia */}
+                <div className="estructura-nivel nivel-1">
+                  <div className="estructura-card presidencia">
+                    <FaGavel className="estructura-icon" />
+                    <h3>PRESIDENCIA</h3>
+                    <p>Mesa Directiva 2025</p>
+                    <span className="estructura-cargo">Máxima Autoridad</span>
+                  </div>
+                </div>
+
+                {/* Nivel 2: Vicepresidencias y Secretaría */}
+                <div className="estructura-nivel nivel-2">
+                  <div className="estructura-card vicepresidencia">
+                    <FaUserTie className="estructura-icon" />
+                    <h4>VICEPRESIDENTES</h4>
+                    <p>Primer y Segundo Vicepresidente</p>
+                  </div>
+                  <div className="estructura-card secretaria">
+                    <FaUserSecret className="estructura-icon" />
+                    <h4>SECRETARÍA GENERAL</h4>
+                    <p>Gestión administrativa y documental</p>
+                  </div>
+                </div>
+
+                {/* Nivel 3: Concejales */}
+                <div className="estructura-nivel nivel-3">
+                  <div className="estructura-card concejales">
+                    <FaUsers className="estructura-icon" />
+                    <h4>CONCEJALES</h4>
+                    <p>Honorables Concejales del Municipio</p>
+                    <div className="estructura-funciones">
+                      <p><strong>Funciones principales:</strong></p>
+                      <ul>
+                        <li>Ejercer control político</li>
+                        <li>Participar en debates</li>
+                        <li>Presentar proyectos de acuerdo</li>
+                        <li>Integrar comisiones</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Nivel 4: Comisiones y Apoyo */}
+                <div className="estructura-nivel nivel-4">
+                  <div className="estructura-card comisiones">
+                    <FaClipboardList className="estructura-icon" />
+                    <h4>COMISIONES PERMANENTES</h4>
+                    <p>Comisiones establecidas según reglamento</p>
+                  </div>
+                  <div className="estructura-card comisiones">
+                    <FaTasks className="estructura-icon" />
+                    <h4>COMISIONES ACCIDENTALES</h4>
+                    <p>Comisiones para temas específicos</p>
+                  </div>
+                  <div className="estructura-card apoyo">
+                    <FaUserCog className="estructura-icon" />
+                    <h4>UNIDAD DE APOYO NORMATIVO</h4>
+                    <p>Asesoría jurídica y normativa</p>
+                  </div>
+                </div>
+
+                {/* Nivel 5: Personal Administrativo */}
+                <div className="estructura-nivel nivel-5">
+                  <div className="estructura-card administrativo">
+                    <FaUsers className="estructura-icon" />
+                    <h4>PERSONAL ADMINISTRATIVO</h4>
+                    <p>Personal de apoyo administrativo y técnico</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -146,10 +234,10 @@ const Acerca = () => {
                       <h3>{autoridad.cargo}</h3>
                       <p className="autoridad-nombre">{autoridad.nombre}</p>
                       {autoridad.email && (
-                        <p className="autoridad-contacto">✉️ {autoridad.email}</p>
+                        <p className="autoridad-contacto"><FaEnvelope /> {autoridad.email}</p>
                       )}
                       {autoridad.telefono && (
-                        <p className="autoridad-contacto">📞 {autoridad.telefono}</p>
+                        <p className="autoridad-contacto"><FaPhone /> {autoridad.telefono}</p>
                       )}
                       {autoridad.biografia && (
                         <p className="autoridad-biografia">{autoridad.biografia}</p>
@@ -163,20 +251,20 @@ const Acerca = () => {
             <div id="contacto" className="acerca-section">
               <h2>Información de Contacto</h2>
               <div className="contacto-info">
-                <p>📍 Calle Principal, Guachucal, Nariño</p>
-                <p>📞 +57 (2) XXX-XXXX</p>
-                <p>✉️ contacto@concejo.guachucal.gov.co</p>
-                <p>🕐 Lunes a Viernes: 8:00 AM - 12:00 PM y 2:00 PM - 6:00 PM</p>
+                <p><FaMapMarkerAlt /> Calle Principal, Guachucal, Nariño</p>
+                <p><FaPhone /> +57 (2) XXX-XXXX</p>
+                <p><FaEnvelope /> contacto@concejo.guachucal.gov.co</p>
+                <p><FaClock /> Lunes a Viernes: 8:00 AM - 12:00 PM y 2:00 PM - 6:00 PM</p>
               </div>
             </div>
 
             {/* Documento PDF Institucional Destacado */}
             {(configuracion.documento_institucional_url || configuracion.documento_institucional_titulo) && (
               <div className="acerca-section documento-institucional-section">
-                <h2>📄 Documento Institucional</h2>
+                <h2><FaFileAlt /> Documento Institucional</h2>
                 <div className="documento-institucional-card">
                   <div className="documento-institucional-icon">
-                    📋
+                    <FaFileAlt />
                   </div>
                   <div className="documento-institucional-content">
                     <h3>
@@ -193,7 +281,7 @@ const Acerca = () => {
                         rel="noopener noreferrer"
                         className="btn btn-primary btn-documento-institucional"
                       >
-                        📥 Descargar PDF
+                        <FaDownload /> Descargar PDF
                       </a>
                     )}
                   </div>

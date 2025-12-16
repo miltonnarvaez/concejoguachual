@@ -219,5 +219,62 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Endpoint para autocompletado
+router.get('/suggestions', async (req, res) => {
+  try {
+    const { q } = req.query;
+    
+    if (!q || q.trim() === '' || q.length < 2) {
+      return res.json([]);
+    }
+
+    const searchTerm = `%${q.trim()}%`;
+    const suggestions = [];
+
+    // Obtener sugerencias de títulos de diferentes tablas
+    const queries = [
+      {
+        query: `SELECT DISTINCT titulo as texto, 'noticia' as tipo FROM noticias WHERE publicada = TRUE AND titulo LIKE ? LIMIT 5`,
+        params: [searchTerm]
+      },
+      {
+        query: `SELECT DISTINCT titulo as texto, 'transparencia' as tipo FROM documentos_transparencia WHERE publicada = TRUE AND titulo LIKE ? LIMIT 5`,
+        params: [searchTerm]
+      },
+      {
+        query: `SELECT DISTINCT titulo as texto, 'gaceta' as tipo FROM documentos_gaceta WHERE publicada = TRUE AND titulo LIKE ? LIMIT 5`,
+        params: [searchTerm]
+      },
+      {
+        query: `SELECT DISTINCT CONCAT('Sesión ', numero_sesion, ' - ', tipo_sesion) as texto, 'sesion' as tipo FROM sesiones_concejo WHERE publicada = TRUE AND (numero_sesion LIKE ? OR tipo_sesion LIKE ?) LIMIT 5`,
+        params: [searchTerm, searchTerm]
+      },
+      {
+        query: `SELECT DISTINCT titulo as texto, 'convocatoria' as tipo FROM convocatorias WHERE activa = TRUE AND titulo LIKE ? LIMIT 5`,
+        params: [searchTerm]
+      }
+    ];
+
+    for (const { query, params } of queries) {
+      try {
+        const [results] = await pool.execute(query, params);
+        suggestions.push(...results);
+      } catch (error) {
+        console.error('Error en sugerencia:', error);
+      }
+    }
+
+    // Limitar y ordenar sugerencias
+    const uniqueSuggestions = suggestions
+      .slice(0, 8)
+      .map(s => ({ texto: s.texto, tipo: s.tipo }));
+
+    res.json(uniqueSuggestions);
+  } catch (error) {
+    console.error('Error en autocompletado:', error);
+    res.status(500).json({ error: 'Error al obtener sugerencias' });
+  }
+});
+
 module.exports = router;
 

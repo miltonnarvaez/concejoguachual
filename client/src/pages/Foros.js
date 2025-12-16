@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import { FaComments, FaFileAlt } from 'react-icons/fa';
 import './Foros.css';
 
 const Foros = () => {
@@ -69,8 +70,8 @@ const Foros = () => {
                   <h2>{foro.titulo}</h2>
                   <p>{foro.descripcion}</p>
                   <div className="foro-stats">
-                    <span>💬 {foro.comentarios_aprobados || 0} comentarios</span>
-                    <span>📝 {foro.total_comentarios || 0} total</span>
+                    <span><FaComments /> {foro.comentarios_aprobados || 0} comentarios</span>
+                    <span><FaFileAlt /> {foro.total_comentarios || 0} total</span>
                   </div>
                 </Link>
               ))}
@@ -83,6 +84,10 @@ const Foros = () => {
 };
 
 export default Foros;
+
+
+
+
 
 
 

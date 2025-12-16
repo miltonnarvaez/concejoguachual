@@ -4,6 +4,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 import NoticiaImage from '../components/NoticiaImage';
 import { getImageByIndex } from '../utils/exampleImages';
+import { FaNewspaper } from 'react-icons/fa';
+import Breadcrumbs from '../components/Breadcrumbs';
 import '../styles/PageLayout.css';
 import './Noticias.css';
 
@@ -36,10 +38,11 @@ const Noticias = () => {
 
   return (
     <div className="noticias-page page-container">
+      <Breadcrumbs />
       <section className="section">
         <div className="container">
           <div className="page-header">
-            <div className="page-header-icon">📰</div>
+            <div className="page-header-icon"><FaNewspaper /></div>
             <div>
               <h1 className="page-title">Noticias</h1>
               <p>Mantente informado sobre las últimas noticias del Concejo Municipal</p>

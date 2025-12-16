@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '../services/api';
+import { 
+  FaSearch, 
+  FaTimes,
+  FaNewspaper,
+  FaFileAlt,
+  FaEye,
+  FaCalendarAlt,
+  FaComments
+} from 'react-icons/fa';
 import './Busqueda.css';
 
 const Busqueda = () => {
@@ -12,6 +21,40 @@ const Busqueda = () => {
   const [fechaDesde, setFechaDesde] = useState(searchParams.get('fecha_desde') || '');
   const [fechaHasta, setFechaHasta] = useState(searchParams.get('fecha_hasta') || '');
   const [showFilters, setShowFilters] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [inputValue, setInputValue] = useState(searchParams.get('q') || '');
+  const suggestionsRef = useRef(null);
+  const inputRef = useRef(null);
+
+  // Obtener sugerencias de autocompletado
+  const { data: suggestions = [] } = useQuery({
+    queryKey: ['suggestions', inputValue],
+    queryFn: async () => {
+      if (!inputValue || inputValue.trim().length < 2) {
+        return [];
+      }
+      const response = await api.get(`/busqueda/suggestions?q=${encodeURIComponent(inputValue)}`);
+      return response.data;
+    },
+    enabled: inputValue.trim().length >= 2 && showSuggestions
+  });
+
+  // Cerrar sugerencias al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Actualizar URL cuando cambien los filtros
   useEffect(() => {
@@ -54,7 +97,35 @@ const Busqueda = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setSearchQuery(inputValue);
+    setShowSuggestions(false);
     // La búsqueda se ejecuta automáticamente por el useQuery
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+    setShowSuggestions(value.trim().length >= 2);
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setInputValue(suggestion.texto);
+    setSearchQuery(suggestion.texto);
+    setShowSuggestions(false);
+    if (suggestion.tipo !== 'todos') {
+      setTipo(suggestion.tipo);
+    }
+  };
+
+  const getTipoIcon = (tipo) => {
+    const icons = {
+      noticia: FaNewspaper,
+      transparencia: FaEye,
+      gaceta: FaFileAlt,
+      sesion: FaCalendarAlt,
+      convocatoria: FaCalendarAlt
+    };
+    return icons[tipo] || FaSearch;
   };
 
   const clearFilters = () => {
@@ -87,6 +158,20 @@ const Busqueda = () => {
     return routes[tipo] || '#';
   };
 
+  // Función para destacar el término buscado
+  const highlightText = (text, query) => {
+    if (!query || !text) return text;
+    const regex = new RegExp(`(${query})`, 'gi');
+    const parts = text.split(regex);
+    return parts.map((part, index) => 
+      regex.test(part) ? (
+        <mark key={index} className="search-highlight">{part}</mark>
+      ) : (
+        part
+      )
+    );
+  };
+
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -113,17 +198,40 @@ const Busqueda = () => {
 
           {/* Barra de búsqueda */}
           <form onSubmit={handleSearch} className="busqueda-form">
-            <div className="busqueda-input-group">
+            <div className="busqueda-input-group" style={{ position: 'relative' }}>
               <input
+                ref={inputRef}
                 type="text"
                 placeholder="Buscar en todo el sitio..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={inputValue}
+                onChange={handleInputChange}
+                onFocus={() => inputValue.trim().length >= 2 && setShowSuggestions(true)}
                 className="busqueda-input"
               />
               <button type="submit" className="busqueda-btn">
-                🔍 Buscar
+                <FaSearch /> Buscar
               </button>
+              
+              {/* Sugerencias de autocompletado */}
+              {showSuggestions && suggestions && suggestions.length > 0 && (
+                <div ref={suggestionsRef} className="busqueda-suggestions">
+                  {suggestions.map((suggestion, index) => {
+                    const Icon = getTipoIcon(suggestion.tipo);
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        className="suggestion-item"
+                        onClick={() => handleSuggestionClick(suggestion)}
+                      >
+                        <Icon className="suggestion-icon" />
+                        <span className="suggestion-text">{suggestion.texto}</span>
+                        <span className="suggestion-type">{getTipoLabel(suggestion.tipo)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             <button
@@ -205,9 +313,43 @@ const Busqueda = () => {
                     : `${resultados.total} resultado${resultados.total !== 1 ? 's' : ''} encontrado${resultados.total !== 1 ? 's' : ''}`}
                 </h2>
                 {resultados.total > 0 && (
-                  <p className="busqueda-query">
-                    Búsqueda: <strong>"{searchQuery}"</strong>
-                  </p>
+                  <div className="busqueda-query">
+                    <p>Búsqueda: <strong>"{searchQuery}"</strong></p>
+                    <div className="filtros-activos">
+                      {tipo !== 'todos' && (
+                        <span className="filtro-chip">
+                          Tipo: {getTipoLabel(tipo)}
+                          <button onClick={() => setTipo('todos')} aria-label="Remover filtro">
+                            <FaTimes />
+                          </button>
+                        </span>
+                      )}
+                      {categoria !== 'todas' && (
+                        <span className="filtro-chip">
+                          Categoría: {categoria}
+                          <button onClick={() => setCategoria('todas')} aria-label="Remover filtro">
+                            <FaTimes />
+                          </button>
+                        </span>
+                      )}
+                      {fechaDesde && (
+                        <span className="filtro-chip">
+                          Desde: {fechaDesde}
+                          <button onClick={() => setFechaDesde('')} aria-label="Remover filtro">
+                            <FaTimes />
+                          </button>
+                        </span>
+                      )}
+                      {fechaHasta && (
+                        <span className="filtro-chip">
+                          Hasta: {fechaHasta}
+                          <button onClick={() => setFechaHasta('')} aria-label="Remover filtro">
+                            <FaTimes />
+                          </button>
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 )}
               </div>
 
@@ -248,8 +390,8 @@ const Busqueda = () => {
                             to={getTipoRoute(item.tipo_resultado, item.id)}
                             className="resultado-card"
                           >
-                            <h4>{item.titulo}</h4>
-                            <p>{item.descripcion?.substring(0, 150)}...</p>
+                            <h4>{highlightText(item.titulo, searchQuery)}</h4>
+                            <p>{highlightText((item.descripcion?.substring(0, 150)) + '...', searchQuery)}</p>
                             <div className="resultado-meta">
                               <span className="resultado-tipo">{getTipoLabel(item.tipo_resultado)}</span>
                               <span className="resultado-categoria">{item.categoria}</span>
@@ -298,8 +440,8 @@ const Busqueda = () => {
                             to={getTipoRoute(item.tipo_resultado, item.id)}
                             className="resultado-card"
                           >
-                            <h4>Sesión {item.numero_sesion} - {item.tipo_sesion}</h4>
-                            <p>{item.resumen?.substring(0, 150)}...</p>
+                            <h4>Sesión {item.numero_sesion} - {highlightText(item.tipo_sesion, searchQuery)}</h4>
+                            <p>{highlightText((item.resumen?.substring(0, 150)) + '...', searchQuery)}</p>
                             <div className="resultado-meta">
                               <span className="resultado-tipo">{getTipoLabel(item.tipo_resultado)}</span>
                               <span className="resultado-fecha">
@@ -322,8 +464,8 @@ const Busqueda = () => {
                             to={getTipoRoute(item.tipo_resultado, item.id)}
                             className="resultado-card"
                           >
-                            <h4>{item.titulo}</h4>
-                            <p>{item.descripcion?.substring(0, 150)}...</p>
+                            <h4>{highlightText(item.titulo, searchQuery)}</h4>
+                            <p>{highlightText((item.descripcion?.substring(0, 150)) + '...', searchQuery)}</p>
                             <div className="resultado-meta">
                               <span className="resultado-tipo">{getTipoLabel(item.tipo_resultado)}</span>
                               <span className="resultado-fecha">
@@ -355,6 +497,10 @@ const Busqueda = () => {
 };
 
 export default Busqueda;
+
+
+
+
 
 
 

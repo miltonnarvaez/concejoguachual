@@ -1,12 +1,17 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import './styles/dark-mode.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import AccessibilityBar from './components/AccessibilityBar';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopOnNavigate from './components/ScrollToTopOnNavigate';
+import ScrollToTopButton from './components/ScrollToTopButton';
+import ProgressBar from './components/ProgressBar';
+import ReadingProgress from './components/ReadingProgress';
+import FloatingActionButton from './components/FloatingActionButton';
 
 // Páginas públicas
 import Home from './pages/Home';
@@ -30,6 +35,8 @@ import PoliticaPrivacidad from './pages/PoliticaPrivacidad';
 import TratamientoDatos from './pages/TratamientoDatos';
 import MapaSitio from './pages/MapaSitio';
 import Busqueda from './pages/Busqueda';
+import Historia from './pages/Historia';
+import PlanAccion from './pages/PlanAccion';
 
 // Páginas de administración
 import AdminLogin from './pages/admin/AdminLogin';
@@ -57,6 +64,7 @@ import Contacto from './pages/Contacto';
 function App() {
   return (
     <div className="App">
+      <ProgressBar />
       <ScrollToTopOnNavigate />
       <AccessibilityBar />
       <Header />
@@ -87,6 +95,8 @@ function App() {
           <Route path="/mapa-sitio" element={<MapaSitio />} />
           <Route path="/busqueda" element={<Busqueda />} />
           <Route path="/contacto" element={<Contacto />} />
+          <Route path="/historia" element={<Historia />} />
+          <Route path="/plan-accion" element={<PlanAccion />} />
           
           {/* Rutas de administración */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -222,6 +232,9 @@ function App() {
       </main>
       <Footer />
       <ScrollToTop />
+      <ScrollToTopButton />
+      <ReadingProgress />
+      <FloatingActionButton />
     </div>
   );
 }

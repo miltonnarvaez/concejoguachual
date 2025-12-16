@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { getFileUrl } from '../utils/fileUtils';
+import { FaImages, FaClipboardList, FaCalendarAlt, FaUserFriends, FaBuilding, FaStar, FaChevronLeft, FaChevronRight, FaTimes, FaExpand } from 'react-icons/fa';
 import './Galeria.css';
 
 const Galeria = () => {
   const [filtroCategoria, setFiltroCategoria] = useState('todas');
   const [filtroTipo, setFiltroTipo] = useState('todas');
   const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
+  const [indiceImagenActual, setIndiceImagenActual] = useState(0);
 
   const { data: items = [], isLoading } = useQuery({
     queryKey: ['galeria', filtroCategoria, filtroTipo],
@@ -24,12 +26,12 @@ const Galeria = () => {
   });
 
   const categorias = [
-    { id: 'todas', nombre: 'Todas', icono: '📸' },
-    { id: 'sesiones', nombre: 'Sesiones', icono: '📋' },
-    { id: 'eventos', nombre: 'Eventos', icono: '🎉' },
-    { id: 'autoridades', nombre: 'Autoridades', icono: '👥' },
-    { id: 'actividades', nombre: 'Actividades', icono: '🏛️' },
-    { id: 'otros', nombre: 'Otros', icono: '📸' }
+    { id: 'todas', nombre: 'Todas', icono: FaImages },
+    { id: 'sesiones', nombre: 'Sesiones', icono: FaClipboardList },
+    { id: 'eventos', nombre: 'Eventos', icono: FaCalendarAlt },
+    { id: 'autoridades', nombre: 'Autoridades', icono: FaUserFriends },
+    { id: 'actividades', nombre: 'Actividades', icono: FaBuilding },
+    { id: 'otros', nombre: 'Otros', icono: FaImages }
   ];
 
   const tipos = [
@@ -37,6 +39,52 @@ const Galeria = () => {
     { id: 'foto', nombre: 'Fotografías' },
     { id: 'video', nombre: 'Videos' }
   ];
+
+  // Filtrar solo imágenes para el lightbox
+  const imagenesFiltradas = items.filter(item => item.tipo === 'foto');
+
+  const abrirLightbox = (item, index) => {
+    if (item.tipo === 'foto') {
+      const indiceEnFiltradas = imagenesFiltradas.findIndex(img => img.id === item.id);
+      setIndiceImagenActual(indiceEnFiltradas >= 0 ? indiceEnFiltradas : 0);
+      setImagenSeleccionada(item);
+    }
+  };
+
+  const cerrarLightbox = () => {
+    setImagenSeleccionada(null);
+  };
+
+  const navegarImagen = (direccion) => {
+    if (imagenesFiltradas.length === 0) return;
+    const nuevoIndice = direccion === 'next'
+      ? (indiceImagenActual + 1) % imagenesFiltradas.length
+      : (indiceImagenActual - 1 + imagenesFiltradas.length) % imagenesFiltradas.length;
+    setIndiceImagenActual(nuevoIndice);
+    setImagenSeleccionada(imagenesFiltradas[nuevoIndice]);
+  };
+
+  // Navegación con teclado
+  useEffect(() => {
+    if (!imagenSeleccionada) return;
+    
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        navegarImagen('next');
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        navegarImagen('prev');
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        cerrarLightbox();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [imagenSeleccionada, indiceImagenActual]);
 
   if (isLoading) {
     return <div className="loading">Cargando galería...</div>;
@@ -64,7 +112,7 @@ const Galeria = () => {
                     className={`filtro-btn ${filtroCategoria === cat.id ? 'active' : ''}`}
                     onClick={() => setFiltroCategoria(cat.id)}
                   >
-                    <span>{cat.icono}</span> {cat.nombre}
+                    <span className="filtro-icon">{React.createElement(cat.icono)}</span> {cat.nombre}
                   </button>
                 ))}
               </div>
@@ -93,11 +141,11 @@ const Galeria = () => {
             </div>
           ) : (
             <div className="galeria-grid">
-              {items.map((item) => (
+              {items.map((item, index) => (
                 <div
                   key={item.id}
                   className={`galeria-item ${item.tipo}`}
-                  onClick={() => item.tipo === 'foto' && setImagenSeleccionada(item)}
+                  onClick={() => item.tipo === 'foto' && abrirLightbox(item, index)}
                 >
                   {item.destacada && (
                     <span className="destacada-badge">⭐ Destacada</span>
@@ -152,18 +200,38 @@ const Galeria = () => {
         </div>
       </section>
 
-      {/* Lightbox para imágenes */}
+      {/* Lightbox mejorado para imágenes */}
       {imagenSeleccionada && (
-        <div className="lightbox" onClick={() => setImagenSeleccionada(null)}>
+        <div className="lightbox" onClick={cerrarLightbox}>
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <button className="lightbox-close" onClick={() => setImagenSeleccionada(null)}>
-              ×
+            <button className="lightbox-close" onClick={cerrarLightbox} aria-label="Cerrar">
+              <FaTimes />
             </button>
-            <img
-              src={getFileUrl(imagenSeleccionada.archivo_url)}
-              alt={imagenSeleccionada.titulo}
-              className="lightbox-image"
-            />
+            {imagenesFiltradas.length > 1 && (
+              <>
+                <button 
+                  className="lightbox-nav lightbox-prev" 
+                  onClick={() => navegarImagen('prev')}
+                  aria-label="Imagen anterior"
+                >
+                  <FaChevronLeft />
+                </button>
+                <button 
+                  className="lightbox-nav lightbox-next" 
+                  onClick={() => navegarImagen('next')}
+                  aria-label="Siguiente imagen"
+                >
+                  <FaChevronRight />
+                </button>
+              </>
+            )}
+            <div className="lightbox-image-container">
+              <img
+                src={getFileUrl(imagenSeleccionada.archivo_url)}
+                alt={imagenSeleccionada.titulo}
+                className="lightbox-image"
+              />
+            </div>
             <div className="lightbox-info">
               <h2>{imagenSeleccionada.titulo}</h2>
               {imagenSeleccionada.descripcion && (
@@ -171,14 +239,24 @@ const Galeria = () => {
               )}
               {imagenSeleccionada.fecha_evento && (
                 <p className="lightbox-fecha">
-                  Fecha del evento: {new Date(imagenSeleccionada.fecha_evento).toLocaleDateString('es-CO', {
+                  <FaCalendarAlt /> {new Date(imagenSeleccionada.fecha_evento).toLocaleDateString('es-CO', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
                   })}
                 </p>
               )}
+              {imagenSeleccionada.categoria && (
+                <p className="lightbox-categoria">
+                  Categoría: {imagenSeleccionada.categoria}
+                </p>
+              )}
             </div>
+            {imagenesFiltradas.length > 1 && (
+              <div className="lightbox-counter">
+                {indiceImagenActual + 1} / {imagenesFiltradas.length}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -187,6 +265,10 @@ const Galeria = () => {
 };
 
 export default Galeria;
+
+
+
+
 
 
 

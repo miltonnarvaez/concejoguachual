@@ -21,7 +21,12 @@ export const AccessibilityProvider = ({ children }) => {
   useEffect(() => {
     // Aplicar estilos de accesibilidad al body
     const body = document.body;
-    body.style.fontSize = `${textSize}rem`;
+    // Solo aplicar fontSize si es diferente de 1 (tamaño por defecto)
+    if (textSize !== 1) {
+      body.style.fontSize = `${textSize}rem`;
+    } else {
+      body.style.fontSize = '';
+    }
     body.style.filter = grayscale ? 'grayscale(100%)' : 'none';
     body.classList.toggle('high-contrast', highContrast);
     body.classList.toggle('readable-font', readableFont);
@@ -58,6 +63,10 @@ export const AccessibilityProvider = ({ children }) => {
     </AccessibilityContext.Provider>
   );
 };
+
+
+
+
 
 
 

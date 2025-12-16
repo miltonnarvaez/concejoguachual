@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { useLanguage } from '../context/LanguageContext';
+import { useTheme } from '../context/ThemeContext';
+import { FaMoon, FaSun } from 'react-icons/fa';
 import './AccessibilityBar.css';
 
 const AccessibilityBar = () => {
@@ -21,6 +23,7 @@ const AccessibilityBar = () => {
     resetAccessibility
   } = useAccessibility();
   const { t } = useLanguage();
+  const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const barRef = useRef(null);
   const [voiceControl, setVoiceControl] = useState(false);
@@ -370,6 +373,14 @@ const AccessibilityBar = () => {
               <path d="M12.79 16.95c3.03-.39 5.21-3.11 5.21-6.16V4.25C18 3.56 17.44 3 16.75 3s-1.25.56-1.25 1.25v6.65c0 1.67-1.13 3.19-2.77 3.52V3.25C12.73 2.56 12.17 2 11.48 2S10.23 2.56 10.23 3.25V13.5c-1.6-.33-2.77-1.85-2.77-3.6V3.25C7.46 2.56 6.9 2 6.21 2S4.96 2.56 4.96 3.25v6.65c0 3.05 2.18 5.77 5.21 6.16v1.34c0 .69.56 1.25 1.25 1.25s1.25-.56 1.25-1.25v-1.34c.25-.03.5-.08.75-.13v1.28c0 .69.56 1.25 1.25 1.25s1.25-.56 1.25-1.25v-1.28c.25.05.5.1.75.13zm-1.04-2.09c-.25.05-.5.09-.75.13v-1.28c.25-.03.5-.08.75-.13v1.28z"/>
             </svg>
             {t('accesibilidad.subrayarEnlaces')}
+          </button>
+          <button
+            onClick={toggleTheme}
+            className={`accessibility-option ${isDarkMode ? 'active' : ''}`}
+            aria-label={isDarkMode ? 'Activar modo claro' : 'Activar modo oscuro'}
+          >
+            {isDarkMode ? <FaSun /> : <FaMoon />}
+            {isDarkMode ? 'Modo Claro' : 'Modo Oscuro'}
           </button>
           <button
             onClick={() => setVoiceControl(!voiceControl)}

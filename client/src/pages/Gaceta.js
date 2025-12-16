@@ -3,6 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocation, Link } from 'react-router-dom';
 import api from '../services/api';
 import { getFileUrl } from '../utils/fileUtils';
+import {
+  FaGavel, FaClipboardList, FaFileContract, FaProjectDiagram, FaBook,
+  FaBalanceScale, FaClipboardCheck
+} from 'react-icons/fa';
 import './Gaceta.css';
 
 const Gaceta = () => {
@@ -20,13 +24,13 @@ const Gaceta = () => {
   });
 
   const tipos = [
-    { value: 'acuerdo', label: '📄 ACUERDOS' },
-    { value: 'acta', label: '📋 ACTAS DE SESIÓN' },
-    { value: 'decreto', label: '📜 DECRETOS' },
-    { value: 'proyecto', label: '📝 PROYECTOS' },
-    { value: 'manual', label: '📚 MANUALES' },
-    { value: 'ley', label: '⚖️ LEYES' },
-    { value: 'politica', label: '📋 POLÍTICAS' }
+    { value: 'acuerdo', label: 'ACUERDOS', icono: FaGavel },
+    { value: 'acta', label: 'ACTAS DE SESIÓN', icono: FaClipboardList },
+    { value: 'decreto', label: 'DECRETOS', icono: FaFileContract },
+    { value: 'proyecto', label: 'PROYECTOS', icono: FaProjectDiagram },
+    { value: 'manual', label: 'MANUALES', icono: FaBook },
+    { value: 'ley', label: 'LEYES', icono: FaBalanceScale },
+    { value: 'politica', label: 'POLÍTICAS', icono: FaClipboardCheck }
   ];
 
   if (isLoading) {
@@ -49,6 +53,7 @@ const Gaceta = () => {
                 href={`/gaceta?tipo=${tipo.value}`}
                 className={`filter-btn ${tipoFiltro === tipo.value ? 'active' : ''}`}
               >
+                <span className="filter-icon">{React.createElement(tipo.icono)}</span>
                 {tipo.label}
               </a>
             ))}

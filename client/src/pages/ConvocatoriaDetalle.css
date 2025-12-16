@@ -39,9 +39,17 @@
 }
 
 .convocatoria-destacada-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   background: #ffc107;
   color: #155724;
+}
+
+.convocatoria-destacada-badge svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -124,6 +132,10 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+
+
 
 
 

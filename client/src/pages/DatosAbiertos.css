@@ -54,9 +54,17 @@
 }
 
 .formato-icon {
-  font-size: 3rem;
-  display: block;
+  font-size: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1rem;
+  color: var(--color-primary);
+}
+
+.formato-icon svg {
+  width: 4rem;
+  height: 4rem;
 }
 
 .formato-card h3 {
@@ -246,6 +254,10 @@
     width: 100%;
   }
 }
+
+
+
+
 
 
 

@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
+import { FaSearch, FaUser, FaIdCard, FaPhone, FaEnvelope, FaFileAlt, FaAlignLeft } from 'react-icons/fa';
+import { useToast } from '../context/ToastContext';
+import FormField from '../components/FormField';
 import './PQRSD.css';
 
 const PQRSD = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [formData, setFormData] = useState({
     tipo: 'peticion',
     grupo_interes: 'general',
@@ -21,6 +25,103 @@ const PQRSD = () => {
   const [numeroRadicado, setNumeroRadicado] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [formProgress, setFormProgress] = useState(0);
+  const draftLoadedRef = useRef(false);
+
+  // Funciones de validación
+  const validateDocumento = (value) => {
+    if (!value || value.trim() === '') return 'Este campo es obligatorio';
+    if (value.length < 5) return 'El documento debe tener al menos 5 caracteres';
+    if (!/^[0-9]+$/.test(value)) return 'El documento solo debe contener números';
+    return true;
+  };
+
+  const validateNombre = (value) => {
+    if (!value || value.trim() === '') return 'Este campo es obligatorio';
+    if (value.length < 3) return 'El nombre debe tener al menos 3 caracteres';
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) return 'El nombre solo debe contener letras';
+    return true;
+  };
+
+  const validateEmail = (value) => {
+    if (!value || value.trim() === '') return 'Este campo es obligatorio';
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) return 'Ingrese un email válido';
+    return true;
+  };
+
+  const validateTelefono = (value) => {
+    if (value && value.trim() !== '') {
+      const phoneRegex = /^[0-9+\-\s()]{7,15}$/;
+      if (!phoneRegex.test(value)) return 'Ingrese un teléfono válido';
+    }
+    return true;
+  };
+
+  // Calcular progreso del formulario
+  useEffect(() => {
+    const fields = ['tipo', 'nombre', 'documento', 'email', 'asunto', 'descripcion', 'aceptaTerminos'];
+    const filledFields = fields.filter(field => {
+      if (field === 'aceptaTerminos') return formData[field];
+      return formData[field] && formData[field].toString().trim() !== '';
+    }).length;
+    setFormProgress(Math.round((filledFields / fields.length) * 100));
+  }, [formData]);
+
+  // Autoguardado en localStorage
+  useEffect(() => {
+    const saveDraft = () => {
+      try {
+        localStorage.setItem('pqrsd_draft', JSON.stringify({
+          ...formData,
+          savedAt: new Date().toISOString()
+        }));
+      } catch (error) {
+        console.error('Error guardando borrador:', error);
+      }
+    };
+
+    const timer = setTimeout(saveDraft, 1000);
+    return () => clearTimeout(timer);
+  }, [formData]);
+
+  // Cargar borrador al montar (solo una vez)
+  useEffect(() => {
+    if (draftLoadedRef.current) return; // Ya se cargó
+    
+    try {
+      const draft = localStorage.getItem('pqrsd_draft');
+      const toastShown = sessionStorage.getItem('pqrsd_draft_toast_shown');
+      
+      if (draft && !toastShown) {
+        const parsedDraft = JSON.parse(draft);
+        // Solo cargar si tiene menos de 7 días
+        const savedAt = new Date(parsedDraft.savedAt);
+        const daysDiff = (new Date() - savedAt) / (1000 * 60 * 60 * 24);
+        if (daysDiff < 7) {
+          // Verificar si el borrador tiene datos reales
+          const hasData = parsedDraft.nombre || parsedDraft.email || parsedDraft.asunto || parsedDraft.descripcion;
+          if (hasData) {
+            setFormData(prev => ({ ...prev, ...parsedDraft }));
+            // Solo mostrar toast si hay datos significativos y no se ha mostrado en esta sesión
+            if (parsedDraft.nombre || parsedDraft.email || parsedDraft.descripcion) {
+              showToast('Borrador recuperado automáticamente', 'info', 3000);
+              sessionStorage.setItem('pqrsd_draft_toast_shown', 'true');
+            }
+          } else {
+            localStorage.removeItem('pqrsd_draft');
+          }
+        } else {
+          localStorage.removeItem('pqrsd_draft');
+        }
+      }
+      draftLoadedRef.current = true;
+    } catch (error) {
+      console.error('Error cargando borrador:', error);
+      draftLoadedRef.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Solo ejecutar una vez al montar
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -56,6 +157,10 @@ const PQRSD = () => {
 
       setNumeroRadicado(response.data.numero_radicado);
       setEnviado(true);
+      showToast(`Solicitud enviada exitosamente. Número de radicado: ${response.data.numero_radicado}`, 'success');
+      
+      // Limpiar borrador
+      localStorage.removeItem('pqrsd_draft');
       
       // Resetear formulario
       setFormData({
@@ -69,10 +174,12 @@ const PQRSD = () => {
         descripcion: '',
         aceptaTerminos: false
       });
+      setFormProgress(0);
     } catch (err) {
       console.error('Error enviando PQRSD:', err);
-      setError(err.response?.data?.error || 'Error al enviar la solicitud. Por favor, intente nuevamente.');
-    } finally {
+      const errorMsg = err.response?.data?.error || 'Error al enviar la solicitud. Por favor, intente nuevamente.';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
       setLoading(false);
     }
   };
@@ -106,7 +213,7 @@ const PQRSD = () => {
               className="btn btn-secondary"
               style={{ whiteSpace: 'nowrap' }}
             >
-              🔍 Consultar Estado
+              <FaSearch /> Consultar Estado
             </Link>
           </div>
           
@@ -206,69 +313,88 @@ const PQRSD = () => {
                 </small>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="nombre">Nombre Completo *</label>
-                <input
-                  type="text"
-                  id="nombre"
-                  name="nombre"
-                  value={formData.nombre}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              {/* Progress Indicator */}
+              {formProgress > 0 && (
+                <div className="form-progress-container">
+                  <div className="form-progress-bar">
+                    <div 
+                      className="form-progress-fill" 
+                      style={{ width: `${formProgress}%` }}
+                    ></div>
+                  </div>
+                  <span className="form-progress-text">{formProgress}% completado</span>
+                </div>
+              )}
+
+              <FormField
+                label="Nombre Completo"
+                name="nombre"
+                type="text"
+                value={formData.nombre}
+                onChange={handleChange}
+                required
+                validation={validateNombre}
+                icon={FaUser}
+                placeholder="Ingrese su nombre completo"
+                helpText="Mínimo 3 caracteres, solo letras"
+              />
 
               <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="documento">Número de Documento *</label>
-                  <input
-                    type="text"
-                    id="documento"
-                    name="documento"
-                    value={formData.documento}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="telefono">Teléfono</label>
-                  <input
-                    type="tel"
-                    id="telefono"
-                    name="telefono"
-                    value={formData.telefono}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Correo Electrónico *</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="asunto">Asunto *</label>
-                <input
+                <FormField
+                  label="Número de Documento"
+                  name="documento"
                   type="text"
-                  id="asunto"
-                  name="asunto"
-                  value={formData.asunto}
+                  value={formData.documento}
                   onChange={handleChange}
                   required
+                  validation={validateDocumento}
+                  icon={FaIdCard}
+                  placeholder="Ej: 1234567890"
+                  helpText="Solo números, mínimo 5 dígitos"
+                />
+
+                <FormField
+                  label="Teléfono"
+                  name="telefono"
+                  type="tel"
+                  value={formData.telefono}
+                  onChange={handleChange}
+                  validation={validateTelefono}
+                  icon={FaPhone}
+                  placeholder="Ej: 3001234567"
+                  helpText="Opcional"
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="descripcion">Descripción Detallada *</label>
+              <FormField
+                label="Correo Electrónico"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                validation={validateEmail}
+                icon={FaEnvelope}
+                placeholder="ejemplo@correo.com"
+              />
+
+              <FormField
+                label="Asunto"
+                name="asunto"
+                type="text"
+                value={formData.asunto}
+                onChange={handleChange}
+                required
+                icon={FaFileAlt}
+                placeholder="Resumen breve de su solicitud"
+                maxLength={255}
+                showCharCount
+              />
+
+              <div className="form-field">
+                <label htmlFor="descripcion" className="form-field-label">
+                  Descripción Detallada <span className="required-asterisk">*</span>
+                </label>
                 <textarea
                   id="descripcion"
                   name="descripcion"
@@ -276,7 +402,13 @@ const PQRSD = () => {
                   onChange={handleChange}
                   rows="6"
                   required
+                  className="form-field-input"
+                  placeholder="Describa su solicitud de manera detallada..."
+                  maxLength={2000}
                 />
+                <div className="form-field-char-count">
+                  {formData.descripcion?.length || 0} / 2000 caracteres
+                </div>
               </div>
 
               <div className="form-group checkbox-group">

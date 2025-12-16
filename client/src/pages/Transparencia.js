@@ -3,6 +3,14 @@ import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 import { getFileUrl } from '../utils/fileUtils';
+import {
+  FaClipboardList, FaDollarSign, FaHandshake, FaChartBar, FaChartLine,
+  FaFileInvoiceDollar, FaShieldAlt, FaFileSignature, FaSitemap, FaProjectDiagram,
+  FaGavel, FaUserCog, FaClipboardCheck, FaLandmark, FaUser, FaSearch, FaFileAlt,
+  FaPhone, FaCalendarAlt, FaClock
+} from 'react-icons/fa';
+import CountUp from '../components/CountUp';
+import Breadcrumbs from '../components/Breadcrumbs';
 import '../styles/PageLayout.css';
 import './Transparencia.css';
 
@@ -32,21 +40,21 @@ const Transparencia = () => {
 
   // Categorías según Ley 1712 de 2014 e ITA
   const categorias = [
-    { id: 'todas', nombre: 'Todas las Categorías', icono: '📋' },
-    { id: 'presupuesto', nombre: 'Presupuesto', icono: '💰', descripcion: 'Presupuesto general, ejecución presupuestal y modificaciones' },
-    { id: 'contratacion', nombre: 'Contratación Pública', icono: '📋', descripcion: 'Procesos de contratación, licitaciones y adjudicaciones' },
-    { id: 'plan_compras', nombre: 'Plan Anual de Compras', icono: '📊', descripcion: 'Plan anual de adquisiciones y compras' },
-    { id: 'rendicion_cuentas', nombre: 'Rendición de Cuentas', icono: '📈', descripcion: 'Informes de gestión y rendición de cuentas' },
-    { id: 'estados_financieros', nombre: 'Estados Financieros', icono: '💵', descripcion: 'Estados financieros, balances y reportes contables' },
-    { id: 'control_interno', nombre: 'Control Interno', icono: '🔍', descripcion: 'Informes de control interno y auditorías' },
-    { id: 'declaracion_renta', nombre: 'Declaración de Renta', icono: '📑', descripcion: 'Declaraciones de renta y bienes' },
-    { id: 'estructura_organizacional', nombre: 'Estructura Organizacional', icono: '🏢', descripcion: 'Organigrama, manual de funciones y estructura' },
-    { id: 'plan_desarrollo', nombre: 'Plan de Desarrollo', icono: '📐', descripcion: 'Plan de desarrollo municipal y seguimiento' },
-    { id: 'normatividad', nombre: 'Normatividad', icono: '⚖️', descripcion: 'Normas, reglamentos y disposiciones aplicables' },
-    { id: 'servicios_ciudadanos', nombre: 'Servicios Ciudadanos', icono: '👥', descripcion: 'Información sobre servicios y trámites' },
-    { id: 'auditorias', nombre: 'Auditorías', icono: '🔎', descripcion: 'Informes de auditoría externa e interna' },
-    { id: 'bienes_inmuebles', nombre: 'Bienes Inmuebles', icono: '🏛️', descripcion: 'Inventario de bienes inmuebles y patrimonio' },
-    { id: 'personal', nombre: 'Personal', icono: '👤', descripcion: 'Planta de personal, nómina y convocatorias de empleo' }
+    { id: 'todas', nombre: 'Todas las Categorías', icono: FaClipboardList },
+    { id: 'presupuesto', nombre: 'Presupuesto', icono: FaDollarSign, descripcion: 'Presupuesto general, ejecución presupuestal y modificaciones' },
+    { id: 'contratacion', nombre: 'Contratación Pública', icono: FaHandshake, descripcion: 'Procesos de contratación, licitaciones y adjudicaciones' },
+    { id: 'plan_compras', nombre: 'Plan Anual de Compras', icono: FaChartBar, descripcion: 'Plan anual de adquisiciones y compras' },
+    { id: 'rendicion_cuentas', nombre: 'Rendición de Cuentas', icono: FaChartLine, descripcion: 'Informes de gestión y rendición de cuentas' },
+    { id: 'estados_financieros', nombre: 'Estados Financieros', icono: FaFileInvoiceDollar, descripcion: 'Estados financieros, balances y reportes contables' },
+    { id: 'control_interno', nombre: 'Control Interno', icono: FaShieldAlt, descripcion: 'Informes de control interno y auditorías' },
+    { id: 'declaracion_renta', nombre: 'Declaración de Renta', icono: FaFileSignature, descripcion: 'Declaraciones de renta y bienes' },
+    { id: 'estructura_organizacional', nombre: 'Estructura Organizacional', icono: FaSitemap, descripcion: 'Organigrama, manual de funciones y estructura' },
+    { id: 'plan_desarrollo', nombre: 'Plan de Desarrollo', icono: FaProjectDiagram, descripcion: 'Plan de desarrollo municipal y seguimiento' },
+    { id: 'normatividad', nombre: 'Normatividad', icono: FaGavel, descripcion: 'Normas, reglamentos y disposiciones aplicables' },
+    { id: 'servicios_ciudadanos', nombre: 'Servicios Ciudadanos', icono: FaUserCog, descripcion: 'Información sobre servicios y trámites' },
+    { id: 'auditorias', nombre: 'Auditorías', icono: FaClipboardCheck, descripcion: 'Informes de auditoría externa e interna' },
+    { id: 'bienes_inmuebles', nombre: 'Bienes Inmuebles', icono: FaLandmark, descripcion: 'Inventario de bienes inmuebles y patrimonio' },
+    { id: 'personal', nombre: 'Personal', icono: FaUser, descripcion: 'Planta de personal, nómina y convocatorias de empleo' }
   ];
 
   const documentosFiltrados = categoriaSeleccionada === 'todas' 
@@ -60,12 +68,35 @@ const Transparencia = () => {
     return acc;
   }, {});
 
+  // Calcular estadísticas para el dashboard
+  const totalDocumentos = documentos.length;
+  const documentosEsteAno = documentos.filter(doc => {
+    const fecha = doc.fecha_publicacion || doc.creado_en;
+    if (!fecha) return false;
+    const año = new Date(fecha).getFullYear();
+    return año === new Date().getFullYear();
+  }).length;
+  
+  const ultimaActualizacion = documentos.length > 0 
+    ? documentos.reduce((latest, doc) => {
+        const fecha = doc.fecha_actualizacion || doc.creado_en;
+        if (!fecha) return latest;
+        return new Date(fecha) > new Date(latest) ? fecha : latest;
+      }, documentos[0].creado_en)
+    : null;
+
+  const categoriaMasDocumentos = Object.entries(documentosPorCategoria)
+    .sort((a, b) => b[1].length - a[1].length)[0];
+
   return (
     <div className="transparencia-page page-container">
+      <Breadcrumbs />
       <section className="section">
         <div className="container">
           <div className="transparencia-header page-header">
-            <div className="page-header-icon">🔍</div>
+            <div className="page-header-icon">
+              <FaSearch />
+            </div>
             <div>
               <h1 className="page-title">Transparencia y Acceso a la Información Pública</h1>
               <p className="transparencia-intro">
@@ -75,8 +106,65 @@ const Transparencia = () => {
               </p>
               <div className="datos-abiertos-link">
                 <a href="/datos-abiertos" className="btn btn-datos-abiertos">
-                  📊 Ver Datos Abiertos (CSV, JSON, XML)
+                  <FaChartBar /> Ver Datos Abiertos (CSV, JSON, XML)
                 </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Dashboard de Estadísticas */}
+          <div className="transparencia-dashboard">
+            <h2 className="dashboard-title">Resumen de Transparencia</h2>
+            <div className="dashboard-widgets">
+              <div className="dashboard-widget">
+                <div className="widget-icon">
+                  <FaFileAlt />
+                </div>
+                <div className="widget-content">
+                  <h3 className="widget-number">
+                    <CountUp end={totalDocumentos} duration={2000} />
+                  </h3>
+                  <p className="widget-label">Documentos Publicados</p>
+                </div>
+              </div>
+              <div className="dashboard-widget">
+                <div className="widget-icon">
+                  <FaCalendarAlt />
+                </div>
+                <div className="widget-content">
+                  <h3 className="widget-number">
+                    <CountUp end={documentosEsteAno} duration={2000} />
+                  </h3>
+                  <p className="widget-label">Documentos {new Date().getFullYear()}</p>
+                </div>
+              </div>
+              <div className="dashboard-widget">
+                <div className="widget-icon">
+                  <FaClipboardList />
+                </div>
+                <div className="widget-content">
+                  <h3 className="widget-number">
+                    {categoriaMasDocumentos ? categoriaMasDocumentos[1].length : 0}
+                  </h3>
+                  <p className="widget-label">
+                    {categoriaMasDocumentos 
+                      ? categorias.find(c => c.id === categoriaMasDocumentos[0])?.nombre || 'Categoría'
+                      : 'Sin documentos'}
+                  </p>
+                </div>
+              </div>
+              <div className="dashboard-widget">
+                <div className="widget-icon">
+                  <FaClock />
+                </div>
+                <div className="widget-content">
+                  <h3 className="widget-number">
+                    {ultimaActualizacion 
+                      ? new Date(ultimaActualizacion).toLocaleDateString('es-CO', { day: '2-digit', month: 'short' })
+                      : 'N/A'}
+                  </h3>
+                  <p className="widget-label">Última Actualización</p>
+                </div>
               </div>
             </div>
           </div>
@@ -101,7 +189,9 @@ const Transparencia = () => {
                     setSearchParams(newSearchParams);
                   }}
                 >
-                  <span className="categoria-icon">{categoria.icono}</span>
+                  <span className="categoria-icon">
+                    {React.createElement(categoria.icono)}
+                  </span>
                   <span className="categoria-nombre">{categoria.nombre}</span>
                   {categoria.descripcion && (
                     <span className="categoria-desc">{categoria.descripcion}</span>
@@ -178,7 +268,7 @@ const Transparencia = () => {
                           rel="noopener noreferrer"
                           className="btn btn-documento"
                         >
-                          <span>📄</span> Ver documento →
+                          <FaFileAlt /> Ver documento →
                         </a>
                       )}
                     </div>
@@ -193,21 +283,21 @@ const Transparencia = () => {
             <h2>Información Adicional</h2>
             <div className="info-grid">
               <div className="info-card">
-                <h3>📋 Solicitud de Información</h3>
+                <h3><FaClipboardList /> Solicitud de Información</h3>
                 <p>
                   Si necesita información que no se encuentra publicada, puede presentar una solicitud 
                   a través del <a href="/pqrsd">sistema de PQRSD</a>.
                 </p>
               </div>
               <div className="info-card">
-                <h3>⏱️ Plazos de Respuesta</h3>
+                <h3><FaCalendarAlt /> Plazos de Respuesta</h3>
                 <p>
                   De acuerdo con la Ley 1712 de 2014, las solicitudes de información pública serán 
                   respondidas en un plazo máximo de <strong>15 días hábiles</strong>.
                 </p>
               </div>
               <div className="info-card">
-                <h3>📞 Contacto</h3>
+                <h3><FaPhone /> Contacto</h3>
                 <p>
                   <strong>Correo:</strong> contacto@concejo.guachucal.gov.co<br />
                   <strong>Teléfono:</strong> +57 (2) XXX-XXXX<br />

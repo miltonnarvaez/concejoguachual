@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '../services/api';
 import { getFileUrl } from '../utils/fileUtils';
+import { FaClipboardList, FaBolt, FaStar, FaFileAlt } from 'react-icons/fa';
 import './SesionDetalle.css';
 
 const SesionDetalle = () => {
@@ -92,12 +93,12 @@ const SesionDetalle = () => {
           <div className="sesion-detalle-header">
             <div className="sesion-badges">
               <span className={`sesion-tipo ${sesion.tipo}`}>
-                {sesion.tipo === 'ordinaria' ? '📋 Sesión Ordinaria' :
-                 sesion.tipo === 'extraordinaria' ? '⚡ Sesión Extraordinaria' :
-                 '⭐ Sesión Especial'}
+                {sesion.tipo === 'ordinaria' ? <><FaClipboardList /> Sesión Ordinaria</> :
+                 sesion.tipo === 'extraordinaria' ? <><FaBolt /> Sesión Extraordinaria</> :
+                 <><FaStar /> Sesión Especial</>}
               </span>
               {sesion.destacada && (
-                <span className="sesion-destacada">⭐ Destacada</span>
+                <span className="sesion-destacada"><FaStar /> Destacada</span>
               )}
             </div>
             <h1>Sesión {sesion.numero_sesion}</h1>
@@ -166,7 +167,7 @@ const SesionDetalle = () => {
                   rel="noopener noreferrer"
                   className="btn btn-primary"
                 >
-                  📄 Ver Acta Completa
+                  <FaFileAlt /> Ver Acta Completa
                 </a>
               </div>
             )}
