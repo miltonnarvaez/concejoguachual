@@ -32,6 +32,54 @@
   box-shadow: 0 0 0 3px rgba(4, 85, 24, 0.1);
 }
 
+.busqueda-voice-btn {
+  padding: 1rem;
+  background: #f8f9fa;
+  color: #045518;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 50px;
+}
+
+.busqueda-voice-btn:hover:not(:disabled) {
+  background: #e8f5e9;
+  border-color: #045518;
+  transform: translateY(-2px);
+}
+
+.busqueda-voice-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.busqueda-voice-btn.listening {
+  background: #ffebee;
+  border-color: #d32f2f;
+  color: #d32f2f;
+  animation: pulse-voice 1.5s infinite;
+}
+
+@keyframes pulse-voice {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(211, 47, 47, 0);
+  }
+}
+
+.busqueda-voice-btn svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+}
+
 .busqueda-btn {
   padding: 1rem 2rem;
   background: #045518;

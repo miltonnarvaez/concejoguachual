@@ -3,14 +3,63 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { getFileUrl } from '../utils/fileUtils';
-import { FaImages, FaClipboardList, FaCalendarAlt, FaUserFriends, FaBuilding, FaStar, FaChevronLeft, FaChevronRight, FaTimes, FaExpand } from 'react-icons/fa';
+import { FaImages, FaClipboardList, FaCalendarAlt, FaUserFriends, FaBuilding, FaStar, FaChevronLeft, FaChevronRight, FaTimes, FaExpand, FaTh, FaThLarge, FaList } from 'react-icons/fa';
 import './Galeria.css';
+
+// Componente de imagen lazy
+const LazyImage = ({ src, alt, className, placeholder }) => {
+  const [imageSrc, setImageSrc] = useState(placeholder || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"%3E%3Crect fill="%23ddd" width="400" height="300"/%3E%3C/svg%3E');
+  const [imageRef, setImageRef] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    let observer;
+    if (imageRef) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const img = new Image();
+              img.src = src;
+              img.onload = () => {
+                setImageSrc(src);
+                setIsLoaded(true);
+              };
+              observer.unobserve(imageRef);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(imageRef);
+    }
+    return () => {
+      if (observer && imageRef) {
+        observer.unobserve(imageRef);
+      }
+    };
+  }, [imageRef, src]);
+
+  return (
+    <img
+      ref={setImageRef}
+      src={imageSrc}
+      alt={alt}
+      className={`${className} ${isLoaded ? 'loaded' : 'loading'}`}
+      style={{
+        filter: isLoaded ? 'none' : 'blur(10px)',
+        transition: 'filter 0.3s ease'
+      }}
+    />
+  );
+};
 
 const Galeria = () => {
   const [filtroCategoria, setFiltroCategoria] = useState('todas');
   const [filtroTipo, setFiltroTipo] = useState('todas');
   const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
   const [indiceImagenActual, setIndiceImagenActual] = useState(0);
+  const [vista, setVista] = useState('grid'); // 'grid', 'mosaic', 'list'
 
   const { data: items = [], isLoading } = useQuery({
     queryKey: ['galeria', filtroCategoria, filtroTipo],
@@ -101,35 +150,65 @@ const Galeria = () => {
             </p>
           </div>
 
-          {/* Filtros */}
-          <div className="galeria-filtros">
-            <div className="filtro-group">
-              <label>Categoría:</label>
-              <div className="filtro-buttons">
-                {categorias.map(cat => (
-                  <button
-                    key={cat.id}
-                    className={`filtro-btn ${filtroCategoria === cat.id ? 'active' : ''}`}
-                    onClick={() => setFiltroCategoria(cat.id)}
-                  >
-                    <span className="filtro-icon">{React.createElement(cat.icono)}</span> {cat.nombre}
-                  </button>
-                ))}
+          {/* Filtros y controles de vista */}
+          <div className="galeria-controls">
+            <div className="galeria-filtros">
+              <div className="filtro-group">
+                <label>Categoría:</label>
+                <div className="filtro-buttons">
+                  {categorias.map(cat => (
+                    <button
+                      key={cat.id}
+                      className={`filtro-btn ${filtroCategoria === cat.id ? 'active' : ''}`}
+                      onClick={() => setFiltroCategoria(cat.id)}
+                    >
+                      <span className="filtro-icon">{React.createElement(cat.icono)}</span> {cat.nombre}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="filtro-group">
+                <label>Tipo:</label>
+                <div className="filtro-buttons">
+                  {tipos.map(tipo => (
+                    <button
+                      key={tipo.id}
+                      className={`filtro-btn ${filtroTipo === tipo.id ? 'active' : ''}`}
+                      onClick={() => setFiltroTipo(tipo.id)}
+                    >
+                      {tipo.nombre}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="filtro-group">
-              <label>Tipo:</label>
-              <div className="filtro-buttons">
-                {tipos.map(tipo => (
-                  <button
-                    key={tipo.id}
-                    className={`filtro-btn ${filtroTipo === tipo.id ? 'active' : ''}`}
-                    onClick={() => setFiltroTipo(tipo.id)}
-                  >
-                    {tipo.nombre}
-                  </button>
-                ))}
+            {/* Selector de vista */}
+            <div className="vista-selector">
+              <label>Vista:</label>
+              <div className="vista-buttons">
+                <button
+                  className={`vista-btn ${vista === 'grid' ? 'active' : ''}`}
+                  onClick={() => setVista('grid')}
+                  title="Cuadrícula"
+                >
+                  <FaTh />
+                </button>
+                <button
+                  className={`vista-btn ${vista === 'mosaic' ? 'active' : ''}`}
+                  onClick={() => setVista('mosaic')}
+                  title="Mosaico"
+                >
+                  <FaThLarge />
+                </button>
+                <button
+                  className={`vista-btn ${vista === 'list' ? 'active' : ''}`}
+                  onClick={() => setVista('list')}
+                  title="Listado"
+                >
+                  <FaList />
+                </button>
               </div>
             </div>
           </div>
@@ -140,7 +219,7 @@ const Galeria = () => {
               <p>No hay elementos disponibles en la galería con los filtros seleccionados.</p>
             </div>
           ) : (
-            <div className="galeria-grid">
+            <div className={`galeria-container galeria-${vista}`}>
               {items.map((item, index) => (
                 <div
                   key={item.id}
@@ -153,10 +232,11 @@ const Galeria = () => {
                   
                   {item.tipo === 'foto' ? (
                     <div className="galeria-image-wrapper">
-                      <img
+                      <LazyImage
                         src={getFileUrl(item.thumbnail_url || item.archivo_url)}
                         alt={item.titulo}
                         className="galeria-image"
+                        placeholder={item.thumbnail_url ? getFileUrl(item.thumbnail_url) : undefined}
                       />
                       <div className="galeria-overlay">
                         <h3>{item.titulo}</h3>

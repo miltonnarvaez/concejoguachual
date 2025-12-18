@@ -21,7 +21,7 @@ const GovCoLogo = ({ width = 70, height = 70 }) => {
     // Fallback a logo local
     return (
       <img 
-        src="/images/logoGovCO.png" 
+        src={`${process.env.PUBLIC_URL || ''}/images/logoGovCO.png`}
         alt="GOV.CO"
         width={width}
         height={height}
@@ -39,6 +39,7 @@ const GovCoLogo = ({ width = 70, height = 70 }) => {
       height={height}
       style={{ objectFit: 'contain' }}
       onError={() => setImageError(true)}
+      loading="lazy"
     />
   );
 };

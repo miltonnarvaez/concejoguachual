@@ -164,7 +164,7 @@ const TexturePattern = () => {
             </g>
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#texturePattern)"/>
+        <rect width="100%" height="100%" fill="url(#texturePattern)" opacity="0.08" style={{background: 'transparent'}}/>
       </svg>
     </div>
   );

@@ -15,12 +15,13 @@ const ContraloriaLogo = ({ width = 70, height = 70 }) => {
 
   return (
     <img 
-      src="https://www.contraloria.gov.co/Contraloria/recursos/images/logo-contraloria.svg" 
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/LogoCGRhorizontal.svg/512px-LogoCGRhorizontal.svg.png" 
       alt="Contraloría"
       width={width}
       height={height}
       style={{ objectFit: 'contain' }}
       onError={() => setImageError(true)}
+      loading="lazy"
     />
   );
 };

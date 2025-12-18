@@ -7,7 +7,7 @@ const Bandera = () => {
   return (
     <div className="bandera-container">
       <img
-        src="/images/bandera.png"
+        src={`${process.env.PUBLIC_URL || ''}/images/bandera.png`}
         alt="Bandera de Guachucal"
         className="bandera-image"
         style={{ display: imageLoaded ? 'block' : 'none' }}

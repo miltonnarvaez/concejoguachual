@@ -30,6 +30,7 @@ const ColombiaCompraLogo = ({ width = 70, height = 70 }) => {
       height={height}
       style={{ objectFit: 'contain' }}
       onError={() => setImageError(true)}
+      loading="lazy"
     />
   );
 };

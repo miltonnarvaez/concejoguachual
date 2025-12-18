@@ -20,12 +20,13 @@ const GobiernoDigitalLogo = ({ width = 70, height = 70 }) => {
 
   return (
     <img 
-      src="https://www.gobiernodigital.gov.co/sites/default/files/logo-gobierno-digital.png" 
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Logo_Gobierno_de_Colombia_2022.svg/512px-Logo_Gobierno_de_Colombia_2022.svg.png" 
       alt="Gobierno Digital"
       width={width}
       height={height}
       style={{ objectFit: 'contain' }}
       onError={() => setImageError(true)}
+      loading="lazy"
     />
   );
 };

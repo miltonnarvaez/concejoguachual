@@ -14,7 +14,7 @@ import {
   FaDollarSign, FaHandshake, FaChartLine, FaFileInvoiceDollar, FaShieldAlt,
   FaFileSignature, FaSitemap, FaProjectDiagram, FaGavel as FaLaw, FaUserCog,
   FaClipboardCheck, FaLandmark, FaUser, FaImages, FaCalendarAlt, FaComments, FaEnvelope,
-  FaCheckCircle, FaTimes, FaBars
+  FaCheckCircle, FaTimes, FaBars, FaMapMarkerAlt, FaClock
 } from 'react-icons/fa';
 import './Header.css';
 
@@ -39,6 +39,45 @@ const Header = () => {
       return response.data;
     }
   });
+
+  // Estado para fecha y hora de Colombia
+  const [fechaHora, setFechaHora] = useState({
+    fecha: '',
+    hora: ''
+  });
+
+  useEffect(() => {
+    const actualizarFechaHora = () => {
+      // Zona horaria de Colombia (America/Bogota)
+      const ahora = new Date(new Date().toLocaleString("en-US", {timeZone: "America/Bogota"}));
+      
+      const opcionesFecha = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      };
+      
+      const opcionesHora = {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      };
+      
+      setFechaHora({
+        fecha: ahora.toLocaleDateString('es-CO', opcionesFecha),
+        hora: ahora.toLocaleTimeString('es-CO', opcionesHora)
+      });
+    };
+
+    // Actualizar inmediatamente
+    actualizarFechaHora();
+    
+    // Actualizar cada minuto (60000 ms)
+    const interval = setInterval(actualizarFechaHora, 60000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const menuItems = [
     {
@@ -153,16 +192,15 @@ const Header = () => {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
-    // Si hay otro menú activo, cerrarlo inmediatamente antes de abrir el nuevo
-    if (activeMenu !== null && activeMenu !== index) {
+    // Solo abrir si no hay otro menú activo o si es el mismo
+    if (activeMenu === null || activeMenu === index) {
+      setActiveMenu(index);
+    } else {
+      // Si hay otro menú activo, cerrarlo primero con un pequeño delay
       setActiveMenu(null);
-      // Pequeño delay para asegurar que el menú anterior se cierre antes de abrir el nuevo
       setTimeout(() => {
         setActiveMenu(index);
-      }, 50);
-    } else {
-      // Establecer el menú activo
-      setActiveMenu(index);
+      }, 100);
     }
   };
 
@@ -187,13 +225,13 @@ const Header = () => {
   }, [activeMenu]);
 
   const handleMouseLeave = (index) => {
-    // Aumentar el timeout para evitar flickering al mover el mouse
+    // Reducir el timeout para cerrar más rápido
     timeoutRef.current = setTimeout(() => {
       // Solo cerrar si el menú activo sigue siendo el mismo
       if (activeMenu === index) {
         setActiveMenu(null);
       }
-    }, 500);
+    }, 150);
   };
 
   const handleSubmenuClick = () => {
@@ -393,6 +431,19 @@ const Header = () => {
             <span className="top-bar-email">✉️ {config.email || 'contacto@concejo.guachucal.gov.co'}</span>
           </div>
           <div className="top-bar-right">
+            <div className="header-info-top-bar">
+              <div className="header-location-top-bar">
+                <FaMapMarkerAlt />
+                <span>Guachucal, Nariño, Colombia</span>
+              </div>
+              <div className="header-datetime-top-bar">
+                <FaClock />
+                <div className="header-datetime-content">
+                  <span className="header-fecha">{fechaHora.fecha}</span>
+                  <span className="header-hora">{fechaHora.hora}</span>
+                </div>
+              </div>
+            </div>
             <a href={config.facebook_url || "https://www.facebook.com/p/Concejo-Municipal-de-Guachucal-61555825801735"} target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Facebook">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -414,6 +465,28 @@ const Header = () => {
       <div className="header-top">
         <div className="header-container">
           <Link to="/" className="header-logo">
+            <div className="escudo-colombia-container">
+              <img 
+                src={`${process.env.PUBLIC_URL || ''}/images/colombia.png`}
+                alt="Escudo de Colombia"
+                className="escudo-colombia"
+                onError={(e) => {
+                  // Si no existe la imagen, intentar con diferentes extensiones
+                  const extensions = ['.svg', '.jpg', '.jpeg', '.webp'];
+                  const baseName = `${process.env.PUBLIC_URL || ''}/images/colombia`;
+                  const currentSrc = e.target.src;
+                  const currentExt = currentSrc.substring(currentSrc.lastIndexOf('.'));
+                  const currentIndex = extensions.indexOf(currentExt);
+                  
+                  if (currentIndex < extensions.length - 1) {
+                    e.target.src = `${baseName}${extensions[currentIndex + 1]}`;
+                  } else {
+                    // Si ninguna extensión funciona, usar una URL pública del escudo de Colombia
+                    e.target.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Escudo_de_Colombia.svg/200px-Escudo_de_Colombia.svg.png';
+                  }
+                }}
+              />
+            </div>
             <Escudo />
             <LogoTexto />
           </Link>

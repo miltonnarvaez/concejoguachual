@@ -24,12 +24,13 @@ const UrnaCristalLogo = ({ width = 70, height = 70 }) => {
 
   return (
     <img 
-      src="https://www.urnadecristal.gov.co/sites/default/files/logo-urna-cristal.png" 
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Logo_Urna_de_Cristal.png/512px-Logo_Urna_de_Cristal.png" 
       alt="Urna de Cristal"
       width={width}
       height={height}
       style={{ objectFit: 'contain' }}
       onError={() => setImageError(true)}
+      loading="lazy"
     />
   );
 };

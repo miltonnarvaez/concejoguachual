@@ -1,0 +1,66 @@
+/* FIX ESPECÍFICO PARA CORREGIR left=24px EN grupos-grid */
+
+/* REGLAS ULTRA ESPECÍFICAS - Máxima prioridad para corregir el desplazamiento */
+section.animated-section.animate-fadeInUp.grupos-interes .container .grupos-grid,
+section.animated-section.grupos-interes .container .grupos-grid,
+div.container .grupos-grid,
+.grupos-interes .container .grupos-grid,
+.home .grupos-interes .container .grupos-grid,
+.grupos-interes .grupos-grid,
+.grupos-grid {
+  left: 0 !important;
+  right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  position: relative !important;
+  transform: none !important;
+  float: none !important;
+  clear: both !important;
+  box-sizing: border-box !important;
+}
+
+/* Asegurar que el contenedor no cause desplazamiento */
+.grupos-interes .container,
+section.animated-section.grupos-interes .container {
+  left: 0 !important;
+  right: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: var(--spacing-md) !important;
+  padding-right: var(--spacing-md) !important;
+  position: relative !important;
+  transform: none !important;
+}
+
+/* Asegurar que el grid esté dentro del padding del contenedor */
+.grupos-interes .container .grupos-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  align-items: start !important;
+  justify-items: stretch !important;
+  place-items: unset !important;
+}
+
+/* FORZAR posicionamiento correcto de las tarjetas */
+.grupo-card,
+.grupos-grid .grupo-card,
+.grupos-interes .grupos-grid .grupo-card,
+.grupos-interes .container .grupos-grid .grupo-card,
+section.animated-section.grupos-interes .container .grupos-grid .grupo-card {
+  position: relative !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  transform: none !important;
+  float: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}

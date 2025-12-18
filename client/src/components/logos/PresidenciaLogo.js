@@ -17,12 +17,13 @@ const PresidenciaLogo = ({ width = 70, height = 70 }) => {
 
   return (
     <img 
-      src="https://www.presidencia.gov.co/sites/default/files/logo-presidencia.png" 
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Logo_Presidencia_de_la_Rep%C3%BAblica_de_Colombia_2022.svg/512px-Logo_Presidencia_de_la_Rep%C3%BAblica_de_Colombia_2022.svg.png" 
       alt="Presidencia de la República"
       width={width}
       height={height}
       style={{ objectFit: 'contain' }}
       onError={() => setImageError(true)}
+      loading="lazy"
     />
   );
 };

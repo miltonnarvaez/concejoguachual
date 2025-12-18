@@ -92,3 +92,7 @@ npm run build:prod  # Usa build:prod en lugar de build
 pm2 restart concejo-backend
 echo "Actualización completada"
 ```
+
+
+
+

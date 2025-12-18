@@ -138,3 +138,7 @@ Después de subir, verifica que todo funciona:
    ```bash
    sudo tail -f /var/log/nginx/concejo_error.log
    ```
+
+
+
+

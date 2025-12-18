@@ -2,6 +2,19 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import './styles/dark-mode.css';
+import './styles/force-center.css';
+import './styles/EMERGENCY-CENTER-FIX.css';
+import './styles/ULTIMATE-CENTER-FIX.css';
+import './styles/FIX-ACCESO-RAPIDO.css';
+import './styles/FIX-CONTACTO.css';
+import './styles/FIX-NOTICIAS-HOME.css';
+import './styles/FIX-GRUPOS-INTERES.css';
+import './styles/FIX-GRUPOS-GRID-LEFT.css';
+import './styles/FIX-UBICACION.css';
+import './styles/FIX-ESTADISTICAS-SECTION.css';
+import './styles/FIX-GACETA.css';
+import './styles/FIX-ENLACES-INTERES.css';
+import './styles/FIX-ENLACES-GRID-SCROLL.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import AccessibilityBar from './components/AccessibilityBar';
@@ -10,7 +23,6 @@ import ScrollToTop from './components/ScrollToTop';
 import ScrollToTopOnNavigate from './components/ScrollToTopOnNavigate';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import ProgressBar from './components/ProgressBar';
-import ReadingProgress from './components/ReadingProgress';
 import FloatingActionButton from './components/FloatingActionButton';
 
 // Páginas públicas
@@ -233,7 +245,6 @@ function App() {
       <Footer />
       <ScrollToTop />
       <ScrollToTopButton />
-      <ReadingProgress />
       <FloatingActionButton />
     </div>
   );

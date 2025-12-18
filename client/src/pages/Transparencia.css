@@ -85,12 +85,116 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .dashboard-title {
   color: var(--color-primary);
   font-size: 2rem;
-  margin-bottom: 2rem;
+  margin: 0;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  font-weight: 700;
+  flex: 1;
+  width: 100%;
+  display: block;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-export {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(21, 87, 36, 0.3);
+}
+
+.btn-export:hover {
+  background: #0d4a1f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(21, 87, 36, 0.4);
+}
+
+.btn-export svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Gráficos de transparencia */
+.transparencia-graficos {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.grafico-container {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.grafico-container.grafico-full-width {
+  grid-column: 1 / -1;
+}
+
+.grafico-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.grafico-titulo {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
   text-align: center;
   font-weight: 700;
+}
+
+.grafico-wrapper {
+  height: 350px;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dashboard-title {
+    text-align: center;
+  }
+
+  .export-buttons {
+    justify-content: center;
+  }
+
+  .grafico-wrapper {
+    height: 250px;
+  }
 }
 
 .dashboard-widgets {
@@ -163,7 +267,11 @@
   color: #155724;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  text-align: center;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+  display: block;
 }
 
 .categorias-grid {
@@ -390,7 +498,11 @@
   color: #155724;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  text-align: center;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100%;
+  display: block;
 }
 
 .info-grid {

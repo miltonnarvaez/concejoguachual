@@ -1,7 +1,8 @@
 .language-selector {
   position: relative;
-  z-index: 1011;
+  z-index: 1003;
   isolation: isolate;
+  flex-shrink: 0;
 }
 
 .language-button {
@@ -16,6 +17,9 @@
   font-size: 0.9rem;
   color: #155724;
   transition: all 0.3s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: fit-content;
 }
 
 .language-button:hover {

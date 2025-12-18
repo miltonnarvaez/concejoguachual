@@ -3,12 +3,16 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 import './AnimatedSection.css';
 
 const AnimatedSection = ({ children, className = '', animationType = 'fadeInUp', id, ...props }) => {
+  // En móvil, usar un threshold más bajo y rootMargin más permisivo
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
   const [ref, isIntersecting, hasIntersected] = useIntersectionObserver({
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: isMobile ? 0.01 : 0.1,
+    rootMargin: isMobile ? '100px 0px 0px 0px' : '0px 0px -50px 0px'
   });
 
-  const animationClass = hasIntersected ? `animate-${animationType}` : '';
+  // En móvil, mostrar inmediatamente para evitar problemas de visibilidad
+  const shouldAnimate = hasIntersected || isMobile;
+  const animationClass = shouldAnimate ? `animate-${animationType}` : '';
   const combinedClassName = `animated-section ${animationClass} ${className}`.trim();
 
   return (

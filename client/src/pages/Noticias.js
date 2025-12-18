@@ -8,6 +8,8 @@ import { FaNewspaper } from 'react-icons/fa';
 import Breadcrumbs from '../components/Breadcrumbs';
 import '../styles/PageLayout.css';
 import './Noticias.css';
+import '../styles/force-center.css';
+import '../styles/EMERGENCY-CENTER-FIX.css';
 
 const Noticias = () => {
   const [searchQuery, setSearchQuery] = useState('');

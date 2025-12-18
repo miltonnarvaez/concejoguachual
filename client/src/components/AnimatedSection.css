@@ -71,6 +71,9 @@
 
 .animated-section {
   transition: opacity 0.3s ease;
+  opacity: 1;
+  visibility: visible;
+  display: block;
 }
 
 .animated-section.animate-fadeInUp {
@@ -107,6 +110,11 @@
   animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   animation-delay: 0.2s;
   opacity: 0;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+  display: block !important;
 }
 
 .animated-section.animate-fadeInUp .anuncio-card,
@@ -197,6 +205,10 @@
     left: 100%;
   }
 }
+
+
+
+
 
 
 

@@ -60,3 +60,7 @@ MODIFY COLUMN rol ENUM('admin', 'editor', 'usuario') DEFAULT 'usuario';
 
 
 
+
+
+
+

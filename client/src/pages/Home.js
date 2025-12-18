@@ -5,14 +5,6 @@ import { useLanguage } from '../context/LanguageContext';
 import api from '../services/api';
 import NoticiaImage from '../components/NoticiaImage';
 import { getImageByIndex } from '../utils/exampleImages';
-import GovCoLogo from '../components/logos/GovCoLogo';
-import AlcaldiaLogo from '../components/logos/AlcaldiaLogo';
-import ContraloriaLogo from '../components/logos/ContraloriaLogo';
-import ColombiaCompraLogo from '../components/logos/ColombiaCompraLogo';
-import UrnaCristalLogo from '../components/logos/UrnaCristalLogo';
-import SECOPLogo from '../components/logos/SECOPLogo';
-import GobiernoDigitalLogo from '../components/logos/GobiernoDigitalLogo';
-import PresidenciaLogo from '../components/logos/PresidenciaLogo';
 import TexturePattern from '../components/TexturePattern';
 import { OrganizationSchema, WebSiteSchema } from '../components/SchemaMarkup';
 import AnimatedSection from '../components/AnimatedSection';
@@ -22,7 +14,8 @@ import {
   FaGavel, FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock, FaFileContract,
   FaClipboardList, FaProjectDiagram, FaFemale, FaUserClock, FaGraduationCap,
   FaWheelchair, FaGlobeAmericas, FaBriefcase, FaChevronDown, FaUsers, FaNewspaper,
-  FaComments, FaFileAlt as FaDocument
+  FaComments, FaFileAlt as FaDocument, FaBuilding, FaCity, FaShoppingCart,
+  FaBox, FaArchive, FaLaptopCode, FaDigitalTachograph, FaFlag, FaLandmark
 } from 'react-icons/fa';
 import CountUp from '../components/CountUp';
 import {
@@ -39,6 +32,19 @@ import {
 } from 'chart.js';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import './Home.css';
+import '../styles/force-center.css';
+import '../styles/EMERGENCY-CENTER-FIX.css';
+import '../styles/ULTIMATE-CENTER-FIX.css';
+import '../styles/FIX-ACCESO-RAPIDO.css';
+import '../styles/FIX-CONTACTO.css';
+import '../styles/FIX-NOTICIAS-HOME.css';
+import '../styles/FIX-GRUPOS-INTERES.css';
+import '../styles/FIX-GRUPOS-GRID-LEFT.css';
+import '../styles/FIX-UBICACION.css';
+import '../styles/FIX-ESTADISTICAS-SECTION.css';
+import '../styles/FIX-GACETA.css';
+import '../styles/FIX-ENLACES-INTERES.css';
+import '../styles/FIX-ENLACES-GRID-SCROLL.css';
 
 // Registrar componentes de Chart.js
 ChartJS.register(
@@ -152,6 +158,73 @@ const Home = () => {
     noticias: noticias.length
   };
 
+  // Función para obtener datos por mes (últimos 6 meses)
+  const obtenerDatosPorMes = (items, fechaField = 'creado_en') => {
+    const meses = [];
+    const ahora = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const fecha = new Date(ahora.getFullYear(), ahora.getMonth() - i, 1);
+      const mesNombre = fecha.toLocaleDateString('es-CO', { month: 'short' });
+      const año = fecha.getFullYear();
+      const mesNum = fecha.getMonth();
+      
+      const count = items.filter(item => {
+        const itemFecha = new Date(item[fechaField] || item.creado_en || item.fecha_publicacion);
+        return itemFecha.getFullYear() === año && itemFecha.getMonth() === mesNum;
+      }).length;
+      
+      meses.push({ mes: mesNombre, año, count });
+    }
+    return meses;
+  };
+
+  // Datos mensuales
+  const datosMensuales = {
+    noticias: obtenerDatosPorMes(noticias, 'fecha_publicacion'),
+    sesiones: obtenerDatosPorMes(sesiones, 'fecha_sesion'),
+    documentos: obtenerDatosPorMes(documentos, 'fecha_publicacion'),
+    pqrsd: obtenerDatosPorMes(pqrsd, 'fecha_creacion')
+  };
+
+  // Gráfico de línea - Comparativa mensual
+  const chartDataMensual = {
+    labels: datosMensuales.noticias.map(d => d.mes),
+    datasets: [
+      {
+        label: 'Noticias',
+        data: datosMensuales.noticias.map(d => d.count),
+        borderColor: 'rgba(40, 167, 69, 1)',
+        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+        tension: 0.4,
+        fill: true
+      },
+      {
+        label: 'Sesiones',
+        data: datosMensuales.sesiones.map(d => d.count),
+        borderColor: 'rgba(0, 123, 255, 1)',
+        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+        tension: 0.4,
+        fill: true
+      },
+      {
+        label: 'Documentos',
+        data: datosMensuales.documentos.map(d => d.count),
+        borderColor: 'rgba(255, 193, 7, 1)',
+        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+        tension: 0.4,
+        fill: true
+      },
+      {
+        label: 'PQRSD',
+        data: datosMensuales.pqrsd.map(d => d.count),
+        borderColor: 'rgba(220, 53, 69, 1)',
+        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+        tension: 0.4,
+        fill: true
+      }
+    ]
+  };
+
   // Datos para gráficos
   const pqrsdPorEstado = {
     resuelto: pqrsd.filter(p => p.estado === 'resuelto').length,
@@ -230,6 +303,19 @@ const Home = () => {
         },
         bodyFont: {
           size: 12
+        }
+      }
+    }
+  };
+
+  // Opciones para gráfico de línea
+  const chartOptionsLine = {
+    ...chartOptions,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1
         }
       }
     }
@@ -521,49 +607,49 @@ const Home = () => {
           <div className="enlaces-grid">
             <a href="https://www.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
               <div className="enlace-icon">
-                <GovCoLogo width={70} height={70} />
+                <FaClipboardList />
               </div>
               <span className="enlace-texto">Trámites y servicios</span>
             </a>
             <a href="https://www.guachucal-narino.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
               <div className="enlace-icon">
-                <AlcaldiaLogo width={70} height={70} />
+                <FaBuilding />
               </div>
               <span className="enlace-texto">Alcaldía de Guachucal</span>
             </a>
             <a href="#" target="_blank" rel="noopener noreferrer" className="enlace-item">
               <div className="enlace-icon">
-                <ContraloriaLogo width={70} height={70} />
+                <FaBalanceScale />
               </div>
               <span className="enlace-texto">Contraloría Municipal</span>
             </a>
             <a href="https://www.colombiacompra.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
               <div className="enlace-icon">
-                <ColombiaCompraLogo width={70} height={70} />
+                <FaShoppingCart />
               </div>
               <span className="enlace-texto">Colombia compra eficiente</span>
             </a>
             <a href="https://www.urnadecristal.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
               <div className="enlace-icon">
-                <UrnaCristalLogo width={70} height={70} />
+                <FaBox />
               </div>
               <span className="enlace-texto">Urna de Cristal</span>
             </a>
             <a href="https://www.contratacion.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
               <div className="enlace-icon">
-                <SECOPLogo width={70} height={70} />
+                <FaFileContract />
               </div>
               <span className="enlace-texto">Contratación Pública</span>
             </a>
             <a href="https://www.gobiernodigital.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
               <div className="enlace-icon">
-                <GobiernoDigitalLogo width={70} height={70} />
+                <FaLaptopCode />
               </div>
               <span className="enlace-texto">Gobierno Digital</span>
             </a>
             <a href="https://www.presidencia.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
               <div className="enlace-icon">
-                <PresidenciaLogo width={70} height={70} />
+                <FaFlag />
               </div>
               <span className="enlace-texto">Presidencia de la República</span>
             </a>
@@ -759,6 +845,12 @@ const Home = () => {
 
           {/* Gráficos */}
           <div className="estadisticas-graficos">
+            <div className="grafico-container grafico-full-width">
+              <h3 className="grafico-titulo">Comparativa Mensual (Últimos 6 Meses)</h3>
+              <div className="grafico-wrapper">
+                <Line data={chartDataMensual} options={chartOptionsLine} />
+              </div>
+            </div>
             <div className="grafico-container">
               <h3 className="grafico-titulo">PQRSD por Estado</h3>
               <div className="grafico-wrapper">

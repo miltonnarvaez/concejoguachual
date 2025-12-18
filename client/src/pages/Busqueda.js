@@ -9,7 +9,9 @@ import {
   FaFileAlt,
   FaEye,
   FaCalendarAlt,
-  FaComments
+  FaComments,
+  FaMicrophone,
+  FaMicrophoneSlash
 } from 'react-icons/fa';
 import './Busqueda.css';
 
@@ -23,6 +25,8 @@ const Busqueda = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [inputValue, setInputValue] = useState(searchParams.get('q') || '');
+  const [isListening, setIsListening] = useState(false);
+  const [recognition, setRecognition] = useState(null);
   const suggestionsRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -38,6 +42,59 @@ const Busqueda = () => {
     },
     enabled: inputValue.trim().length >= 2 && showSuggestions
   });
+
+  // Inicializar reconocimiento de voz
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognitionInstance = new SpeechRecognition();
+      recognitionInstance.continuous = false;
+      recognitionInstance.interimResults = false;
+      recognitionInstance.lang = 'es-ES';
+
+      recognitionInstance.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputValue(transcript);
+        setSearchQuery(transcript);
+        setIsListening(false);
+      };
+
+      recognitionInstance.onerror = (event) => {
+        console.error('Error en reconocimiento de voz:', event.error);
+        setIsListening(false);
+        if (event.error === 'no-speech') {
+          alert('No se detectó voz. Por favor, intenta nuevamente.');
+        }
+      };
+
+      recognitionInstance.onend = () => {
+        setIsListening(false);
+      };
+
+      setRecognition(recognitionInstance);
+    }
+  }, []);
+
+  // Función para iniciar/detener reconocimiento de voz
+  const toggleVoiceSearch = () => {
+    if (!recognition) {
+      alert('Tu navegador no soporta búsqueda por voz. Por favor, usa Chrome o Edge.');
+      return;
+    }
+
+    if (isListening) {
+      recognition.stop();
+      setIsListening(false);
+    } else {
+      try {
+        recognition.start();
+        setIsListening(true);
+      } catch (error) {
+        console.error('Error iniciando reconocimiento:', error);
+        setIsListening(false);
+      }
+    }
+  };
 
   // Cerrar sugerencias al hacer clic fuera
   useEffect(() => {
@@ -208,6 +265,15 @@ const Busqueda = () => {
                 onFocus={() => inputValue.trim().length >= 2 && setShowSuggestions(true)}
                 className="busqueda-input"
               />
+              <button
+                type="button"
+                onClick={toggleVoiceSearch}
+                className={`busqueda-voice-btn ${isListening ? 'listening' : ''}`}
+                title={isListening ? 'Detener grabación' : 'Búsqueda por voz'}
+                disabled={!recognition}
+              >
+                {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
+              </button>
               <button type="submit" className="busqueda-btn">
                 <FaSearch /> Buscar
               </button>

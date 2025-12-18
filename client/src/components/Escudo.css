@@ -13,11 +13,11 @@
   object-fit: contain;
 }
 
-/* Tamaño más pequeño en el header */
+/* Tamaño en el header */
 .header .escudo-container .escudo-image,
 .header .escudo-container .escudo-svg {
-  max-width: 40px;
-  max-height: 40px;
+  max-width: 65px;
+  max-height: 65px;
 }
 
 /* Responsive */
@@ -30,7 +30,7 @@
 
   .header .escudo-container .escudo-image,
   .header .escudo-container .escudo-svg {
-    max-width: 30px;
-    max-height: 30px;
+    max-width: 50px;
+    max-height: 50px;
   }
 }

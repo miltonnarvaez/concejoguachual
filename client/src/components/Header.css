@@ -23,6 +23,10 @@
   border-bottom: 2px solid var(--color-primary-dark);
   position: relative;
   z-index: 1001;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .top-bar-container {
@@ -30,17 +34,23 @@
   margin: 0 auto;
   padding: 0 var(--spacing-md);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
+  flex-wrap: nowrap !important;
+  gap: var(--spacing-md);
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .top-bar-left {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  flex-wrap: wrap;
+  flex-wrap: nowrap !important;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .top-bar-separator {
@@ -79,18 +89,116 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  flex-wrap: nowrap !important;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.header-info-top-bar {
+  display: flex !important;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: nowrap !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.header-location-top-bar,
+.header-datetime-top-bar {
+  display: flex !important;
+  align-items: center;
+  gap: 0.4rem;
+  color: white !important;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.header-location-top-bar svg,
+.header-datetime-top-bar svg {
+  color: var(--color-lime-yellow) !important;
+  font-size: 1rem;
+  flex-shrink: 0;
+  display: block !important;
+}
+
+.header-location-top-bar span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  color: white !important;
+  visibility: visible !important;
+}
+
+.header-datetime-content {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  min-width: fit-content;
+}
+
+.header-fecha {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.header-hora {
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  color: var(--color-lime-yellow);
+}
+
+/* Estilos específicos para fecha/hora en la barra superior verde */
+.header-info-top-bar .header-datetime-content {
+  display: flex !important;
+  flex-direction: column;
+  line-height: 1.1;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.header-info-top-bar .header-fecha {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-info-top-bar .header-hora {
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  color: var(--color-lime-yellow) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+  white-space: nowrap;
 }
 
 .social-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   color: white;
   text-decoration: none;
   border-radius: 50%;
   transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .social-icon:hover {
@@ -113,6 +221,9 @@
   min-height: 60px;
   display: flex;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .header-container {
@@ -120,9 +231,13 @@
   margin: 0 auto;
   padding: 0 var(--spacing-md);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
 }
 
 .header-logo {
@@ -146,25 +261,90 @@
   height: 100%;
 }
 
+.escudo-colombia-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 0.5rem;
+}
+
+.escudo-colombia {
+  max-width: 65px;
+  max-height: 65px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
 .header-logo .escudo-container {
   flex-shrink: 0;
 }
 
 .header-logo .escudo-image,
 .header-logo .escudo-svg {
-  max-width: 40px;
-  max-height: 40px;
+  max-width: 65px;
+  max-height: 65px;
   width: auto;
   height: auto;
+}
+
+.header-info {
+  display: none; /* Ocultado - ahora está en la barra superior verde */
+}
+
+.header-location,
+.header-datetime {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.header-location svg,
+.header-datetime svg {
+  color: var(--color-primary);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.header-location span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.header-datetime-content {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.header-fecha {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.header-hora {
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  color: var(--color-primary);
 }
 
 .header-contact {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  flex-shrink: 0;
+  flex: 0 0 auto;
   position: relative;
+  flex-shrink: 0;
   z-index: 1002;
+  min-width: fit-content;
 }
 
 .header-search-btn {
@@ -182,6 +362,8 @@
   font-size: 1.2rem;
   transition: var(--transition);
   flex-shrink: 0;
+  position: relative;
+  z-index: 1003;
 }
 
 .header-search-btn:hover {
@@ -236,14 +418,14 @@
   z-index: 1000;
 }
 
-/* Puente invisible para evitar que se cierre el menú al mover el mouse */
+/* Puente invisible para evitar que se cierre el menú al mover el mouse - REDUCIDO */
 .nav-item.has-submenu::after {
   content: '';
   position: absolute;
   top: 100%;
-  left: -10px;
-  right: -10px;
-  height: 20px;
+  left: 0;
+  right: 0;
+  height: 5px;
   background: transparent;
   z-index: 1001;
   pointer-events: auto;
@@ -310,7 +492,7 @@
   z-index: 1000;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
   pointer-events: none;
   border-top: 4px solid var(--color-primary);
   overflow: visible;
@@ -702,31 +884,248 @@
   .top-bar-right {
     justify-content: center;
     width: 100%;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+
+  .top-bar-right .language-selector .language-button {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.75rem;
   }
 }
 
 @media (max-width: 768px) {
+  .header-top {
+    padding: 0.5rem 0;
+    min-height: auto;
+  }
+
   .header-container {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
+    padding: 0 var(--spacing-sm);
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .header-logo {
+    flex: 0 0 auto;
+    max-width: calc(100% - 120px);
     flex-shrink: 0;
+    order: 1;
+  }
+
+  .escudo-colombia {
+    max-width: 50px;
+    max-height: 50px;
+  }
+  
+  .header-logo .escudo-image,
+  .header-logo .escudo-svg {
+    max-width: 50px;
+    max-height: 50px;
   }
 
   .header-contact {
-    flex-shrink: 0;
+    flex: 0 0 auto;
+    order: 2;
+    min-width: fit-content;
     align-items: center;
+    gap: var(--spacing-xs);
+    margin-left: auto;
+  }
+
+  .header-info {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin: var(--spacing-xs) 0 0 0;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    padding: 0;
+    max-width: 100%;
+    clear: both;
+  }
+
+  .header-location,
+  .header-datetime {
+    font-size: 0.7rem;
+    gap: 0.25rem;
+  }
+
+  .header-location svg,
+  .header-datetime svg {
+    font-size: 0.85rem;
+  }
+
+  .header-datetime-content {
+    line-height: 1.2;
+  }
+
+  .header-fecha {
+    font-size: 0.65rem;
+  }
+
+  .header-hora {
+    font-size: 0.75rem;
+  }
+
+  .header-search-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    font-size: 1rem;
+  }
+
+  .language-selector {
+    flex-shrink: 0;
+  }
+
+  .language-button {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
   }
 
   .header-top-bar {
     font-size: 0.75rem;
   }
 
+  .top-bar-container {
+    flex-wrap: nowrap !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: 0 var(--spacing-sm);
+  }
+
+  .top-bar-left,
+  .top-bar-right {
+    flex-wrap: nowrap !important;
+  }
+
+  .header-info-top-bar {
+    flex-wrap: nowrap !important;
+    gap: var(--spacing-xs);
+    flex-direction: row !important;
+  }
+
+  .header-location-top-bar,
+  .header-datetime-top-bar {
+    font-size: 0.7rem;
+  }
+
+  .header-location-top-bar span {
+    max-width: 120px;
+  }
+
+  .header-datetime-content {
+    font-size: 0.65rem;
+  }
+
   .top-bar-phone,
   .top-bar-email {
     font-size: 0.75rem;
+  }
+
+  .top-bar-right {
+    gap: var(--spacing-xs);
+  }
+
+  .header-info-top-bar {
+    gap: var(--spacing-xs);
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header-location-top-bar,
+  .header-datetime-top-bar {
+    font-size: 0.7rem;
+  }
+
+  .header-location-top-bar span {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0 var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+
+  .header-logo {
+    max-width: calc(100% - 85px);
+    order: 1;
+  }
+
+  .escudo-colombia {
+    max-width: 40px;
+    max-height: 40px;
+  }
+  
+  .header-logo .escudo-image,
+  .header-logo .escudo-svg {
+    max-width: 40px;
+    max-height: 40px;
+  }
+
+  .header-contact {
+    gap: var(--spacing-xs);
+    order: 2;
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  .header-info {
+    gap: var(--spacing-xs);
+    order: 3;
+    width: 100%;
+    margin-top: var(--spacing-xs);
+    clear: both;
+    padding-top: var(--spacing-xs);
+  }
+
+  .header-location,
+  .header-datetime {
+    font-size: 0.65rem;
+  }
+
+  .header-location span,
+  .header-fecha {
+    font-size: 0.6rem;
+  }
+
+  .header-location span {
+    max-width: 110px;
+  }
+
+  .header-hora {
+    font-size: 0.7rem;
+  }
+
+  .header-search-btn {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 0.85rem;
+  }
+
+  .language-button {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .top-bar-container {
+    padding: 0 var(--spacing-xs);
+  }
+
+  .top-bar-phone,
+  .top-bar-email {
+    font-size: 0.7rem;
   }
 }

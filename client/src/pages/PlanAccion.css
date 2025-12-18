@@ -1,0 +1,769 @@
+.plan-accion-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+}
+
+/* Hero Section */
+.plan-hero {
+  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  color: white;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.plan-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.plan-hero-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+.plan-hero .page-title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.plan-hero-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.95;
+}
+
+.plan-hero-date {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.plan-hero-resolucion {
+  font-size: 1rem;
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+/* Mesa Directiva */
+.mesa-directiva-section {
+  padding: 3rem 0;
+  background: white;
+}
+
+.mesa-directiva-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.mesa-directiva-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.mesa-directiva-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.mesa-directiva-cargo {
+  font-size: 1rem;
+  color: #28a745;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mesa-directiva-nombre {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.mesa-directiva-periodo {
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Presentación */
+.presentacion-section {
+  padding: 3rem 0;
+  background: #f8f9fa;
+}
+
+.presentacion-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.presentacion-content p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+/* Misión y Visión */
+.mision-vision-section {
+  padding: 3rem 0;
+  background: white;
+}
+
+.mision-vision-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.mision-vision-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-left: 5px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.mision-vision-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.mision-vision-icon {
+  font-size: 3rem;
+  color: #28a745;
+  margin-bottom: 1.5rem;
+}
+
+.mision-vision-card h3 {
+  font-size: 1.8rem;
+  color: #155724;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.mision-vision-card p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #333;
+  text-align: justify;
+}
+
+/* Valores */
+.valores-section {
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.valores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.valor-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.valor-card:hover {
+  transform: translateY(-5px);
+  border-color: #28a745;
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.2);
+}
+
+.valor-icon {
+  font-size: 2.5rem;
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+.valor-card h4 {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Políticas y Objetivos */
+.politicas-section,
+.objetivos-calidad-section,
+.objetivos-especificos-section {
+  padding: 3rem 0;
+  background: white;
+}
+
+.politicas-list,
+.objetivos-list {
+  max-width: 1000px;
+  margin: 2rem auto 0;
+}
+
+.politica-item,
+.objetivo-item {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.politica-item:hover,
+.objetivo-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.politica-icon,
+.objetivo-icon {
+  font-size: 1.5rem;
+  color: #28a745;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.politica-item p,
+.objetivo-item p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #333;
+  margin: 0;
+  text-align: justify;
+}
+
+/* Fortalecimiento */
+.fortalecimiento-section {
+  padding: 3rem 0;
+  background: #f8f9fa;
+}
+
+.fortalecimiento-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.fortalecimiento-item {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-top: 4px solid #28a745;
+}
+
+.fortalecimiento-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.fortalecimiento-icon {
+  font-size: 2.5rem;
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+.fortalecimiento-item h3 {
+  font-size: 1.5rem;
+  color: #155724;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.fortalecimiento-item p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #333;
+  text-align: justify;
+}
+
+/* Herramientas */
+.herramientas-section {
+  padding: 3rem 0;
+  background: white;
+}
+
+.herramientas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.herramienta-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.herramienta-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.herramienta-icon {
+  font-size: 1.5rem;
+  color: #28a745;
+  flex-shrink: 0;
+}
+
+.herramienta-card span {
+  font-size: 1.05rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Plazo y Seguimiento */
+.plazo-seguimiento-section {
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.plazo-seguimiento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.plazo-seguimiento-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border-top: 4px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.plazo-seguimiento-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.plazo-seguimiento-icon {
+  font-size: 3rem;
+  color: #28a745;
+  margin-bottom: 1.5rem;
+}
+
+.plazo-seguimiento-card h3 {
+  font-size: 1.8rem;
+  color: #155724;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.plazo-seguimiento-card p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #333;
+  text-align: justify;
+}
+
+/* Diagnóstico */
+.diagnostico-section {
+  padding: 3rem 0;
+  background: #fff5f5;
+}
+
+.diagnostico-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.diagnostico-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #dc3545;
+  transition: all 0.3s ease;
+}
+
+.diagnostico-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.diagnostico-number {
+  min-width: 35px;
+  height: 35px;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.diagnostico-item p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+  margin: 0;
+  text-align: justify;
+}
+
+.diagnostico-summary {
+  margin-top: 2rem;
+  text-align: center;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.diagnostico-summary p {
+  font-size: 1.2rem;
+  color: #dc3545;
+  margin: 0;
+}
+
+/* Proyección Comunitaria */
+.proyeccion-section {
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #f0f8ff 0%, #ffffff 100%);
+}
+
+.proyeccion-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.proyeccion-item {
+  background: white;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.proyeccion-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.proyeccion-icon {
+  font-size: 2.5rem;
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+.proyeccion-item h3 {
+  font-size: 1.5rem;
+  color: #155724;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.proyeccion-item p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #333;
+  text-align: justify;
+}
+
+/* Beneficios List */
+.beneficios-list {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+.beneficios-list h4 {
+  font-size: 1.2rem;
+  color: #155724;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.beneficios-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.beneficios-list li {
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #333;
+  text-align: justify;
+}
+
+.beneficios-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #28a745;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Estructura Jerárquica */
+.estructura-section {
+  padding: 3rem 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.estructura-organigrama {
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  position: relative;
+}
+
+.estructura-nivel {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.estructura-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+  min-width: 250px;
+  flex: 1;
+  max-width: 350px;
+}
+
+.estructura-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.estructura-icon {
+  font-size: 2.5rem;
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+.estructura-card h3 {
+  font-size: 1.3rem;
+  color: #155724;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.estructura-card h4 {
+  font-size: 1.1rem;
+  color: #155724;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.estructura-card p {
+  font-size: 0.95rem;
+  color: #333;
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+.estructura-cargo {
+  display: inline-block;
+  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  color: white;
+  padding: 0.35rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.estructura-badge {
+  display: inline-block;
+  background: #ffc107;
+  color: #000;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Niveles específicos */
+.nivel-1 .estructura-card {
+  border-top: 5px solid #155724;
+  background: linear-gradient(135deg, #f0f8f0 0%, #ffffff 100%);
+}
+
+.nivel-2 .estructura-card {
+  border-top: 4px solid #28a745;
+}
+
+.nivel-3 .estructura-card {
+  border-top: 3px solid #6c757d;
+}
+
+.nivel-4 .estructura-card {
+  border-top: 3px solid #17a2b8;
+}
+
+.nivel-5 .estructura-card {
+  border-top: 3px solid #ffc107;
+}
+
+.estructura-funciones {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #e0e0e0;
+  text-align: left;
+}
+
+.estructura-funciones p {
+  font-weight: 600;
+  color: #155724;
+  margin-bottom: 0.75rem;
+}
+
+.estructura-funciones ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.estructura-funciones li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.estructura-funciones li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #28a745;
+  font-weight: 700;
+}
+
+/* Líneas conectoras (opcional, para visualización jerárquica) */
+.estructura-organigrama::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #28a745, transparent);
+  transform: translateX(-50%);
+  z-index: 0;
+  opacity: 0.3;
+}
+
+.estructura-nivel {
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .plan-hero .page-title {
+    font-size: 2rem;
+  }
+
+  .plan-hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .mision-vision-grid,
+  .plazo-seguimiento-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .diagnostico-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .proyeccion-content {
+    grid-template-columns: 1fr;
+  }
+
+  .fortalecimiento-content {
+    grid-template-columns: 1fr;
+  }
+
+  .herramientas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .politica-item,
+  .objetivo-item {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .politica-icon,
+  .objetivo-icon {
+    align-self: flex-start;
+  }
+
+  .estructura-organigrama::before {
+    display: none;
+  }
+
+  .estructura-nivel {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .estructura-card {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
