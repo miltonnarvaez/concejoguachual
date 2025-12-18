@@ -13,7 +13,8 @@ const AnimatedSection = ({ children, className = '', animationType = 'fadeInUp',
   // En móvil, mostrar inmediatamente para evitar problemas de visibilidad
   const shouldAnimate = hasIntersected || isMobile;
   const animationClass = shouldAnimate ? `animate-${animationType}` : '';
-  const combinedClassName = `animated-section ${animationClass} ${className}`.trim();
+  const visibleClass = shouldAnimate ? 'visible' : '';
+  const combinedClassName = `animated-section ${animationClass} ${visibleClass} ${className}`.trim();
 
   return (
     <section

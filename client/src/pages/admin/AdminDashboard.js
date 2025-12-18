@@ -83,6 +83,10 @@ const AdminDashboard = () => {
               <h2>🗣️ Foros</h2>
               <p>Gestionar foros de discusión</p>
             </Link>
+            <Link to="/admin/repositorio" className="dashboard-card">
+              <h2>📁 Repositorio Temporal</h2>
+              <p>Revisar y procesar archivos subidos por el concejo</p>
+            </Link>
           </div>
         </div>
       </div>

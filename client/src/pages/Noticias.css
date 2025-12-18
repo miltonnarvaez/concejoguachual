@@ -63,7 +63,8 @@
   gap: 2rem;
   margin-top: 1rem;
   justify-content: center;
-  place-items: center;
+  align-items: start;
+  place-items: start;
 }
 
 .noticia-card {
@@ -72,6 +73,10 @@
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-self: start;
 }
 
 .noticia-card:hover {
@@ -158,6 +163,8 @@
 @media (max-width: 768px) {
   .noticias-grid {
     grid-template-columns: 1fr;
+    align-items: start;
+    place-items: start;
   }
 }
 

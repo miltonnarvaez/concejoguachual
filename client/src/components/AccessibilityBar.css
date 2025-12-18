@@ -1,6 +1,6 @@
 .accessibility-bar {
   position: fixed;
-  top: 80px;
+  top: 150px;
   right: 0;
   z-index: 2000;
   display: flex;
@@ -12,36 +12,62 @@
   background: var(--color-lime-accent);
   color: var(--color-primary);
   border: none;
-  padding: 0.4rem 0.6rem;
-  border-radius: 50px;
+  padding: 0.4rem 0.5rem;
+  border-radius: 20px 0 0 20px;
   cursor: pointer;
-  font-size: 0.65rem;
+  font-size: 0;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(203, 233, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(203, 233, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  letter-spacing: 0.2px;
+  justify-content: center;
   position: relative;
   z-index: 2001;
-  border: 1px solid rgba(21, 87, 36, 0.3);
+  border: 1px solid rgba(21, 87, 36, 0.2);
   line-height: 1;
+  opacity: 0.6;
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
 }
 
 .accessibility-toggle::before {
   content: '♿';
-  font-size: 0.75rem;
+  font-size: 1.2rem;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
   display: inline-block;
   line-height: 1;
 }
 
-.accessibility-toggle:hover {
-  background: var(--color-lime-yellow);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(203, 233, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.15);
+.accessibility-toggle::after {
+  content: attr(title);
+  position: absolute;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2002;
+  font-weight: 500;
 }
+
+.accessibility-toggle:hover {
+  opacity: 1;
+  transform: translateX(-5px);
+}
+
+.accessibility-toggle:hover::after {
+  opacity: 1;
+}
+
 
 .accessibility-toggle:active {
   transform: translateY(0);
@@ -169,30 +195,34 @@
 
 @media (max-width: 768px) {
   .accessibility-bar {
-    top: 50px;
-    right: 10px;
+    top: 130px;
+    right: 0;
     align-items: flex-end;
   }
 
   .accessibility-toggle {
-    padding: 0.35rem 0.5rem;
-    font-size: 0.6rem;
-    width: auto;
-    min-width: auto;
-    border-radius: 50px;
-    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+    padding: 0.35rem 0.4rem;
+    font-size: 0;
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    border-radius: 18px 0 0 18px;
+    box-shadow: 0 2px 6px rgba(203, 233, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .accessibility-toggle::before {
+    font-size: 1rem;
+  }
+
+  .accessibility-toggle::after {
     font-size: 0.7rem;
+    padding: 0.3rem 0.5rem;
+    right: calc(100% + 8px);
   }
 
   .accessibility-menu {
     min-width: calc(100vw - 20px);
     max-width: 300px;
-    right: 0;
-    left: auto;
-    bottom: calc(100% + 0.5rem);
     border-radius: 12px;
     padding: 0.75rem;
   }

@@ -26,24 +26,43 @@ const AccessibilityBar = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const barRef = useRef(null);
+  const buttonRef = useRef(null);
+  const menuRef = useRef(null);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
   const [voiceControl, setVoiceControl] = useState(false);
   const [listeningText, setListeningText] = useState('');
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef(null);
 
+  const updateMenuPosition = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + 8,
+        right: window.innerWidth - rect.right
+      });
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (barRef.current && !barRef.current.contains(event.target)) {
+      if (menuRef.current && !menuRef.current.contains(event.target) &&
+          buttonRef.current && !buttonRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
+      updateMenuPosition();
       document.addEventListener('mousedown', handleClickOutside);
+      window.addEventListener('resize', updateMenuPosition);
+      window.addEventListener('scroll', updateMenuPosition, true);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', updateMenuPosition);
+      window.removeEventListener('scroll', updateMenuPosition, true);
     };
   }, [isOpen, setIsOpen]);
 
@@ -318,14 +337,22 @@ const AccessibilityBar = () => {
   return (
     <div className={`accessibility-bar ${isOpen ? 'open' : ''}`} ref={barRef}>
       <button
+        ref={buttonRef}
         className="accessibility-toggle"
         onClick={() => setIsOpen(!isOpen)}
         aria-label={t('accesibilidad.titulo')}
+        title={t('accesibilidad.titulo')}
       >
-        {t('accesibilidad.titulo')}
       </button>
       {isOpen && (
-        <div className="accessibility-menu">
+        <div 
+          className="accessibility-menu"
+          ref={menuRef}
+          style={{
+            top: `${menuPosition.top}px`,
+            right: `${menuPosition.right}px`
+          }}
+        >
           <button onClick={increaseText} className="accessibility-option">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14h-4v-2h4v-2h-4V9h4V7H9v10h5v2z"/>

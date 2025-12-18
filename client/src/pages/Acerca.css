@@ -46,6 +46,9 @@
 .acerca-content {
   max-width: 1000px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 var(--spacing-md);
 }
 
 .acerca-section {
@@ -55,6 +58,9 @@
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border: 1px solid #e0e0e0;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .acerca-section h2 {
@@ -63,7 +69,12 @@
   margin-bottom: var(--spacing-md);
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-sm);
+  text-align: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .section-icon {
@@ -200,6 +211,16 @@
 /* Estructura Jerárquica */
 .estructura-section {
   margin-top: var(--spacing-xl);
+  text-align: center;
+}
+
+.estructura-section h2 {
+  justify-content: center !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 .section-description {

@@ -14,7 +14,7 @@ import {
   FaDollarSign, FaHandshake, FaChartLine, FaFileInvoiceDollar, FaShieldAlt,
   FaFileSignature, FaSitemap, FaProjectDiagram, FaGavel as FaLaw, FaUserCog,
   FaClipboardCheck, FaLandmark, FaUser, FaImages, FaCalendarAlt, FaComments, FaEnvelope,
-  FaCheckCircle, FaTimes, FaBars, FaMapMarkerAlt, FaClock
+  FaCheckCircle, FaTimes, FaBars, FaClock
 } from 'react-icons/fa';
 import './Header.css';
 
@@ -431,19 +431,6 @@ const Header = () => {
             <span className="top-bar-email">✉️ {config.email || 'contacto@concejo.guachucal.gov.co'}</span>
           </div>
           <div className="top-bar-right">
-            <div className="header-info-top-bar">
-              <div className="header-location-top-bar">
-                <FaMapMarkerAlt />
-                <span>Guachucal, Nariño, Colombia</span>
-              </div>
-              <div className="header-datetime-top-bar">
-                <FaClock />
-                <div className="header-datetime-content">
-                  <span className="header-fecha">{fechaHora.fecha}</span>
-                  <span className="header-hora">{fechaHora.hora}</span>
-                </div>
-              </div>
-            </div>
             <a href={config.facebook_url || "https://www.facebook.com/p/Concejo-Municipal-de-Guachucal-61555825801735"} target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Facebook">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -490,6 +477,15 @@ const Header = () => {
             <Escudo />
             <LogoTexto />
           </Link>
+          <div className="header-datetime-wrapper">
+            <div className="header-datetime">
+              <FaClock />
+              <div className="header-datetime-content">
+                <span className="header-fecha">{fechaHora.fecha}</span>
+                <span className="header-hora">{fechaHora.hora}</span>
+              </div>
+            </div>
+          </div>
           <div className="header-contact">
             <Link to="/busqueda" className="header-search-btn" aria-label="Búsqueda avanzada">
               🔍
@@ -577,7 +573,7 @@ const Header = () => {
                             key={subIndex}
                             to={subItem.path} 
                             onClick={handleSubmenuClick} 
-                            className="mega-menu-item"
+                            className={`mega-menu-item ${subItem.icon === FaPhone ? 'mega-menu-item-phone' : ''}`}
                             onKeyDown={(e) => handleSubmenuKeyDown(e, index, subIndex, item.submenu.length)}
                           >
                             {subItem.icon && <subItem.icon className="mega-menu-item-icon" />}

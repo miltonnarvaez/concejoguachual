@@ -28,7 +28,8 @@ const AdminNavbar = ({ title, showBackButton = true }) => {
         'usuarios': 'Usuarios',
         'pqrsd': 'PQRSD',
         'galeria': 'Galería',
-        'encuestas': 'Encuestas'
+        'encuestas': 'Encuestas',
+        'repositorio': 'Repositorio Temporal'
       };
       
       breadcrumbs.push({

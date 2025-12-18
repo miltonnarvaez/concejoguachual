@@ -39,7 +39,8 @@ const Breadcrumbs = () => {
     'contacto': { name: 'Contacto', icon: FaEnvelope },
     'politica-privacidad': { name: 'Política de Privacidad', icon: FaFileAlt },
     'tratamiento-datos': { name: 'Tratamiento de Datos', icon: FaFileAlt },
-    'mapa-sitio': { name: 'Mapa del Sitio', icon: FaInfoCircle }
+    'mapa-sitio': { name: 'Mapa del Sitio', icon: FaInfoCircle },
+    'plan-accion': { name: 'Plan de Acción', icon: FaFileAlt }
   };
 
   // Si estamos en la página de inicio, no mostrar breadcrumbs

@@ -18,8 +18,8 @@
 .header-top-bar {
   background-color: var(--color-primary);
   color: white;
-  padding: 0.5rem 0;
-  font-size: 0.875rem;
+  padding: 0.35rem 0;
+  font-size: 0.75rem;
   border-bottom: 2px solid var(--color-primary-dark);
   position: relative;
   z-index: 1001;
@@ -27,17 +27,20 @@
   overflow-y: hidden !important;
   width: 100%;
   box-sizing: border-box;
+  line-height: 1.1;
+  height: auto;
+  min-height: auto;
 }
 
 .top-bar-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--spacing-md);
+  padding: 0 var(--spacing-sm);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: nowrap !important;
-  gap: var(--spacing-md);
+  gap: var(--spacing-xs);
   overflow-x: hidden !important;
   overflow-y: hidden !important;
   width: 100%;
@@ -47,7 +50,7 @@
 .top-bar-left {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
   flex-wrap: nowrap !important;
   flex-shrink: 1;
   min-width: 0;
@@ -55,24 +58,37 @@
 
 .top-bar-separator {
   color: rgba(255, 255, 255, 0.5);
-  margin: 0 0.5rem;
+  margin: 0 0.25rem;
+  flex-shrink: 0;
+  display: inline-block !important;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .top-bar-phone,
 .top-bar-email {
-  display: flex;
+  display: inline-flex !important;
   align-items: center;
   gap: 0.25rem;
   color: white;
+  font-size: 0.75rem;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+  min-width: auto;
+  line-height: 1.2;
+  vertical-align: middle;
 }
 
 .gov-co-logo {
-  display: flex;
+  display: inline-flex !important;
   align-items: center;
   gap: 0.5rem;
   color: white;
   text-decoration: none;
   font-weight: 600;
+  flex-shrink: 0;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
 .gov-co-logo:hover {
@@ -81,66 +97,71 @@
 }
 
 .gov-co-logo-img {
-  height: 30px;
+  height: 24px;
   width: auto;
+  flex-shrink: 0;
 }
 
 .top-bar-right {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  justify-content: center;
+  gap: var(--spacing-xs);
   flex-wrap: nowrap !important;
-  flex-shrink: 1;
-  min-width: 0;
+  flex-shrink: 0;
+  min-width: auto;
 }
 
 .header-info-top-bar {
   display: flex !important;
+  flex-direction: row !important;
   align-items: center;
   gap: var(--spacing-xs);
   flex-wrap: nowrap !important;
   visibility: visible !important;
   opacity: 1 !important;
-  flex-shrink: 1;
-  min-width: 0;
+  flex-shrink: 0;
+  min-width: auto;
+  width: auto;
+  line-height: 1.2;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.header-location-top-bar,
 .header-datetime-top-bar {
   display: flex !important;
+  flex-direction: row !important;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
   color: white !important;
-  font-size: 0.75rem;
-  white-space: nowrap;
-  flex-shrink: 1;
-  min-width: 0;
+  font-size: 0.7rem;
+  white-space: nowrap !important;
+  flex-shrink: 0;
+  min-width: auto;
   visibility: visible !important;
   opacity: 1 !important;
+  line-height: 1.2;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.header-location-top-bar svg,
 .header-datetime-top-bar svg {
   color: var(--color-lime-yellow) !important;
-  font-size: 1rem;
+  font-size: 0.85rem;
   flex-shrink: 0;
   display: block !important;
 }
 
-.header-location-top-bar span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 200px;
-  color: white !important;
-  visibility: visible !important;
-}
 
 .header-datetime-content {
-  display: flex;
+  display: inline-flex !important;
   flex-direction: column;
-  line-height: 1.2;
-  min-width: fit-content;
+  line-height: 1.1;
+  min-width: auto;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .header-fecha {
@@ -167,25 +188,27 @@
 }
 
 .header-info-top-bar .header-fecha {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: rgba(255, 255, 255, 0.9) !important;
   visibility: visible !important;
   opacity: 1 !important;
   display: block !important;
-  white-space: nowrap;
+  white-space: nowrap !important;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.1;
 }
 
 .header-info-top-bar .header-hora {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
   font-family: 'Courier New', monospace;
   color: var(--color-lime-yellow) !important;
   visibility: visible !important;
   opacity: 1 !important;
   display: block !important;
-  white-space: nowrap;
+  white-space: nowrap !important;
+  line-height: 1.1;
 }
 
 .social-icon {
@@ -231,9 +254,9 @@
   margin: 0 auto;
   padding: 0 var(--spacing-md);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   position: relative;
   width: 100%;
   box-sizing: border-box;
@@ -324,6 +347,51 @@
   line-height: 1.3;
 }
 
+/* Wrapper para fecha y hora en header blanco */
+.header-datetime-wrapper {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: var(--spacing-sm);
+}
+
+.header-datetime-wrapper .header-datetime {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.header-datetime-wrapper .header-datetime svg {
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.header-datetime-wrapper .header-datetime-content {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  gap: 0.1rem;
+}
+
+.header-datetime-wrapper .header-fecha {
+  font-size: 0.65rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.header-datetime-wrapper .header-hora {
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
 .header-fecha {
   font-size: 0.75rem;
   color: var(--color-text-secondary);
@@ -343,8 +411,10 @@
   flex: 0 0 auto;
   position: relative;
   flex-shrink: 0;
-  z-index: 1002;
+  z-index: 10000;
   min-width: fit-content;
+  margin-left: auto;
+  overflow: visible;
 }
 
 .header-search-btn {
@@ -644,6 +714,18 @@
   height: 1.2rem;
 }
 
+/* Rotar el icono de teléfono 180 grados */
+.mega-menu-item-phone .mega-menu-item-icon,
+.mega-menu-item-phone .mega-menu-item-icon svg {
+  transform: rotate(180deg) !important;
+}
+
+/* Alternativa: rotar por path del link */
+a.mega-menu-item[href="/acerca#contacto"] .mega-menu-item-icon,
+a.mega-menu-item[href="/acerca#contacto"] .mega-menu-item-icon svg {
+  transform: rotate(180deg) !important;
+}
+
 .mega-menu-item-text {
   font-weight: 500;
   font-size: 0.9rem;
@@ -883,9 +965,32 @@
   .top-bar-left,
   .top-bar-right {
     justify-content: center;
-    width: 100%;
-    flex-wrap: wrap;
-    gap: var(--spacing-xs);
+    align-items: center;
+    width: auto;
+    flex-wrap: nowrap !important;
+    gap: 0.25rem;
+    flex-shrink: 0;
+    min-width: auto;
+    max-width: 100%;
+    overflow: visible !important;
+  }
+
+  .social-icon {
+    width: 22px !important;
+    height: 22px !important;
+    flex-shrink: 0;
+    min-width: 22px;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .social-icon svg {
+    width: 13px !important;
+    height: 13px !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .top-bar-right .language-selector .language-button {
@@ -895,6 +1000,13 @@
 }
 
 @media (max-width: 768px) {
+  .header-top-bar {
+    padding: 0.35rem 0;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    height: auto;
+  }
+
   .header-top {
     padding: 0.5rem 0;
     min-height: auto;
@@ -995,31 +1107,70 @@
 
   .top-bar-container {
     flex-wrap: nowrap !important;
-    overflow-x: hidden !important;
+    flex-direction: row !important;
+    overflow-x: visible !important;
     overflow-y: hidden !important;
     justify-content: center;
-    gap: var(--spacing-xs);
-    padding: 0 var(--spacing-sm);
+    gap: 0.2rem;
+    padding: 0 var(--spacing-xs);
+    align-items: center;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  .top-bar-left,
-  .top-bar-right {
+  .top-bar-left {
+    display: flex !important;
+    flex-direction: row !important;
     flex-wrap: nowrap !important;
+    gap: 0.2rem;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .top-bar-right {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.2rem;
+    flex-shrink: 0;
+    width: auto;
+    min-width: auto;
+    max-width: 100%;
+    overflow: visible !important;
+  }
+
+  .top-bar-right .social-icon {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 20px !important;
+    height: 20px !important;
+    flex-shrink: 0;
+    min-width: 20px;
+  }
+
+  .top-bar-right .social-icon svg {
+    width: 12px !important;
+    height: 12px !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
   .header-info-top-bar {
-    flex-wrap: nowrap !important;
-    gap: var(--spacing-xs);
+    display: inline-flex !important;
     flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 0.2rem;
+    align-items: center;
+    vertical-align: middle;
   }
 
-  .header-location-top-bar,
   .header-datetime-top-bar {
     font-size: 0.7rem;
-  }
-
-  .header-location-top-bar span {
-    max-width: 120px;
   }
 
   .header-datetime-content {
@@ -1028,26 +1179,47 @@
 
   .top-bar-phone,
   .top-bar-email {
-    font-size: 0.75rem;
+    display: inline-flex !important;
+    font-size: 0.65rem;
+    white-space: nowrap !important;
+    flex-shrink: 0;
+    vertical-align: middle;
   }
 
-  .top-bar-right {
-    gap: var(--spacing-xs);
-  }
-
-  .header-info-top-bar {
-    gap: var(--spacing-xs);
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .header-location-top-bar,
   .header-datetime-top-bar {
-    font-size: 0.7rem;
+    display: flex !important;
+    flex-direction: row !important;
+    font-size: 0.6rem;
+    gap: 0.2rem;
+    white-space: nowrap !important;
+    flex-shrink: 0;
   }
 
-  .header-location-top-bar span {
-    max-width: 150px;
+  .header-datetime-top-bar svg {
+    font-size: 0.7rem;
+    flex-shrink: 0;
+  }
+
+  .header-datetime-content {
+    display: inline-flex !important;
+    flex-direction: column;
+    font-size: 0.55rem;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .gov-co-logo {
+    display: inline-flex !important;
+    flex-shrink: 0;
+  }
+
+  .gov-co-logo-img {
+    height: 20px;
+  }
+
+  .top-bar-separator {
+    margin: 0 0.15rem;
+    font-size: 0.7rem;
   }
 }
 
@@ -1122,10 +1294,24 @@
 
   .top-bar-container {
     padding: 0 var(--spacing-xs);
+    gap: 0.2rem;
   }
 
   .top-bar-phone,
   .top-bar-email {
+    font-size: 0.65rem;
+  }
+
+  .header-info-top-bar {
+    gap: 0.2rem;
+  }
+
+  .header-datetime-top-bar {
+    font-size: 0.6rem;
+    gap: 0.2rem;
+  }
+
+  .header-datetime-top-bar svg {
     font-size: 0.7rem;
   }
 }

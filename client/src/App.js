@@ -15,6 +15,7 @@ import './styles/FIX-ESTADISTICAS-SECTION.css';
 import './styles/FIX-GACETA.css';
 import './styles/FIX-ENLACES-INTERES.css';
 import './styles/FIX-ENLACES-GRID-SCROLL.css';
+import './styles/FIX-WHITE-OVERLAY.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import AccessibilityBar from './components/AccessibilityBar';
@@ -68,6 +69,8 @@ import AdminHistoria from './pages/admin/AdminHistoria';
 import AdminTramites from './pages/admin/AdminTramites';
 import AdminOpiniones from './pages/admin/AdminOpiniones';
 import AdminForos from './pages/admin/AdminForos';
+import AdminRepositorio from './pages/admin/AdminRepositorio';
+import RepositorioUpload from './pages/RepositorioUpload';
 import Tramites from './pages/Tramites';
 import Foros from './pages/Foros';
 import ForoDetalle from './pages/ForoDetalle';
@@ -109,6 +112,7 @@ function App() {
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/historia" element={<Historia />} />
           <Route path="/plan-accion" element={<PlanAccion />} />
+          <Route path="/repositorio-upload" element={<RepositorioUpload />} />
           
           {/* Rutas de administración */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -239,6 +243,10 @@ function App() {
                 <AdminForos />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/admin/repositorio"
+            element={<AdminRepositorio />}
           />
         </Routes>
       </main>

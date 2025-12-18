@@ -5,6 +5,9 @@ import './LanguageSelector.css';
 const LanguageSelector = () => {
   const { language, setLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
+  const selectorRef = useRef(null);
+  const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
 
   const languages = [
@@ -15,18 +18,41 @@ const LanguageSelector = () => {
 
   const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
 
+  const updateDropdownPosition = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + 8,
+        right: window.innerWidth - rect.right
+      });
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
+          buttonRef.current && !buttonRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    if (isOpen) {
+      updateDropdownPosition();
+      document.addEventListener('mousedown', handleClickOutside);
+      window.addEventListener('resize', updateDropdownPosition);
+      window.addEventListener('scroll', updateDropdownPosition, true);
+    }
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', updateDropdownPosition);
+      window.removeEventListener('scroll', updateDropdownPosition, true);
     };
-  }, []);
+  }, [isOpen]);
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  };
 
   const handleLanguageChange = (langCode) => {
     setLanguage(langCode);
@@ -34,10 +60,11 @@ const LanguageSelector = () => {
   };
 
   return (
-    <div className="language-selector" ref={dropdownRef}>
+    <div className="language-selector" ref={selectorRef}>
       <button
+        ref={buttonRef}
         className="language-button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         aria-label="Seleccionar idioma"
       >
         <span className="language-flag">{currentLanguage.flag}</span>
@@ -45,7 +72,14 @@ const LanguageSelector = () => {
         <span className="language-arrow">▼</span>
       </button>
       {isOpen && (
-        <div className="language-dropdown">
+        <div 
+          className="language-dropdown"
+          ref={dropdownRef}
+          style={{
+            top: `${dropdownPosition.top}px`,
+            right: `${dropdownPosition.right}px`
+          }}
+        >
           {languages.map((lang) => (
             <button
               key={lang.code}

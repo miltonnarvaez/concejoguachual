@@ -468,23 +468,55 @@ const Home = () => {
         <div className="container">
           <h2 className="section-title">{t('home.contacto')}</h2>
           <div className="contacto-content">
-            <div className="contacto-info">
-              <p><FaMapMarkerAlt /> Calle Principal, Guachucal, Nariño</p>
-              <p><FaPhone /> +57 (2) XXX-XXXX</p>
-              <p><FaEnvelope /> contacto@concejo.guachucal.gov.co</p>
-              <p><FaClock /> Lunes a Viernes: 8:00 AM - 12:00 PM y 2:00 PM - 6:00 PM</p>
+            <div className="contacto-info-grid">
+              <div className="contacto-info-card">
+                <div className="contacto-icon-wrapper">
+                  <FaMapMarkerAlt className="contacto-icon" />
+                </div>
+                <h3>Ubicación</h3>
+                <p>Calle Principal, Guachucal, Nariño</p>
+              </div>
+              <div className="contacto-info-card">
+                <div className="contacto-icon-wrapper">
+                  <FaPhone className="contacto-icon" />
+                </div>
+                <h3>Teléfono</h3>
+                <p>+57 (2) XXX-XXXX</p>
+              </div>
+              <div className="contacto-info-card">
+                <div className="contacto-icon-wrapper">
+                  <FaEnvelope className="contacto-icon" />
+                </div>
+                <h3>Email</h3>
+                <p>contacto@concejo.guachucal.gov.co</p>
+              </div>
+              <div className="contacto-info-card">
+                <div className="contacto-icon-wrapper">
+                  <FaClock className="contacto-icon" />
+                </div>
+                <h3>Horarios</h3>
+                <p>Lunes a Viernes: 8:00 AM - 12:00 PM y 2:00 PM - 6:00 PM</p>
+              </div>
             </div>
-            <div className="contacto-actions">
-              <div className="contacto-pqrs">
-                <p className="contacto-pqrs-text">¿Tiene alguna petición, queja, reclamo, sugerencia o denuncia?</p>
+            <div className="contacto-actions-grid">
+              <div className="contacto-action-card contacto-pqrs-card">
+                <div className="contacto-action-icon">
+                  <FaFileAlt />
+                </div>
+                <h3>PQRS</h3>
+                <p>¿Tiene alguna petición, queja, reclamo, sugerencia o denuncia?</p>
                 <Link to="/pqrsd" className="btn btn-pqrs">
                   Envíe su PQRS aquí
                 </Link>
               </div>
-              <div className="contacto-form-link">
-                <p className="contacto-form-text">¿Tiene alguna consulta o mensaje general?</p>
+              <div className="contacto-action-card contacto-mensaje-card">
+                <div className="contacto-action-icon">
+                  <FaEnvelope />
+                </div>
+                <h3>Contacto</h3>
+                <p>¿Tiene alguna consulta o mensaje general?</p>
                 <Link to="/contacto" className="btn btn-contacto">
-                  Enviar Mensaje de Contacto
+                  Enviar Mensaje
                 </Link>
               </div>
             </div>
@@ -813,7 +845,7 @@ const Home = () => {
                 <FaClipboardCheck />
               </div>
               <div className="estadistica-content">
-                <h3 className="estadistica-numero">
+                <h3 className="estadistica-numero estadistica-valor">
                   <CountUp end={stats.pqrsdResueltas} duration={2000} />
                 </h3>
                 <p className="estadistica-label">PQRSD Resueltas</p>
@@ -835,7 +867,7 @@ const Home = () => {
                 <FaNewspaper />
               </div>
               <div className="estadistica-content">
-                <h3 className="estadistica-numero">
+                <h3 className="estadistica-numero estadistica-valor">
                   <CountUp end={stats.noticias} duration={2000} />
                 </h3>
                 <p className="estadistica-label">Noticias Publicadas</p>

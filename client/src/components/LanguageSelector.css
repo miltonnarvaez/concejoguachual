@@ -1,6 +1,6 @@
 .language-selector {
   position: relative;
-  z-index: 1003;
+  z-index: 10000;
   isolation: isolate;
   flex-shrink: 0;
 }
@@ -20,6 +20,8 @@
   white-space: nowrap;
   flex-shrink: 0;
   min-width: fit-content;
+  position: relative;
+  z-index: 10000;
 }
 
 .language-button:hover {
@@ -46,15 +48,13 @@
 }
 
 .language-dropdown {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
+  position: fixed;
   background: #fff;
   border: 1px solid #e9ecef;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
   min-width: 180px;
-  z-index: 1012;
+  z-index: 10001;
   overflow: visible;
   display: flex;
   flex-direction: column;
@@ -76,7 +76,7 @@
   color: #155724;
   transition: background-color 0.3s;
   position: relative;
-  z-index: 2001;
+  z-index: 10002;
 }
 
 .language-flag {

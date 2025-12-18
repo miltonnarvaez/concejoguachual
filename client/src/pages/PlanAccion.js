@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AnimatedSection from '../components/AnimatedSection';
+import CountUp from '../components/CountUp';
+import Breadcrumbs from '../components/Breadcrumbs';
 import { 
   FaFileAlt, FaUsers, FaChartLine, FaCheckCircle, FaCalendarAlt,
   FaBullseye, FaEye, FaHandshake, FaGavel, FaBook, FaLaptop,
   FaArchive, FaShieldAlt, FaComments, FaGlobe, FaUserTie,
   FaSyncAlt, FaEye as FaEyeIcon, FaDownload, FaSitemap,
-  FaUserSecret, FaUserCog, FaClipboardList, FaTasks, FaMapMarkerAlt
+  FaUserSecret, FaUserCog, FaClipboardList, FaTasks, FaMapMarkerAlt,
+  FaProjectDiagram, FaHandsHelping, FaFileContract, FaChartBar,
+  FaPrint, FaList, FaChevronUp, FaChevronDown
 } from 'react-icons/fa';
 import './PlanAccion.css';
 
@@ -162,8 +166,126 @@ const PlanAccion = () => {
     'Ofrecer los servicios de información y reprografía, a usuarios internos como externo del concejo municipal.'
   ];
 
+  // Estado para navegación flotante
+  const [showNav, setShowNav] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+  const sectionRefs = useRef({});
+
+  // Secciones del plan para navegación
+  const sections = [
+    { id: 'mesa-directiva', title: 'Mesa Directiva', icon: FaUsers },
+    { id: 'estructura', title: 'Estructura Jerárquica', icon: FaSitemap },
+    { id: 'presentacion', title: 'Presentación', icon: FaFileAlt },
+    { id: 'mision-vision', title: 'Misión y Visión', icon: FaEye },
+    { id: 'diagnostico', title: 'Diagnóstico', icon: FaChartBar },
+    { id: 'proyeccion', title: 'Proyección Comunitaria', icon: FaMapMarkerAlt },
+    { id: 'valores', title: 'Valores', icon: FaHandshake },
+    { id: 'politicas', title: 'Políticas de Calidad', icon: FaShieldAlt },
+    { id: 'objetivos-calidad', title: 'Objetivos de Calidad', icon: FaBullseye },
+    { id: 'objetivos-especificos', title: 'Objetivos Específicos', icon: FaProjectDiagram },
+    { id: 'fortalecimiento', title: 'Fortalecimiento Institucional', icon: FaLaptop },
+    { id: 'herramientas', title: 'Herramientas Esperadas', icon: FaCheckCircle },
+    { id: 'estadisticas', title: 'Estadísticas', icon: FaChartLine },
+    { id: 'timeline', title: 'Cronograma', icon: FaCalendarAlt },
+    { id: 'plazo-seguimiento', title: 'Plazo y Seguimiento', icon: FaCalendarAlt }
+  ];
+
+  // Función para imprimir/descargar PDF
+  const handlePrint = () => {
+    window.print();
+  };
+
+  // Detectar sección activa al hacer scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 200;
+      
+      for (const section of sections) {
+        const element = document.getElementById(section.id);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Llamar una vez al cargar
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Scroll suave a sección
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 100; // Offset para header
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+      setShowNav(false);
+    }
+  };
+
   return (
     <div className="plan-accion-page">
+      <Breadcrumbs />
+      
+      {/* Botones de acción flotantes */}
+      <div className="plan-action-buttons">
+        <button 
+          className="plan-action-btn plan-print-btn" 
+          onClick={handlePrint}
+          title="Imprimir/Descargar PDF"
+          aria-label="Imprimir plan de acción"
+        >
+          <FaPrint />
+        </button>
+        <button 
+          className="plan-action-btn plan-nav-toggle-btn" 
+          onClick={() => setShowNav(!showNav)}
+          title="Mostrar/Ocultar Navegación"
+          aria-label="Toggle navigation"
+        >
+          {showNav ? <FaChevronDown /> : <FaList />}
+        </button>
+      </div>
+
+      {/* Navegación flotante */}
+      {showNav && (
+        <div className="plan-floating-nav">
+          <div className="plan-nav-header">
+            <h3>Índice</h3>
+            <button onClick={() => setShowNav(false)} aria-label="Cerrar navegación">
+              <FaChevronUp />
+            </button>
+          </div>
+          <ul className="plan-nav-list">
+            {sections.map((section) => {
+              const Icon = section.icon;
+              return (
+                <li key={section.id}>
+                  <button
+                    className={`plan-nav-item ${activeSection === section.id ? 'active' : ''}`}
+                    onClick={() => scrollToSection(section.id)}
+                  >
+                    <Icon className="plan-nav-icon" />
+                    <span>{section.title}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+
       {/* Hero Section */}
       <AnimatedSection className="section plan-hero" animationType="fadeIn">
         <div className="container">
@@ -200,7 +322,7 @@ const PlanAccion = () => {
       </AnimatedSection>
 
       {/* Estructura Jerárquica */}
-      <AnimatedSection className="section estructura-section" animationType="fadeInUp">
+      <AnimatedSection id="estructura" className="section estructura-section" animationType="fadeInUp">
         <div className="container">
           <h2 className="section-title">Estructura Jerárquica del Concejo</h2>
           <p className="section-subtitle">
@@ -287,7 +409,7 @@ const PlanAccion = () => {
       </AnimatedSection>
 
       {/* Presentación */}
-      <AnimatedSection className="section presentacion-section" animationType="fadeInUp">
+      <AnimatedSection id="presentacion" className="section presentacion-section" animationType="fadeInUp">
         <div className="container">
           <h2 className="section-title">Presentación</h2>
           <div className="presentacion-content">
@@ -311,7 +433,7 @@ const PlanAccion = () => {
       </AnimatedSection>
 
       {/* Misión y Visión */}
-      <AnimatedSection className="section mision-vision-section" animationType="fadeInUp">
+      <AnimatedSection id="mision-vision" className="section mision-vision-section" animationType="fadeInUp">
         <div className="container">
           <div className="mision-vision-grid">
             <div className="mision-vision-card">
@@ -365,7 +487,7 @@ const PlanAccion = () => {
       </AnimatedSection>
 
       {/* Proyección Comunitaria */}
-      <AnimatedSection className="section proyeccion-section" animationType="fadeInUp">
+      <AnimatedSection id="proyeccion" className="section proyeccion-section" animationType="fadeInUp">
         <div className="container">
           <h2 className="section-title">Proyección Comunitaria</h2>
           <div className="proyeccion-content">
@@ -416,7 +538,7 @@ const PlanAccion = () => {
       </AnimatedSection>
 
       {/* Políticas de Calidad */}
-      <AnimatedSection className="section politicas-section" animationType="fadeInUp">
+      <AnimatedSection id="politicas" className="section politicas-section" animationType="fadeInUp">
         <div className="container">
           <h2 className="section-title">Políticas de Calidad</h2>
           <div className="politicas-list">
@@ -446,16 +568,39 @@ const PlanAccion = () => {
       </AnimatedSection>
 
       {/* Objetivos Específicos */}
-      <AnimatedSection className="section objetivos-especificos-section" animationType="fadeInUp">
+      <AnimatedSection id="objetivos-especificos" className="section objetivos-especificos-section" animationType="fadeInUp">
         <div className="container">
           <h2 className="section-title">Objetivos Específicos</h2>
           <div className="objetivos-list">
-            {objetivosEspecificos.map((objetivo, index) => (
-              <div key={index} className="objetivo-item">
-                <FaBullseye className="objetivo-icon" />
-                <p>{objetivo}</p>
-              </div>
-            ))}
+            {objetivosEspecificos.map((objetivo, index) => {
+              // Simular progreso (en producción vendría de la API)
+              const progreso = Math.min(100, Math.max(0, Math.floor(Math.random() * 100)));
+              const estado = progreso === 100 ? 'completado' : progreso > 0 ? 'en-progreso' : 'pendiente';
+              
+              return (
+                <div key={index} className="objetivo-item objetivo-item-con-progreso">
+                  <div className="objetivo-header">
+                    <FaBullseye className="objetivo-icon" />
+                    <p className="objetivo-texto">{objetivo}</p>
+                  </div>
+                  <div className="objetivo-progreso-container">
+                    <div className="objetivo-progreso-bar">
+                      <div 
+                        className={`objetivo-progreso-fill progreso-${estado}`}
+                        style={{ width: `${progreso}%` }}
+                      >
+                        <span className="objetivo-progreso-text">{progreso}%</span>
+                      </div>
+                    </div>
+                    <span className={`objetivo-estado estado-${estado}`}>
+                      {estado === 'completado' ? '✓ Completado' : 
+                       estado === 'en-progreso' ? '⏳ En Progreso' : 
+                       '📋 Pendiente'}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </AnimatedSection>
@@ -552,7 +697,7 @@ const PlanAccion = () => {
       </AnimatedSection>
 
       {/* Herramientas Esperadas */}
-      <AnimatedSection className="section herramientas-section" animationType="fadeInUp">
+      <AnimatedSection id="herramientas" className="section herramientas-section" animationType="fadeInUp">
         <div className="container">
           <h2 className="section-title">Herramientas Esperadas para 2025</h2>
           <p className="section-subtitle">
@@ -570,8 +715,153 @@ const PlanAccion = () => {
         </div>
       </AnimatedSection>
 
+      {/* Estadísticas del Plan de Acción */}
+      <AnimatedSection className="section estadisticas-plan-section" animationType="fadeInUp">
+        <div className="container">
+          <h2 className="section-title">Estadísticas del Plan de Acción 2025</h2>
+          <p className="section-subtitle">
+            Métricas y datos relevantes del Plan de Acción del Concejo Municipal de Guachucal
+          </p>
+          
+          <div className="estadisticas-plan-grid">
+            <div className="estadistica-plan-card">
+              <div className="estadistica-plan-icon">
+                <FaBullseye />
+              </div>
+              <div className="estadistica-plan-content">
+                <h3 className="estadistica-plan-numero estadistica-valor">
+                  <CountUp end={objetivosCalidad.length} duration={2000} />
+                </h3>
+                <p className="estadistica-plan-label">Objetivos de Calidad</p>
+              </div>
+            </div>
+            
+            <div className="estadistica-plan-card">
+              <div className="estadistica-plan-icon">
+                <FaProjectDiagram />
+              </div>
+              <div className="estadistica-plan-content">
+                <h3 className="estadistica-plan-numero estadistica-valor">
+                  <CountUp end={objetivosEspecificos.length} duration={2000} />
+                </h3>
+                <p className="estadistica-plan-label">Objetivos Específicos</p>
+              </div>
+            </div>
+            
+            <div className="estadistica-plan-card">
+              <div className="estadistica-plan-icon">
+                <FaCheckCircle />
+              </div>
+              <div className="estadistica-plan-content">
+                <h3 className="estadistica-plan-numero estadistica-valor">
+                  <CountUp end={herramientasEsperadas.length} duration={2000} />
+                </h3>
+                <p className="estadistica-plan-label">Herramientas Esperadas</p>
+              </div>
+            </div>
+            
+            <div className="estadistica-plan-card">
+              <div className="estadistica-plan-icon">
+                <FaFileContract />
+              </div>
+              <div className="estadistica-plan-content">
+                <h3 className="estadistica-plan-numero estadistica-valor">
+                  <CountUp end={politicasCalidad.length} duration={2000} />
+                </h3>
+                <p className="estadistica-plan-label">Políticas de Calidad</p>
+              </div>
+            </div>
+            
+            <div className="estadistica-plan-card">
+              <div className="estadistica-plan-icon">
+                <FaHandsHelping />
+              </div>
+              <div className="estadistica-plan-content">
+                <h3 className="estadistica-plan-numero estadistica-valor">
+                  <CountUp end={valores.length} duration={2000} />
+                </h3>
+                <p className="estadistica-plan-label">Valores Institucionales</p>
+              </div>
+            </div>
+            
+            <div className="estadistica-plan-card">
+              <div className="estadistica-plan-icon">
+                <FaChartBar />
+              </div>
+              <div className="estadistica-plan-content">
+                <h3 className="estadistica-plan-numero estadistica-valor">
+                  <CountUp end={diagnostico.length} duration={2000} />
+                </h3>
+                <p className="estadistica-plan-label">Deficiencias Identificadas</p>
+              </div>
+            </div>
+            
+            <div className="estadistica-plan-card">
+              <div className="estadistica-plan-icon">
+                <FaUsers />
+              </div>
+              <div className="estadistica-plan-content">
+                <h3 className="estadistica-plan-numero estadistica-valor">
+                  <CountUp end={mesaDirectiva.length} duration={2000} />
+                </h3>
+                <p className="estadistica-plan-label">Miembros Mesa Directiva</p>
+              </div>
+            </div>
+            
+            <div className="estadistica-plan-card">
+              <div className="estadistica-plan-icon">
+                <FaCalendarAlt />
+              </div>
+              <div className="estadistica-plan-content">
+                <h3 className="estadistica-plan-numero estadistica-valor">
+                  <CountUp end={12} duration={2000} />
+                </h3>
+                <p className="estadistica-plan-label">Meses de Ejecución</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </AnimatedSection>
+
+      {/* Timeline de Ejecución */}
+      <AnimatedSection id="timeline" className="section timeline-section" animationType="fadeInUp">
+        <div className="container">
+          <h2 className="section-title">Cronograma de Ejecución 2025</h2>
+          <p className="section-subtitle">
+            Seguimiento trimestral del Plan de Acción
+          </p>
+          <div className="timeline-plan">
+            {[
+              { trimestre: 'Q1', meses: 'Ene - Mar', actividades: 'Inicio del plan, diagnóstico inicial', estado: 'completado' },
+              { trimestre: 'Q2', meses: 'Abr - Jun', actividades: 'Implementación de herramientas, capacitaciones', estado: 'en-progreso' },
+              { trimestre: 'Q3', meses: 'Jul - Sep', actividades: 'Seguimiento y evaluación, ajustes', estado: 'pendiente' },
+              { trimestre: 'Q4', meses: 'Oct - Dic', actividades: 'Cierre del año, rendición de cuentas', estado: 'pendiente' }
+            ].map((item, index) => (
+              <div key={index} className={`timeline-item timeline-${item.estado}`}>
+                <div className="timeline-marker">
+                  <div className="timeline-dot"></div>
+                  {index < 3 && <div className="timeline-line"></div>}
+                </div>
+                <div className="timeline-content">
+                  <div className="timeline-header">
+                    <span className="timeline-trimestre">{item.trimestre}</span>
+                    <span className="timeline-meses">{item.meses}</span>
+                  </div>
+                  <p className="timeline-actividades">{item.actividades}</p>
+                  <span className={`timeline-estado estado-${item.estado}`}>
+                    {item.estado === 'completado' ? '✓ Completado' : 
+                     item.estado === 'en-progreso' ? '⏳ En Progreso' : 
+                     '📋 Pendiente'}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </AnimatedSection>
+
       {/* Plazo y Seguimiento */}
-      <AnimatedSection className="section plazo-seguimiento-section" animationType="fadeInUp">
+      <AnimatedSection id="plazo-seguimiento" className="section plazo-seguimiento-section" animationType="fadeInUp">
         <div className="container">
           <div className="plazo-seguimiento-grid">
             <div className="plazo-seguimiento-card">
