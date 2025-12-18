@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FaPlus, FaEnvelope, FaFileAlt, FaComments, FaTimes } from 'react-icons/fa';
 import './FloatingActionButton.css';
 
 const FloatingActionButton = () => {
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Ocultar en la página del repositorio
+  if (location.pathname.includes('/repositorio-upload')) {
+    return null;
+  }
 
   const actions = [
     { icon: FaEnvelope, label: 'Contacto', path: '/contacto', color: '#155724' },

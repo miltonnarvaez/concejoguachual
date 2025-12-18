@@ -45,14 +45,14 @@
 
 .fab-menu {
   position: absolute;
-  bottom: 60px; /* Ajustado para alineación con botón de 50px */
+  top: 60px;
   right: 0;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(20px);
+  transform: translateY(-20px);
   transition: all 0.3s ease;
   pointer-events: none;
 }
@@ -65,8 +65,8 @@
 }
 
 .fab-action {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--action-color, var(--color-primary));
   color: white;
@@ -80,7 +80,7 @@
   animation: fabSlideIn 0.3s ease forwards;
   animation-delay: var(--delay, 0s);
   opacity: 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .fab-action svg {
@@ -131,7 +131,7 @@
 
 @media (max-width: 768px) {
   .fab-container {
-    bottom: 4.5rem; /* Espacio para el botón de scroll to top en móvil (1.5rem + 45px + gap) */
+    top: 130px;
     right: 1.5rem;
   }
 

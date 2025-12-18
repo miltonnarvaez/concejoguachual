@@ -232,9 +232,24 @@ const RepositorioUpload = () => {
       const fileInput = document.getElementById('archivos');
       if (fileInput) fileInput.value = '';
       
-      // Recargar archivos si hay una categoría seleccionada
-      if (categoriaSeleccionada && vista === 'carpetas') {
+      // Recargar categorías para actualizar contadores
+      try {
+        const categoriasResponse = await api.get('/repositorio/categorias');
+        if (categoriasResponse.data && Array.isArray(categoriasResponse.data)) {
+          setCategorias(categoriasResponse.data);
+        }
+      } catch (error) {
+        console.error('Error recargando categorías:', error);
+      }
+      
+      // Si hay una categoría seleccionada, recargar archivos
+      if (categoriaSeleccionada) {
         refetchArchivos();
+      }
+      
+      // Si estamos en la vista de "subir", cambiar a "carpetas" y mostrar la carpeta donde se subió
+      if (vista === 'subir' && categoriaSeleccionada) {
+        setVista('carpetas');
       }
     } catch (error) {
       console.error('Error subiendo archivos:', error);

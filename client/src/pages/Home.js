@@ -351,22 +351,7 @@ const Home = () => {
         <div className={`hero-content ${isVisible ? 'visible' : ''}`}>
           <h1 className="hero-title">Concejo Municipal de Guachucal</h1>
           <p className="hero-subtitle">Transparencia, participación ciudadana y servicio público</p>
-          <div className="hero-actions">
-            <Link to="/pqrsd" className="btn btn-hero-primary">
-              Enviar PQRSD
-            </Link>
-            <Link to="/busqueda" className="btn btn-hero-secondary">
-              Buscar Información
-            </Link>
-          </div>
         </div>
-        <button 
-          className="hero-scroll-indicator" 
-          onClick={scrollToNext}
-          aria-label="Desplazarse hacia abajo"
-        >
-          <FaChevronDown />
-        </button>
       </section>
 
       {/* Anuncios Importantes */}
@@ -774,14 +759,6 @@ const Home = () => {
           <div className="ubicacion-content">
             <div className="ubicacion-left">
               <div className="ubicacion-escudo-container">
-                <img 
-                  src={`${process.env.PUBLIC_URL || ''}/images/escudo.png`}
-                  alt="Escudo de Guachucal"
-                  className="ubicacion-escudo"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
                 <div className="ubicacion-guachucal-label">GUACHUCAL</div>
               </div>
               <p className="ubicacion-subtitulo">Nariño, Colombia</p>
