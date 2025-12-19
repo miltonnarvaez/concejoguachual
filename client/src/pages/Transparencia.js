@@ -20,7 +20,8 @@ import {
   PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js';
 import { Bar, Line } from 'react-chartjs-2';
 import '../styles/PageLayout.css';
@@ -37,7 +38,8 @@ ChartJS.register(
   PointElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 const Transparencia = () => {

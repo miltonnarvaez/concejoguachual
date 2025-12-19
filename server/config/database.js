@@ -1,8 +1,12 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
+// Forzar IPv4 si se usa 'localhost' para evitar problemas con IPv6
+const dbHost = process.env.DB_HOST || 'localhost';
+const resolvedHost = dbHost === 'localhost' ? '127.0.0.1' : dbHost;
+
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
+  host: resolvedHost,
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'concejo_guachucal',

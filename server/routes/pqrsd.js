@@ -154,6 +154,50 @@ router.get('/consulta/:numeroRadicado', async (req, res) => {
   }
 });
 
+// Obtener estadísticas públicas de PQRSD (sin autenticación)
+router.get('/estadisticas', async (req, res) => {
+  try {
+    // Estadísticas generales
+    const [general] = await pool.execute(`
+      SELECT 
+        COUNT(*) as total,
+        SUM(CASE WHEN estado = 'resuelto' THEN 1 ELSE 0 END) as resuelto,
+        SUM(CASE WHEN estado = 'en_proceso' THEN 1 ELSE 0 END) as en_proceso,
+        SUM(CASE WHEN estado = 'pendiente' THEN 1 ELSE 0 END) as pendiente,
+        SUM(CASE WHEN estado = 'cerrado' THEN 1 ELSE 0 END) as cerrado
+      FROM pqrsd
+    `);
+
+    // Datos mensuales (últimos 12 meses)
+    const [mensuales] = await pool.execute(`
+      SELECT 
+        DATE_FORMAT(creado_en, '%Y-%m') as mes,
+        COUNT(*) as count
+      FROM pqrsd
+      GROUP BY DATE_FORMAT(creado_en, '%Y-%m')
+      ORDER BY mes DESC
+      LIMIT 12
+    `);
+
+    res.json({
+      estadisticas: general[0] || {
+        total: 0,
+        resuelto: 0,
+        en_proceso: 0,
+        pendiente: 0,
+        cerrado: 0
+      },
+      datosMensuales: mensuales.map(row => ({
+        mes: row.mes,
+        count: parseInt(row.count)
+      }))
+    });
+  } catch (error) {
+    console.error('Error obteniendo estadísticas PQRSD:', error);
+    res.status(500).json({ error: 'Error al obtener las estadísticas' });
+  }
+});
+
 // Listar todas las solicitudes (admin)
 router.get('/', authenticateToken, requireAdmin, async (req, res) => {
   try {

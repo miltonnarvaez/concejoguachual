@@ -4,9 +4,24 @@ export const getFileUrl = (path) => {
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path;
   }
-  // Construir URL completa usando la base URL del API
-  const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-  return `${baseURL}${path}`;
+  
+  // En producción, agregar el prefijo /concejoguachucal
+  const basename = process.env.NODE_ENV === 'production' ? '/concejoguachucal' : '';
+  
+  // Si la ruta ya tiene el prefijo, no duplicarlo
+  if (path.startsWith('/concejoguachucal')) {
+    return path;
+  }
+  
+  // Construir URL completa
+  if (process.env.NODE_ENV === 'production') {
+    // En producción, usar la ruta relativa con el basename
+    return `${basename}${path}`;
+  } else {
+    // En desarrollo, usar la base URL del API
+    const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    return `${baseURL}${path}`;
+  }
 };
 
 

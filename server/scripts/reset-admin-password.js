@@ -6,9 +6,12 @@ async function resetAdminPassword() {
   let connection;
   
   try {
-    // Conectar a MySQL
+    // Conectar a MySQL (forzar IPv4 si se usa 'localhost')
+    const dbHost = process.env.DB_HOST || 'localhost';
+    const resolvedHost = dbHost === 'localhost' ? '127.0.0.1' : dbHost;
+    
     connection = await mysql.createConnection({
-      host: process.env.DB_HOST || 'localhost',
+      host: resolvedHost,
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'concejo_guachucal'

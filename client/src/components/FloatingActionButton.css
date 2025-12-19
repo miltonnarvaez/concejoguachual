@@ -131,8 +131,9 @@
 
 @media (max-width: 768px) {
   .fab-container {
-    top: 130px;
+    bottom: 4.5rem;
     right: 1.5rem;
+    top: auto;
   }
 
   .fab-button {

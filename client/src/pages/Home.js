@@ -28,7 +28,8 @@ import {
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js';
 import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import './Home.css';
@@ -56,7 +57,8 @@ ChartJS.register(
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 const Home = () => {
@@ -134,11 +136,16 @@ const Home = () => {
     }
   });
 
-  const { data: pqrsd = [] } = useQuery({
-    queryKey: ['pqrsd'],
+  const { data: pqrsdStats = null } = useQuery({
+    queryKey: ['pqrsd-estadisticas'],
     queryFn: async () => {
-      const response = await api.get('/pqrsd');
-      return response.data;
+      try {
+        const response = await api.get('/pqrsd/estadisticas');
+        return response.data;
+      } catch (error) {
+        console.error('Error obteniendo estadísticas PQRSD:', error);
+        return null;
+      }
     }
   });
 
@@ -153,7 +160,7 @@ const Home = () => {
   // Calcular estadísticas
   const stats = {
     sesiones: sesiones.length,
-    pqrsdResueltas: pqrsd.filter(p => p.estado === 'resuelto').length,
+    pqrsdResueltas: pqrsdStats?.estadisticas?.resuelto || 0,
     documentos: documentos.length,
     noticias: noticias.length
   };
@@ -183,7 +190,21 @@ const Home = () => {
     noticias: obtenerDatosPorMes(noticias, 'fecha_publicacion'),
     sesiones: obtenerDatosPorMes(sesiones, 'fecha_sesion'),
     documentos: obtenerDatosPorMes(documentos, 'fecha_publicacion'),
-    pqrsd: obtenerDatosPorMes(pqrsd, 'fecha_creacion')
+    pqrsd: (() => {
+      if (!pqrsdStats?.datosMensuales) return [];
+      const ahora = new Date();
+      const meses = [];
+      for (let i = 5; i >= 0; i--) {
+        const fecha = new Date(ahora.getFullYear(), ahora.getMonth() - i, 1);
+        const mesNombre = fecha.toLocaleDateString('es-CO', { month: 'short' });
+        const año = fecha.getFullYear();
+        const mesNum = String(fecha.getMonth() + 1).padStart(2, '0');
+        const mesKey = `${año}-${mesNum}`;
+        const item = pqrsdStats.datosMensuales.find(d => d.mes === mesKey);
+        meses.push({ mes: mesNombre, año, count: item ? item.count : 0 });
+      }
+      return meses;
+    })()
   };
 
   // Gráfico de línea - Comparativa mensual
@@ -227,10 +248,10 @@ const Home = () => {
 
   // Datos para gráficos
   const pqrsdPorEstado = {
-    resuelto: pqrsd.filter(p => p.estado === 'resuelto').length,
-    enProceso: pqrsd.filter(p => p.estado === 'en_proceso').length,
-    pendiente: pqrsd.filter(p => p.estado === 'pendiente').length,
-    cerrado: pqrsd.filter(p => p.estado === 'cerrado').length
+    resuelto: pqrsdStats?.estadisticas?.resuelto || 0,
+    enProceso: pqrsdStats?.estadisticas?.en_proceso || 0,
+    pendiente: pqrsdStats?.estadisticas?.pendiente || 0,
+    cerrado: pqrsdStats?.estadisticas?.cerrado || 0
   };
 
   // Gráfico de barras - PQRSD por estado

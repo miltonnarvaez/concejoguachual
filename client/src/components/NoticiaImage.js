@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { getFileUrl } from '../utils/fileUtils';
 import './NoticiaImage.css';
 
 const NoticiaImage = ({ src, alt, className = '' }) => {
+  // Procesar la URL para agregar el prefijo en producción
+  const imageUrl = src ? getFileUrl(src) : null;
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
 
@@ -41,7 +44,7 @@ const NoticiaImage = ({ src, alt, className = '' }) => {
         </div>
       )}
       <img
-        src={src}
+        src={imageUrl}
         alt={alt || 'Imagen de noticia'}
         className="noticia-image"
         onLoad={() => setImageLoading(false)}

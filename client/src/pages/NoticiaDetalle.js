@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import api from '../services/api';
 import NoticiaImage from '../components/NoticiaImage';
 import { ArticleSchema } from '../components/SchemaMarkup';
+import { getFileUrl } from '../utils/fileUtils';
 import './NoticiaDetalle.css';
 
 const NoticiaDetalle = () => {
@@ -35,7 +36,7 @@ const NoticiaDetalle = () => {
       <ArticleSchema
         headline={noticia.titulo}
         description={noticia.resumen || noticia.contenido.substring(0, 200)}
-        image={noticia.imagen_url ? `${window.location.origin}${noticia.imagen_url}` : undefined}
+        image={noticia.imagen_url ? getFileUrl(noticia.imagen_url) : undefined}
         datePublished={noticia.fecha_publicacion || noticia.creado_en}
         dateModified={noticia.actualizado_en || noticia.fecha_actualizacion || noticia.fecha_publicacion || noticia.creado_en}
       />

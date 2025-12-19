@@ -12,6 +12,10 @@
 /* Responsive */
 @media (max-width: 768px) {
   .logo-texto-image {
-    max-height: 40px;
+    max-height: 36px;
+  }
+  
+  .logo-texto-container {
+    gap: 0.4rem;
   }
 }

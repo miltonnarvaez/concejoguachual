@@ -16,12 +16,19 @@ const Noticias = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoriaParam = searchParams.get('categoria');
 
-  const { data: noticias = [], isLoading } = useQuery({
+  const { data: noticias = [], isLoading, error } = useQuery({
     queryKey: ['noticias'],
     queryFn: async () => {
-      const response = await api.get('/noticias');
-      return response.data;
-    }
+      try {
+        const response = await api.get('/noticias');
+        return response.data;
+      } catch (err) {
+        console.error('Error obteniendo noticias:', err);
+        throw err;
+      }
+    },
+    retry: 2,
+    retryDelay: 1000
   });
 
   // Filtrar noticias por búsqueda y categoría
@@ -35,7 +42,41 @@ const Noticias = () => {
   });
 
   if (isLoading) {
-    return <div className="loading">Cargando noticias...</div>;
+    return (
+      <div className="noticias-page page-container">
+        <Breadcrumbs />
+        <section className="section">
+          <div className="container">
+            <div className="loading">Cargando noticias...</div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="noticias-page page-container">
+        <Breadcrumbs />
+        <section className="section">
+          <div className="container">
+            <div className="no-results">
+              <h2>Error al cargar noticias</h2>
+              <p>
+                {error.response?.status === 404 
+                  ? 'El servicio de noticias no está disponible.'
+                  : error.response?.status === 500
+                  ? 'Error en el servidor. Por favor, intenta más tarde.'
+                  : 'No se pudo conectar al servidor. Verifica tu conexión a internet.'}
+              </p>
+              <p style={{ fontSize: '0.9em', color: '#666', marginTop: '1rem' }}>
+                Código de error: {error.response?.status || 'Sin conexión'}
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
   }
 
   return (
