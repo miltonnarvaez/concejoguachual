@@ -132,6 +132,8 @@ const Header = () => {
         { label: 'DECRETOS', path: '/gaceta?tipo=decreto', icon: FaFileContract },
         { label: 'PROYECTOS', path: '/gaceta?tipo=proyecto', icon: FaProjectDiagram },
         { label: 'MANUALES', path: '/gaceta?tipo=manual', icon: FaBook },
+        { label: 'PLANES', path: '/gaceta?tipo=plan', icon: FaProjectDiagram },
+        { label: 'REGLAMENTO INTERNO', path: '/gaceta?tipo=reglamento-interno', icon: FaBook },
         { label: 'LEYES', path: '/gaceta?tipo=ley', icon: FaLaw },
         { label: 'POLÍTICAS', path: '/gaceta?tipo=politica', icon: FaClipboardList }
       ]
@@ -475,6 +477,27 @@ const Header = () => {
               />
             </div>
             <Escudo />
+            <div className="escudo-alcaldia-container">
+              <img 
+                src={`${process.env.PUBLIC_URL || ''}/images/alcaldia.png`}
+                alt="Escudo de la Alcaldía de Guachucal"
+                className="escudo-alcaldia"
+                onError={(e) => {
+                  // Si no existe la imagen, intentar con diferentes extensiones
+                  const extensions = ['.png', '.jpeg', '.webp', '.svg'];
+                  const baseName = `${process.env.PUBLIC_URL || ''}/images/alcaldia`;
+                  const currentSrc = e.target.src;
+                  const currentExt = currentSrc.substring(currentSrc.lastIndexOf('.'));
+                  const currentIndex = extensions.indexOf(currentExt);
+                  
+                  if (currentIndex < extensions.length - 1) {
+                    e.target.src = `${baseName}${extensions[currentIndex + 1]}`;
+                  } else {
+                    e.target.style.display = 'none';
+                  }
+                }}
+              />
+            </div>
             <LogoTexto />
           </Link>
           <div className="header-datetime-wrapper">

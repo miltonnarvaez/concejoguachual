@@ -8,6 +8,15 @@ import { getImageByIndex } from '../utils/exampleImages';
 import TexturePattern from '../components/TexturePattern';
 import { OrganizationSchema, WebSiteSchema } from '../components/SchemaMarkup';
 import AnimatedSection from '../components/AnimatedSection';
+import HeroSlider from '../components/HeroSlider';
+import { 
+  AlcaldiaIcon, 
+  ContraloriaIcon, 
+  ColombiaCompraIcon, 
+  UrnaCristalIcon, 
+  ContratacionPublicaIcon, 
+  GobiernoDigitalIcon 
+} from '../components/logos/EnlacesIconos';
 import {
   FaCalendarAlt, FaHandshake, FaFileSignature, FaDollarSign, FaChartLine,
   FaShieldAlt, FaFileAlt, FaBook, FaClipboardCheck, FaBalanceScale, FaSitemap,
@@ -15,7 +24,8 @@ import {
   FaClipboardList, FaProjectDiagram, FaFemale, FaUserClock, FaGraduationCap,
   FaWheelchair, FaGlobeAmericas, FaBriefcase, FaChevronDown, FaUsers, FaNewspaper,
   FaComments, FaFileAlt as FaDocument, FaBuilding, FaCity, FaShoppingCart,
-  FaBox, FaArchive, FaLaptopCode, FaDigitalTachograph, FaFlag, FaLandmark
+  FaBox, FaArchive, FaLaptopCode, FaDigitalTachograph, FaFlag, FaLandmark,
+  FaChevronLeft, FaChevronRight
 } from 'react-icons/fa';
 import CountUp from '../components/CountUp';
 import {
@@ -65,28 +75,8 @@ const Home = () => {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [isVisible, setIsVisible] = useState(false);
-  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
-
-  // Precargar imagen de fondo del hero
-  useEffect(() => {
-    const img = new Image();
-    const imagePath = `${process.env.PUBLIC_URL || ''}/images/hero-grupo-personas.jpg`;
-    img.src = imagePath;
-    img.onload = () => {
-      setHeroImageLoaded(true);
-    };
-    img.onerror = () => {
-      // Intentar con la segunda imagen
-      const img2 = new Image();
-      img2.src = `${process.env.PUBLIC_URL || ''}/images/hero-grupo-personas2.jpg`;
-      img2.onload = () => {
-        setHeroImageLoaded(true);
-      };
-      img2.onerror = () => {
-        setHeroImageLoaded(false);
-      };
-    };
-  }, []);
+  const [enlacesScrollPosition, setEnlacesScrollPosition] = useState(0);
+  const enlacesCarouselRef = React.useRef(null);
 
   const { data: noticias = [] } = useQuery({
     queryKey: ['noticias'],
@@ -355,25 +345,8 @@ const Home = () => {
         url={window.location.origin}
         searchUrl={`${window.location.origin}/busqueda?q={search_term_string}`}
       />
-      {/* Hero Section */}
-      <section className="hero">
-        <div 
-          className="hero-background" 
-          style={{
-            backgroundImage: heroImageLoaded
-              ? `url('${process.env.PUBLIC_URL || ''}/images/hero-grupo-personas.jpg'), linear-gradient(135deg, rgba(21, 87, 36, 0.7) 0%, rgba(40, 167, 69, 0.7) 100%)`
-              : 'linear-gradient(135deg, #155724 0%, #28a745 100%)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center 40%',
-            backgroundRepeat: 'no-repeat'
-          }}
-        ></div>
-        <div className="hero-overlay"></div>
-        <div className={`hero-content ${isVisible ? 'visible' : ''}`}>
-          <h1 className="hero-title">Concejo Municipal de Guachucal</h1>
-          <p className="hero-subtitle">Transparencia, participación ciudadana y servicio público</p>
-        </div>
-      </section>
+      {/* Hero Slider */}
+      <HeroSlider />
 
       {/* Anuncios Importantes */}
       {destacadas.length > 0 && (
@@ -642,55 +615,71 @@ const Home = () => {
       <AnimatedSection className="section enlaces-interes" animationType="bounceIn">
         <div className="container">
           <h2 className="section-title">Enlaces de Interés</h2>
-          <div className="enlaces-grid">
-            <a href="https://www.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
-              <div className="enlace-icon">
-                <FaClipboardList />
+          <div className="enlaces-carousel-wrapper">
+            <button 
+              className="enlaces-carousel-btn enlaces-carousel-btn-prev"
+              onClick={() => {
+                if (enlacesCarouselRef.current) {
+                  const scrollAmount = 300;
+                  enlacesCarouselRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                }
+              }}
+              aria-label="Anterior"
+            >
+              <FaChevronLeft />
+            </button>
+            <div className="enlaces-carousel" ref={enlacesCarouselRef}>
+              <div className="enlaces-grid">
+                <a href="https://www.guachucal-narino.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
+                  <div className="enlace-icon">
+                    <AlcaldiaIcon width={50} height={50} />
+                  </div>
+                  <span className="enlace-texto">Alcaldía de Guachucal</span>
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" className="enlace-item">
+                  <div className="enlace-icon">
+                    <ContraloriaIcon width={50} height={50} />
+                  </div>
+                  <span className="enlace-texto">Contraloría Municipal</span>
+                </a>
+                <a href="https://www.colombiacompra.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
+                  <div className="enlace-icon">
+                    <ColombiaCompraIcon width={50} height={50} />
+                  </div>
+                  <span className="enlace-texto">Colombia compra eficiente</span>
+                </a>
+                <a href="https://www.urnadecristal.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
+                  <div className="enlace-icon">
+                    <UrnaCristalIcon width={50} height={50} />
+                  </div>
+                  <span className="enlace-texto">Urna de Cristal</span>
+                </a>
+                <a href="https://www.contratacion.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
+                  <div className="enlace-icon">
+                    <ContratacionPublicaIcon width={50} height={50} />
+                  </div>
+                  <span className="enlace-texto">Contratación Pública</span>
+                </a>
+                <a href="https://www.gobiernodigital.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
+                  <div className="enlace-icon">
+                    <GobiernoDigitalIcon width={50} height={50} />
+                  </div>
+                  <span className="enlace-texto">Gobierno Digital</span>
+                </a>
               </div>
-              <span className="enlace-texto">Trámites y servicios</span>
-            </a>
-            <a href="https://www.guachucal-narino.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
-              <div className="enlace-icon">
-                <FaBuilding />
-              </div>
-              <span className="enlace-texto">Alcaldía de Guachucal</span>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" className="enlace-item">
-              <div className="enlace-icon">
-                <FaBalanceScale />
-              </div>
-              <span className="enlace-texto">Contraloría Municipal</span>
-            </a>
-            <a href="https://www.colombiacompra.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
-              <div className="enlace-icon">
-                <FaShoppingCart />
-              </div>
-              <span className="enlace-texto">Colombia compra eficiente</span>
-            </a>
-            <a href="https://www.urnadecristal.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
-              <div className="enlace-icon">
-                <FaBox />
-              </div>
-              <span className="enlace-texto">Urna de Cristal</span>
-            </a>
-            <a href="https://www.contratacion.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
-              <div className="enlace-icon">
-                <FaFileContract />
-              </div>
-              <span className="enlace-texto">Contratación Pública</span>
-            </a>
-            <a href="https://www.gobiernodigital.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
-              <div className="enlace-icon">
-                <FaLaptopCode />
-              </div>
-              <span className="enlace-texto">Gobierno Digital</span>
-            </a>
-            <a href="https://www.presidencia.gov.co" target="_blank" rel="noopener noreferrer" className="enlace-item">
-              <div className="enlace-icon">
-                <FaFlag />
-              </div>
-              <span className="enlace-texto">Presidencia de la República</span>
-            </a>
+            </div>
+            <button 
+              className="enlaces-carousel-btn enlaces-carousel-btn-next"
+              onClick={() => {
+                if (enlacesCarouselRef.current) {
+                  const scrollAmount = 300;
+                  enlacesCarouselRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                }
+              }}
+              aria-label="Siguiente"
+            >
+              <FaChevronRight />
+            </button>
           </div>
         </div>
       </AnimatedSection>
@@ -780,6 +769,62 @@ const Home = () => {
           <div className="ubicacion-content">
             <div className="ubicacion-left">
               <div className="ubicacion-escudo-container">
+                <div className="ubicacion-escudos-wrapper">
+                  <img 
+                    src={`${process.env.PUBLIC_URL || ''}/images/colombia.png`}
+                    alt="Escudo de Colombia"
+                    className="ubicacion-escudo"
+                    onError={(e) => {
+                      const extensions = ['.svg', '.jpg', '.jpeg', '.webp'];
+                      const baseName = `${process.env.PUBLIC_URL || ''}/images/colombia`;
+                      const currentSrc = e.target.src;
+                      const currentExt = currentSrc.substring(currentSrc.lastIndexOf('.'));
+                      const currentIndex = extensions.indexOf(currentExt);
+                      
+                      if (currentIndex < extensions.length - 1) {
+                        e.target.src = `${baseName}${extensions[currentIndex + 1]}`;
+                      } else {
+                        e.target.style.display = 'none';
+                      }
+                    }}
+                  />
+                  <img 
+                    src={`${process.env.PUBLIC_URL || ''}/images/escudo.png`}
+                    alt="Escudo del Concejo Municipal de Guachucal"
+                    className="ubicacion-escudo"
+                    onError={(e) => {
+                      const extensions = ['.svg', '.jpg', '.jpeg', '.webp'];
+                      const baseName = `${process.env.PUBLIC_URL || ''}/images/escudo`;
+                      const currentSrc = e.target.src;
+                      const currentExt = currentSrc.substring(currentSrc.lastIndexOf('.'));
+                      const currentIndex = extensions.indexOf(currentExt);
+                      
+                      if (currentIndex < extensions.length - 1) {
+                        e.target.src = `${baseName}${extensions[currentIndex + 1]}`;
+                      } else {
+                        e.target.style.display = 'none';
+                      }
+                    }}
+                  />
+                  <img 
+                    src={`${process.env.PUBLIC_URL || ''}/images/alcaldia.png`}
+                    alt="Escudo de la Alcaldía de Guachucal"
+                    className="ubicacion-escudo"
+                    onError={(e) => {
+                      const extensions = ['.png', '.jpeg', '.webp', '.svg'];
+                      const baseName = `${process.env.PUBLIC_URL || ''}/images/alcaldia`;
+                      const currentSrc = e.target.src;
+                      const currentExt = currentSrc.substring(currentSrc.lastIndexOf('.'));
+                      const currentIndex = extensions.indexOf(currentExt);
+                      
+                      if (currentIndex < extensions.length - 1) {
+                        e.target.src = `${baseName}${extensions[currentIndex + 1]}`;
+                      } else {
+                        e.target.style.display = 'none';
+                      }
+                    }}
+                  />
+                </div>
                 <div className="ubicacion-guachucal-label">GUACHUCAL</div>
               </div>
               <p className="ubicacion-subtitulo">Nariño, Colombia</p>

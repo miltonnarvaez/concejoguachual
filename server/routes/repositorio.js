@@ -9,56 +9,98 @@ const { authenticateToken, requireAdmin } = require('../middleware/auth');
 const repositorioBaseDir = path.join(__dirname, '../uploads/repositorio-temporal');
 
 // Carpetas organizadas por categoría
-const carpetas = {
-  'acerca-de': 'Acerca del Concejo',
-  'miembros': 'Miembros del Concejo',
-  'historia': 'Historia',
-  'gaceta': 'Gaceta',
-  'sesiones': 'Sesiones',
-  'transparencia': 'Transparencia',
-  'documentos-oficiales': 'Documentos Oficiales',
-  'documentos-generales': 'Documentos Generales',
-  // Carpetas de Acerca de
-  'acerca-mision': 'Acerca - Misión',
-  'acerca-vision': 'Acerca - Visión',
-  'acerca-estructura-jerarquica': 'Acerca - Estructura Jerárquica',
-  'acerca-autoridades': 'Acerca - Autoridades',
-  'acerca-contacto': 'Acerca - Contacto',
-  'acerca-simbolos': 'Acerca - Símbolos',
-  'plan-accion': 'Plan de Acción 2025',
-  // Carpetas de Documentos
-  'documentos-gaceta-municipal': 'Documentos - Gaceta Municipal',
-  'documentos-acuerdos': 'Documentos - Acuerdos',
-  'documentos-actas-sesion': 'Documentos - Actas de Sesión',
-  'documentos-decretos': 'Documentos - Decretos',
-  'documentos-proyectos': 'Documentos - Proyectos',
-  'documentos-manuales': 'Documentos - Manuales',
-  'documentos-leyes': 'Documentos - Leyes',
-  'documentos-politicas': 'Documentos - Políticas',
-  // Carpetas de Transparencia
-  'transparencia-presupuesto': 'Transparencia - Presupuesto',
-  'transparencia-contratacion-publica': 'Transparencia - Contratación Pública',
-  'transparencia-plan-anual-compras': 'Transparencia - Plan Anual de Compras',
-  'transparencia-rendicion-cuentas': 'Transparencia - Rendición de Cuentas',
-  'transparencia-estados-financieros': 'Transparencia - Estados Financieros',
-  'transparencia-control-interno': 'Transparencia - Control Interno',
-  'transparencia-declaracion-renta': 'Transparencia - Declaración de Renta',
-  'transparencia-estructura-organizacional': 'Transparencia - Estructura Organizacional',
-  'transparencia-plan-desarrollo': 'Transparencia - Plan de Desarrollo',
-  'transparencia-normatividad': 'Transparencia - Normatividad',
-  'transparencia-servicios-ciudadanos': 'Transparencia - Servicios Ciudadanos',
-  'transparencia-auditorias': 'Transparencia - Auditorías',
-  'transparencia-bienes-inmuebles': 'Transparencia - Bienes Inmuebles',
-  'transparencia-personal': 'Transparencia - Personal'
+// Las carpetas se cargan desde un archivo JSON para permitir agregar nuevas dinámicamente
+const carpetasFilePath = path.join(__dirname, '../uploads/repositorio-temporal', 'carpetas.json');
+
+// Función para cargar carpetas desde archivo o usar las predeterminadas
+const cargarCarpetas = () => {
+  const carpetasDefault = {
+    'acerca-de': 'Acerca del Concejo',
+    'miembros': 'Miembros del Concejo',
+    'historia': 'Historia',
+    'gaceta': 'Gaceta',
+    'sesiones': 'Sesiones',
+    'transparencia': 'Transparencia',
+    'documentos-oficiales': 'Documentos Oficiales',
+    'documentos-generales': 'Documentos Generales',
+    // Carpetas de Acerca de
+    'acerca-mision': 'Acerca - Misión',
+    'acerca-vision': 'Acerca - Visión',
+    'acerca-estructura-jerarquica': 'Acerca - Estructura Jerárquica',
+    'acerca-autoridades': 'Acerca - Autoridades',
+    'acerca-contacto': 'Acerca - Contacto',
+    'acerca-simbolos': 'Acerca - Símbolos',
+    'plan-accion': 'Plan de Acción 2025',
+    // Carpetas de Documentos
+    'documentos-gaceta-municipal': 'Documentos - Gaceta Municipal',
+    'documentos-acuerdos': 'Documentos - Acuerdos',
+    'documentos-actas-sesion': 'Documentos - Actas de Sesión',
+    'documentos-decretos': 'Documentos - Decretos',
+    'documentos-proyectos': 'Documentos - Proyectos',
+    'documentos-manuales': 'Documentos - Manuales',
+    'documentos-planes': 'Documentos - Planes',
+    'documentos-leyes': 'Documentos - Leyes',
+    'documentos-politicas': 'Documentos - Políticas',
+    'reglamento-interno': 'Reglamento Interno',
+    // Carpetas de Transparencia
+    'transparencia-presupuesto': 'Transparencia - Presupuesto',
+    'transparencia-contratacion-publica': 'Transparencia - Contratación Pública',
+    'transparencia-plan-anual-compras': 'Transparencia - Plan Anual de Compras',
+    'transparencia-rendicion-cuentas': 'Transparencia - Rendición de Cuentas',
+    'transparencia-estados-financieros': 'Transparencia - Estados Financieros',
+    'transparencia-control-interno': 'Transparencia - Control Interno',
+    'transparencia-declaracion-renta': 'Transparencia - Declaración de Renta',
+    'transparencia-estructura-organizacional': 'Transparencia - Estructura Organizacional',
+    'transparencia-plan-desarrollo': 'Transparencia - Plan de Desarrollo',
+    'transparencia-normatividad': 'Transparencia - Normatividad',
+    'transparencia-servicios-ciudadanos': 'Transparencia - Servicios Ciudadanos',
+    'transparencia-auditorias': 'Transparencia - Auditorías',
+    'transparencia-bienes-inmuebles': 'Transparencia - Bienes Inmuebles',
+    'transparencia-personal': 'Transparencia - Personal'
+  };
+
+  if (fs.existsSync(carpetasFilePath)) {
+    try {
+      const carpetasGuardadas = JSON.parse(fs.readFileSync(carpetasFilePath, 'utf8'));
+      return { ...carpetasDefault, ...carpetasGuardadas };
+    } catch (error) {
+      console.error('Error cargando carpetas desde archivo:', error);
+      return carpetasDefault;
+    }
+  }
+  return carpetasDefault;
 };
 
-// Crear carpetas si no existen
-Object.keys(carpetas).forEach(carpeta => {
-  const carpetaPath = path.join(repositorioBaseDir, carpeta);
-  if (!fs.existsSync(carpetaPath)) {
-    fs.mkdirSync(carpetaPath, { recursive: true });
+// Función para guardar carpetas en archivo
+const guardarCarpetas = (carpetas) => {
+  try {
+    // Asegurar que el directorio existe
+    const dir = path.dirname(carpetasFilePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(carpetasFilePath, JSON.stringify(carpetas, null, 2), 'utf8');
+  } catch (error) {
+    console.error('Error guardando carpetas:', error);
   }
-});
+};
+
+// Cargar carpetas al iniciar
+let carpetas = cargarCarpetas();
+
+// Función para inicializar carpetas
+const inicializarCarpetas = () => {
+  carpetas = cargarCarpetas();
+  Object.keys(carpetas).forEach(carpeta => {
+    const carpetaPath = path.join(repositorioBaseDir, carpeta);
+    if (!fs.existsSync(carpetaPath)) {
+      fs.mkdirSync(carpetaPath, { recursive: true });
+    }
+  });
+};
+
+// Inicializar carpetas al cargar el módulo
+inicializarCarpetas();
 
 // Configuración de multer para el repositorio
 const repositorioStorage = multer.diskStorage({
@@ -180,6 +222,8 @@ const listarArchivosCarpeta = (carpeta) => {
 // Listar categorías disponibles
 router.get('/categorias', (req, res) => {
   try {
+    // Recargar carpetas para obtener las más recientes
+    carpetas = cargarCarpetas();
     const categorias = Object.keys(carpetas).map(key => ({
       id: key,
       nombre: carpetas[key],
@@ -194,9 +238,59 @@ router.get('/categorias', (req, res) => {
   }
 });
 
+// Crear nueva carpeta/categoría
+router.post('/crear-carpeta', (req, res) => {
+  try {
+    const { nombre } = req.body;
+    
+    if (!nombre || !nombre.trim()) {
+      return res.status(400).json({ error: 'El nombre de la carpeta es requerido' });
+    }
+
+    // Generar ID único a partir del nombre
+    const id = nombre
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remover acentos
+      .replace(/[^a-z0-9]+/g, '-') // Reemplazar espacios y caracteres especiales con guiones
+      .replace(/^-+|-+$/g, ''); // Remover guiones al inicio y final
+
+    // Verificar que no exista ya
+    if (carpetas[id]) {
+      return res.status(400).json({ error: 'Ya existe una carpeta con un nombre similar' });
+    }
+
+    // Agregar nueva carpeta
+    carpetas[id] = nombre.trim();
+    
+    // Guardar en archivo
+    guardarCarpetas(carpetas);
+    
+    // Crear el directorio físico
+    const carpetaPath = path.join(repositorioBaseDir, id);
+    if (!fs.existsSync(carpetaPath)) {
+      fs.mkdirSync(carpetaPath, { recursive: true });
+    }
+
+    res.json({
+      mensaje: 'Carpeta creada exitosamente',
+      carpeta: {
+        id: id,
+        nombre: nombre.trim(),
+        cantidadArchivos: 0
+      }
+    });
+  } catch (error) {
+    console.error('Error creando carpeta:', error);
+    res.status(500).json({ error: 'Error creando carpeta' });
+  }
+});
+
 // Listar archivos de una categoría (público - sin autenticación)
 router.get('/listar/:categoria?', (req, res) => {
   try {
+    // Recargar carpetas para obtener las más recientes
+    carpetas = cargarCarpetas();
     const categoria = req.params.categoria;
     
     if (categoria && carpetas[categoria]) {
@@ -237,6 +331,9 @@ router.get('/listar/:categoria?', (req, res) => {
 // Subir archivo (sin autenticación - acceso público con token simple)
 router.post('/upload', uploadRepositorio.single('archivo'), (req, res) => {
   try {
+    // Recargar carpetas para obtener las más recientes
+    carpetas = cargarCarpetas();
+    
     if (!req.file) {
       return res.status(400).json({ error: 'No se proporcionó ningún archivo' });
     }
@@ -262,6 +359,9 @@ router.post('/upload', uploadRepositorio.single('archivo'), (req, res) => {
 // Subir múltiples archivos
 router.post('/upload-multiple', uploadRepositorio.array('archivos', 20), (req, res) => {
   try {
+    // Recargar carpetas para obtener las más recientes
+    carpetas = cargarCarpetas();
+    
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: 'No se proporcionaron archivos' });
     }
@@ -340,6 +440,8 @@ router.delete('/eliminar/:categoria/:nombreArchivo', async (req, res) => {
 // Mover archivo entre categorías (público temporalmente)
 router.put('/mover', async (req, res) => {
   try {
+    // Recargar carpetas para obtener las más recientes
+    carpetas = cargarCarpetas();
     const { categoriaOrigen, categoriaDestino, nombreArchivo } = req.body;
     
     if (!carpetas[categoriaOrigen] || !carpetas[categoriaDestino]) {
@@ -372,6 +474,8 @@ router.put('/mover', async (req, res) => {
 // Listar todos los archivos del repositorio
 router.get('/admin/listar', authenticateToken, requireAdmin, (req, res) => {
   try {
+    // Recargar carpetas para obtener las más recientes
+    carpetas = cargarCarpetas();
     const categoria = req.query.categoria;
     
     if (categoria && carpetas[categoria]) {
@@ -448,6 +552,8 @@ router.delete('/admin/eliminar/:categoria/:nombreArchivo', authenticateToken, re
 // Mover archivo entre categorías
 router.put('/admin/mover', authenticateToken, requireAdmin, async (req, res) => {
   try {
+    // Recargar carpetas para obtener las más recientes
+    carpetas = cargarCarpetas();
     const { categoriaOrigen, categoriaDestino, nombreArchivo } = req.body;
     
     if (!carpetas[categoriaOrigen] || !carpetas[categoriaDestino]) {
@@ -476,6 +582,8 @@ router.put('/admin/mover', authenticateToken, requireAdmin, async (req, res) => 
 // Obtener estadísticas del repositorio
 router.get('/admin/estadisticas', authenticateToken, requireAdmin, (req, res) => {
   try {
+    // Recargar carpetas para obtener las más recientes
+    carpetas = cargarCarpetas();
     const estadisticas = {};
     let totalArchivos = 0;
     let totalTamaño = 0;
@@ -506,3 +614,10 @@ router.get('/admin/estadisticas', authenticateToken, requireAdmin, (req, res) =>
 });
 
 module.exports = router;
+
+
+
+
+
+
+

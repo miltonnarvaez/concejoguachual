@@ -1,4 +1,4 @@
-/* Home Page Styles - Similar to Concejo de Pasto */
+﻿/* Home Page Styles - Similar to Concejo de Pasto */
 
 .home {
   min-height: 100vh;
@@ -707,6 +707,7 @@
 /* Contacto Section */
 .contacto {
   position: relative !important;
+  background: linear-gradient(135deg, #f0f8f3 0%, #e8f5ec 50%, #e0f2e6 100%) !important;
   background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
@@ -737,7 +738,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(248, 249, 250, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(240, 248, 243, 0.98) 0%, rgba(232, 245, 236, 0.95) 50%, rgba(224, 242, 230, 0.98) 100%);
   z-index: 0;
   backdrop-filter: blur(1px);
 }
@@ -767,8 +768,8 @@
 
 /* Títulos sobre imágenes - color lima */
 .contacto .section-title {
-  color: var(--color-lime-accent);
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3);
+  color: var(--color-primary-dark) !important;
+  text-shadow: none !important;
   text-align: center !important;
   width: 100% !important;
   margin-left: auto !important;
@@ -976,7 +977,7 @@
 .contacto-info-card h3 {
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-primary-dark) !important;
   margin: 0;
   margin-bottom: var(--spacing-xs);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
@@ -984,7 +985,7 @@
 
 .contacto-info-card p {
   font-size: 0.95rem;
-  color: var(--color-text);
+  color: var(--color-text) !important;
   margin: 0;
   line-height: 1.5;
   font-weight: 500;
@@ -1439,9 +1440,9 @@
   display: block !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
-  overflow-x: hidden !important;
-  overflow-y: hidden !important;
-  overflow: hidden !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  overflow: visible !important;
   box-sizing: border-box !important;
   position: relative !important;
   left: 0 !important;
@@ -1456,9 +1457,9 @@
   max-width: 1200px !important;
   width: 100% !important;
   display: block !important;
-  overflow-x: hidden !important;
-  overflow-y: hidden !important;
-  overflow: hidden !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  overflow: visible !important;
   box-sizing: border-box !important;
   position: relative !important;
   left: 0 !important;
@@ -1474,38 +1475,58 @@
   margin-right: auto !important;
 }
 
-.enlaces-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important;
+/* Estilos del carrusel - sobrescriben los estilos antiguos del grid */
+.enlaces-carousel-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-lg);
+  width: 100%;
+  padding: 0 var(--spacing-sm);
+  overflow: visible !important;
+}
+
+.enlaces-carousel-wrapper .enlaces-carousel-btn {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 20 !important;
+}
+
+.enlaces-carousel-wrapper .enlaces-grid {
+  display: flex !important;
+  grid-template-columns: none !important;
   gap: var(--spacing-md);
-  margin-top: var(--spacing-lg) !important;
+  margin-top: 0 !important;
   margin-bottom: 0 !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
-  place-items: center;
-  justify-content: center;
-  max-width: 100%;
-  width: 100%;
-  overflow-x: hidden !important;
-  overflow-y: hidden !important;
-  overflow: hidden !important;
+  place-items: unset !important;
+  justify-content: flex-start !important;
+  max-width: none !important;
+  width: max-content !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  overflow: visible !important;
   -webkit-overflow-scrolling: touch !important;
   box-sizing: border-box !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  padding-left: var(--spacing-sm) !important;
+  padding-right: var(--spacing-sm) !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
-  left: 0 !important;
+  left: auto !important;
   right: auto !important;
   top: auto !important;
   position: relative !important;
   transform: none !important;
   translate: none !important;
   inset: auto !important;
-  min-width: 0 !important;
+  min-width: max-content !important;
   height: auto !important;
   max-height: none !important;
-  min-height: 0 !important;
+  min-height: auto !important;
   will-change: auto !important;
 }
 
@@ -1514,30 +1535,31 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
   background: white;
   text-decoration: none;
   border-radius: 12px;
   transition: var(--transition);
   border: none !important;
-  width: 150px;
+  min-width: 170px;
+  width: 170px;
   height: 150px;
-  aspect-ratio: 1;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .enlace-item:hover {
   background: white;
   border: none !important;
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   text-decoration: none;
 }
 
 .enlace-icon {
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1559,6 +1581,16 @@
   box-sizing: border-box;
 }
 
+.enlace-icon img,
+.enlace-icon svg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
 .enlace-icon img {
   max-width: 100%;
   max-height: 100%;
@@ -1571,9 +1603,90 @@
 }
 
 .enlace-texto {
-  font-size: 0.9rem;
-  color: var(--color-text);
+  font-size: 0.85rem;
+  color: #333;
   font-weight: 500;
+  line-height: 1.3;
+  margin-top: var(--spacing-xs);
+}
+
+/* Botones del carrusel de enlaces */
+.enlaces-carousel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.enlaces-carousel-btn:hover {
+  background-color: #5a6268;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.enlaces-carousel-btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.enlaces-carousel-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 3;
+}
+
+.enlaces-carousel-btn-prev {
+  margin-right: var(--spacing-sm);
+  order: 1;
+  flex-shrink: 0;
+}
+
+.enlaces-carousel {
+  order: 2;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #6c757d transparent;
+}
+
+.enlaces-carousel::-webkit-scrollbar {
+  height: 6px;
+}
+
+.enlaces-carousel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.enlaces-carousel::-webkit-scrollbar-thumb {
+  background-color: #6c757d;
+  border-radius: 3px;
+}
+
+.enlaces-carousel-btn-next {
+  margin-left: var(--spacing-sm);
+  order: 3;
+  flex-shrink: 0;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 20 !important;
+  width: 40px !important;
+  height: 40px !important;
 }
 
 /* Grupos de Interés Section */
@@ -1791,6 +1904,7 @@
 /* Ubicación Section */
 .ubicacion {
   position: relative;
+  background: linear-gradient(135deg, #f5f9f7 0%, #f0f6f3 50%, #ebf3ef 100%) !important;
   background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
@@ -1813,7 +1927,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(245, 249, 247, 0.98) 0%, rgba(240, 246, 243, 0.95) 50%, rgba(235, 243, 239, 0.98) 100%);
   z-index: 0;
   backdrop-filter: blur(2px);
 }
@@ -1846,17 +1960,33 @@
 .ubicacion-escudo-container {
   position: relative;
   margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.ubicacion-escudos-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
 }
 
 .ubicacion-escudo {
-  width: 150px;
+  width: 120px;
   height: auto;
+  max-width: 120px;
+  max-height: 120px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .ubicacion-guachucal-label {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-lime-accent);
+  color: var(--color-primary-dark) !important;
   text-align: center;
   margin-top: var(--spacing-sm);
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3);
@@ -1899,7 +2029,7 @@
 
 .ubicacion-section-title {
   font-size: 2rem;
-  color: var(--color-lime-accent);
+  color: var(--color-primary-dark) !important;
   margin-bottom: var(--spacing-md);
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 0, 0, 0.3);
   position: relative;
@@ -1965,10 +2095,10 @@
 
 .ubicacion-horarios-title {
   font-size: 1.25rem;
-  color: var(--color-accent);
+  color: var(--color-primary-dark) !important;
   margin-bottom: var(--spacing-sm);
   font-weight: 700;
-  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9), 0 0 10px rgba(255, 255, 255, 0.7);
+  text-shadow: none !important;
   background: rgba(255, 255, 255, 0.85);
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -2133,22 +2263,36 @@
     grid-template-columns: 1fr;
   }
 
+  .ubicacion-escudos-wrapper {
+    gap: var(--spacing-sm);
+  }
+
+  .ubicacion-escudo {
+    width: 80px;
+    max-width: 80px;
+    max-height: 80px;
+  }
+
   .acceso-grid {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: calc(var(--spacing-md) * 0.5);
   }
 
-  .gaceta-grid,
-  .enlaces-grid {
+  .gaceta-grid {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    overflow-x: hidden !important;
+  }
+
+  .enlaces-carousel-wrapper .enlaces-grid {
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: visible !important;
   }
 
   .enlace-item {
-    width: 120px;
-    height: 120px;
-    aspect-ratio: 1;
-    padding: var(--spacing-xs);
+    min-width: 150px;
+    width: 150px;
+    height: 140px;
+    padding: var(--spacing-sm);
     border: none;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
@@ -2776,20 +2920,35 @@
     grid-template-columns: repeat(2, 1fr) !important;
   }
 
+  .enlaces-carousel-wrapper {
+    gap: var(--spacing-xs);
+    padding: 0 var(--spacing-xs);
+  }
+
+  .enlaces-carousel-wrapper .enlaces-carousel-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 35px;
+    height: 35px;
+  }
+
+  .enlaces-carousel-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .enlaces-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    overflow-x: hidden !important;
+    display: flex !important;
+    gap: var(--spacing-sm) !important;
+    overflow-x: auto !important;
   }
 
   .enlace-item {
-    width: 100%;
-    max-width: 140px;
-    height: 140px;
-    aspect-ratio: 1;
-    margin: 0 auto;
-    padding: var(--spacing-xs);
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 140px;
+    width: 140px;
+    height: 130px;
+    padding: var(--spacing-sm);
   }
 
   .enlace-item:hover {

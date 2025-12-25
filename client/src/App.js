@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import './styles/dark-mode.css';
@@ -25,6 +25,7 @@ import ScrollToTopOnNavigate from './components/ScrollToTopOnNavigate';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import ProgressBar from './components/ProgressBar';
 import FloatingActionButton from './components/FloatingActionButton';
+import SplashScreen from './components/SplashScreen';
 
 // Páginas públicas
 import Home from './pages/Home';
@@ -77,8 +78,15 @@ import ForoDetalle from './pages/ForoDetalle';
 import Contacto from './pages/Contacto';
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+  };
+
   return (
     <div className="App">
+      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
       <ProgressBar />
       <ScrollToTopOnNavigate />
       <AccessibilityBar />

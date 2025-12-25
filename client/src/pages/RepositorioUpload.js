@@ -16,7 +16,9 @@ import {
   FaFileWord,
   FaFileExcel,
   FaFilePowerpoint,
-  FaTrash
+  FaTrash,
+  FaPlus,
+  FaTimesCircle
 } from 'react-icons/fa';
 import './RepositorioUpload.css';
 
@@ -32,6 +34,9 @@ const RepositorioUpload = () => {
   const [cargandoCategorias, setCargandoCategorias] = useState(true);
   const [notaArchivo, setNotaArchivo] = useState(''); // Nota opcional para el archivo
   const [mostrarNota, setMostrarNota] = useState(false); // Toggle para mostrar/ocultar campo de nota
+  const [mostrarCrearCarpeta, setMostrarCrearCarpeta] = useState(false); // Toggle para mostrar formulario de crear carpeta
+  const [nombreNuevaCarpeta, setNombreNuevaCarpeta] = useState(''); // Nombre de la nueva carpeta
+  const [creandoCarpeta, setCreandoCarpeta] = useState(false); // Estado de carga al crear carpeta
   const timeoutRef = useRef(null);
   const isMountedRef = useRef(true);
 
@@ -315,8 +320,51 @@ const RepositorioUpload = () => {
       console.error('Error eliminando archivo:', error);
       setMensaje({ 
         tipo: 'error', 
-        texto: error.response?.data?.error || 'Error eliminando archivo. Por favor intenta de nuevo.' 
+        texto: error.response?.data?.error || 'Error eliminando archivo. Por favor intenta de nuevo.'
       });
+    }
+  };
+
+  // Función para crear nueva carpeta
+  const handleCrearCarpeta = async (e) => {
+    e.preventDefault();
+    
+    if (!nombreNuevaCarpeta.trim()) {
+      setMensaje({ 
+        tipo: 'error', 
+        texto: 'Por favor ingresa un nombre para la carpeta' 
+      });
+      return;
+    }
+
+    setCreandoCarpeta(true);
+    setMensaje({ tipo: '', texto: '' });
+
+    try {
+      const response = await api.post('/repositorio/crear-carpeta', {
+        nombre: nombreNuevaCarpeta.trim()
+      });
+
+      if (response.data && response.data.carpeta) {
+        // Agregar la nueva carpeta a la lista
+        setCategorias([...categorias, response.data.carpeta]);
+        setMensaje({ 
+          tipo: 'exito', 
+          texto: `Carpeta "${response.data.carpeta.nombre}" creada exitosamente` 
+        });
+        
+        // Limpiar formulario
+        setNombreNuevaCarpeta('');
+        setMostrarCrearCarpeta(false);
+      }
+    } catch (error) {
+      console.error('Error creando carpeta:', error);
+      setMensaje({ 
+        tipo: 'error', 
+        texto: error.response?.data?.error || 'Error creando carpeta. Por favor intenta de nuevo.'
+      });
+    } finally {
+      setCreandoCarpeta(false);
     }
   };
 
@@ -366,26 +414,91 @@ const RepositorioUpload = () => {
                 <p>Cargando carpetas...</p>
               </div>
             ) : !categoriaSeleccionada ? (
-              categorias.length > 0 ? (
-                <div className="drive-folders-grid">
-                  {categorias.map((cat) => (
-                    <div 
-                      key={cat.id} 
-                      className="drive-folder-card"
-                      onClick={() => setCategoriaSeleccionada(cat.id)}
-                    >
-                      <FaFolder className="folder-icon" />
-                      <h3>{cat.nombre}</h3>
-                      <p>{cat.cantidadArchivos || 0} archivo(s)</p>
-                    </div>
-                  ))}
+              <>
+                <div className="drive-folders-header">
+                  <h2>Carpetas Disponibles</h2>
+                  <button 
+                    className="btn-crear-carpeta"
+                    onClick={() => setMostrarCrearCarpeta(!mostrarCrearCarpeta)}
+                  >
+                    <FaPlus /> {mostrarCrearCarpeta ? 'Cancelar' : 'Crear Nueva Carpeta'}
+                  </button>
                 </div>
-              ) : (
-                <div className="drive-empty">
-                  <FaInfoCircle className="empty-icon" />
-                  <p>No se pudieron cargar las carpetas. Por favor recarga la página.</p>
-                </div>
-              )
+
+                {mostrarCrearCarpeta && (
+                  <div className="crear-carpeta-form">
+                    <form onSubmit={handleCrearCarpeta}>
+                      <div className="form-group">
+                        <label htmlFor="nombreCarpeta">
+                          <FaFolder /> Nombre de la carpeta
+                        </label>
+                        <input
+                          type="text"
+                          id="nombreCarpeta"
+                          value={nombreNuevaCarpeta}
+                          onChange={(e) => setNombreNuevaCarpeta(e.target.value)}
+                          placeholder="Ej: Documentos 2025"
+                          maxLength="100"
+                          required
+                          autoFocus
+                        />
+                        <span className="form-hint">
+                          {nombreNuevaCarpeta.length}/100 caracteres
+                        </span>
+                      </div>
+                      <div className="form-actions">
+                        <button 
+                          type="submit" 
+                          className="btn-submit"
+                          disabled={creandoCarpeta || !nombreNuevaCarpeta.trim()}
+                        >
+                          {creandoCarpeta ? (
+                            <>
+                              <FaSpinner className="spinner" /> Creando...
+                            </>
+                          ) : (
+                            <>
+                              <FaCheckCircle /> Crear Carpeta
+                            </>
+                          )}
+                        </button>
+                        <button 
+                          type="button" 
+                          className="btn-cancel"
+                          onClick={() => {
+                            setMostrarCrearCarpeta(false);
+                            setNombreNuevaCarpeta('');
+                          }}
+                          disabled={creandoCarpeta}
+                        >
+                          <FaTimesCircle /> Cancelar
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
+
+                {categorias.length > 0 ? (
+                  <div className="drive-folders-grid">
+                    {categorias.map((cat) => (
+                      <div 
+                        key={cat.id} 
+                        className="drive-folder-card"
+                        onClick={() => setCategoriaSeleccionada(cat.id)}
+                      >
+                        <FaFolder className="folder-icon" />
+                        <h3>{cat.nombre}</h3>
+                        <p>{cat.cantidadArchivos || 0} archivo(s)</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="drive-empty">
+                    <FaInfoCircle className="empty-icon" />
+                    <p>No hay carpetas disponibles. Crea una nueva carpeta para comenzar.</p>
+                  </div>
+                )}
+              </>
             ) : (
               <>
                 <div className="drive-breadcrumb">
@@ -587,3 +700,10 @@ const RepositorioUpload = () => {
 };
 
 export default RepositorioUpload;
+
+
+
+
+
+
+
