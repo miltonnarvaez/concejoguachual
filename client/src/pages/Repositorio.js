@@ -24,6 +24,9 @@ const Repositorio = () => {
     queryKey: ['repositorio-categorias-publico'],
     queryFn: async () => {
       const response = await api.get('/repositorio/listar');
+      console.log('📂 Datos de categorías recibidos:', response.data);
+      console.log('📂 Categorías:', response.data?.categorias);
+      console.log('📂 Total archivos:', response.data?.totalArchivos);
       return response.data;
     }
   });
@@ -34,6 +37,9 @@ const Repositorio = () => {
     queryFn: async () => {
       if (!categoriaSeleccionada) return null;
       const response = await api.get(`/repositorio/listar/${categoriaSeleccionada}`);
+      console.log(`📄 Archivos recibidos para "${categoriaSeleccionada}":`, response.data);
+      console.log(`📄 Total archivos:`, response.data?.total);
+      console.log(`📄 Array de archivos:`, response.data?.archivos);
       return response.data;
     },
     enabled: !!categoriaSeleccionada
@@ -91,6 +97,15 @@ const Repositorio = () => {
 
   const categorias = categoriasData?.categorias || {};
   const archivos = datosArchivos?.archivos || [];
+  
+  // Debug
+  console.log('🔍 Estado actual:', {
+    categoriaSeleccionada,
+    categoriasCount: Object.keys(categorias).length,
+    archivosCount: archivos.length,
+    loadingCategorias,
+    loadingArchivos
+  });
 
   return (
     <div className="repositorio-publico">
