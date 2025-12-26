@@ -760,31 +760,67 @@ const hacerPeticionHTTP = (url, options = {}) => {
   });
 };
 
-// Función auxiliar para descargar archivo desde URL remota
-const descargarArchivoRemoto = (url, destino) => {
-  return new Promise((resolve, reject) => {
-    const urlObj = new URL(url);
-    const protocol = urlObj.protocol === 'https:' ? https : http;
-    
-    const req = protocol.get(url, (res) => {
-      if (res.statusCode !== 200) {
-        reject(new Error(`HTTP ${res.statusCode}`));
-        return;
-      }
-      
-      const fileStream = fs.createWriteStream(destino);
-      res.pipe(fileStream);
-      
-      fileStream.on('finish', () => {
-        fileStream.close();
-        resolve();
+// Función auxiliar para esperar un tiempo (delay)
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Función auxiliar para descargar archivo desde URL remota con retry
+const descargarArchivoRemoto = async (url, destino, maxRetries = 3) => {
+  const urlObj = new URL(url);
+  const protocol = urlObj.protocol === 'https:' ? https : http;
+  
+  for (let intento = 0; intento < maxRetries; intento++) {
+    try {
+      await new Promise((resolve, reject) => {
+        const req = protocol.get(url, (res) => {
+          // Si es 429 (Too Many Requests), esperar y reintentar
+          if (res.statusCode === 429) {
+            const retryAfter = res.headers['retry-after'] ? parseInt(res.headers['retry-after']) * 1000 : (intento + 1) * 2000;
+            reject(new Error(`HTTP 429 - Rate limited. Retry after ${retryAfter}ms`));
+            return;
+          }
+          
+          if (res.statusCode !== 200) {
+            reject(new Error(`HTTP ${res.statusCode}`));
+            return;
+          }
+          
+          const fileStream = fs.createWriteStream(destino);
+          res.pipe(fileStream);
+          
+          fileStream.on('finish', () => {
+            fileStream.close();
+            resolve();
+          });
+          
+          fileStream.on('error', reject);
+        });
+        
+        req.on('error', reject);
+        req.setTimeout(30000, () => {
+          req.destroy();
+          reject(new Error('Timeout'));
+        });
       });
       
-      fileStream.on('error', reject);
-    });
-    
-    req.on('error', reject);
-  });
+      // Si llegamos aquí, la descarga fue exitosa
+      return;
+    } catch (error) {
+      // Si es el último intento, lanzar el error
+      if (intento === maxRetries - 1) {
+        throw error;
+      }
+      
+      // Si es error 429, esperar más tiempo antes de reintentar
+      if (error.message.includes('429')) {
+        const waitTime = (intento + 1) * 3000; // Backoff exponencial: 3s, 6s, 9s
+        console.log(`⏳ Rate limited. Esperando ${waitTime}ms antes de reintentar...`);
+        await delay(waitTime);
+      } else {
+        // Para otros errores, esperar un poco menos
+        await delay(1000 * (intento + 1));
+      }
+    }
+  }
 };
 
 // Sincronizar archivos desde servidor remoto o directorio local
@@ -855,10 +891,26 @@ router.post('/sincronizar', async (req, res) => {
         
         console.log(`🔄 Obteniendo lista de archivos desde: ${listarUrl}`);
         
-        // Obtener lista de archivos del servidor remoto
-        const datosRemotos = await hacerPeticionHTTP(listarUrl);
+        // Obtener lista de archivos del servidor remoto con retry
+        let datosRemotos;
+        let intentosListar = 0;
+        const maxIntentosListar = 3;
         
-        if (!datosRemotos.categorias) {
+        while (intentosListar < maxIntentosListar) {
+          try {
+            datosRemotos = await hacerPeticionHTTP(listarUrl);
+            break; // Si funciona, salir del bucle
+          } catch (error) {
+            intentosListar++;
+            if (intentosListar >= maxIntentosListar) {
+              throw error; // Si es el último intento, lanzar el error
+            }
+            console.log(`⚠️ Error obteniendo lista (intento ${intentosListar}/${maxIntentosListar}), reintentando en 2 segundos...`);
+            await delay(2000);
+          }
+        }
+        
+        if (!datosRemotos || !datosRemotos.categorias) {
           return res.status(400).json({ error: 'Respuesta inválida del servidor remoto' });
         }
 
@@ -882,7 +934,8 @@ router.post('/sincronizar', async (req, res) => {
           const metadataLocal = cargarMetadatos(categoriaLocal);
 
           // Procesar cada archivo del servidor remoto
-          for (const archivoRemoto of datosCategoria.archivos || []) {
+          for (let i = 0; i < (datosCategoria.archivos || []).length; i++) {
+            const archivoRemoto = datosCategoria.archivos[i];
             try {
               const archivoLocalPath = path.join(carpetaLocalPath, archivoRemoto.nombre);
               const metadataArchivo = metadataLocal[archivoRemoto.nombre];
@@ -895,10 +948,16 @@ router.post('/sincronizar', async (req, res) => {
                 if (hashLocal !== archivoRemoto.hash) {
                   // Descargar archivo actualizado
                   const descargarUrl = `${baseUrl}/api/repositorio/descargar/${categoriaRemota}/${encodeURIComponent(archivoRemoto.nombre)}`;
+                  console.log(`📥 Descargando: ${archivoRemoto.nombre} (${i + 1}/${datosCategoria.archivos.length})`);
                   await descargarArchivoRemoto(descargarUrl, archivoLocalPath);
                   marcarArchivoSincronizado(categoriaLocal, archivoRemoto.nombre, 'servidor');
                   archivosModificados++;
                   archivosSincronizados++;
+                  
+                  // Delay entre descargas para evitar rate limiting (500ms)
+                  if (i < datosCategoria.archivos.length - 1) {
+                    await delay(500);
+                  }
                 } else if (metadataArchivo?.sincronizado) {
                   // Ya está sincronizado y no ha cambiado
                   archivosOmitidos++;
@@ -910,14 +969,26 @@ router.post('/sincronizar', async (req, res) => {
               } else {
                 // Archivo nuevo, descargar
                 const descargarUrl = `${baseUrl}/api/repositorio/descargar/${categoriaRemota}/${encodeURIComponent(archivoRemoto.nombre)}`;
+                console.log(`📥 Descargando: ${archivoRemoto.nombre} (${i + 1}/${datosCategoria.archivos.length})`);
                 await descargarArchivoRemoto(descargarUrl, archivoLocalPath);
                 marcarArchivoSincronizado(categoriaLocal, archivoRemoto.nombre, 'servidor');
                 archivosNuevos++;
                 archivosSincronizados++;
+                
+                // Delay entre descargas para evitar rate limiting (500ms)
+                if (i < datosCategoria.archivos.length - 1) {
+                  await delay(500);
+                }
               }
             } catch (error) {
               console.error(`❌ Error sincronizando ${archivoRemoto.nombre}:`, error);
               errores.push({ archivo: archivoRemoto.nombre, error: error.message });
+              
+              // Si es error 429, esperar más tiempo antes de continuar
+              if (error.message.includes('429')) {
+                console.log(`⏳ Esperando 5 segundos antes de continuar...`);
+                await delay(5000);
+              }
             }
           }
         }
