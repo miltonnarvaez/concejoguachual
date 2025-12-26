@@ -399,9 +399,22 @@ router.get('/listar/:categoria?', (req, res) => {
     carpetas = cargarCarpetas();
     const categoria = req.params.categoria;
     
+    console.log('📂 GET /listar - Categoría solicitada:', categoria || 'todas');
+    console.log('📁 Directorio base del repositorio:', repositorioBaseDir);
+    console.log('📋 Total categorías disponibles:', Object.keys(carpetas).length);
+    
     if (categoria && carpetas[categoria]) {
       // Listar archivos de una categoría específica
+      const carpetaPath = path.join(repositorioBaseDir, categoria);
+      console.log('📂 Ruta de la carpeta:', carpetaPath);
+      console.log('✅ Carpeta existe:', fs.existsSync(carpetaPath));
+      
       const archivos = listarArchivosCarpeta(categoria);
+      console.log(`📄 Archivos encontrados en "${categoria}": ${archivos.length}`);
+      if (archivos.length > 0) {
+        console.log('📄 Primeros archivos:', archivos.slice(0, 3).map(a => a.nombre));
+      }
+      
       res.json({
         categoria: categoria,
         nombreCategoria: carpetas[categoria],
@@ -421,7 +434,12 @@ router.get('/listar/:categoria?', (req, res) => {
           total: archivos.length
         };
         totalArchivos += archivos.length;
+        if (archivos.length > 0) {
+          console.log(`📂 "${cat}": ${archivos.length} archivos`);
+        }
       });
+      
+      console.log(`📊 Total archivos en todas las categorías: ${totalArchivos}`);
       
       res.json({
         categorias: todasLasCategorias,
@@ -429,8 +447,9 @@ router.get('/listar/:categoria?', (req, res) => {
       });
     }
   } catch (error) {
-    console.error('Error listando archivos:', error);
-    res.status(500).json({ error: 'Error listando archivos' });
+    console.error('❌ Error listando archivos:', error);
+    console.error('Stack:', error.stack);
+    res.status(500).json({ error: 'Error listando archivos', detalle: error.message });
   }
 });
 
