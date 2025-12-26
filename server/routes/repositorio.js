@@ -954,9 +954,9 @@ router.post('/sincronizar', async (req, res) => {
                   archivosModificados++;
                   archivosSincronizados++;
                   
-                  // Delay entre descargas para evitar rate limiting (500ms)
+                  // Delay entre descargas para evitar rate limiting (2000ms)
                   if (i < datosCategoria.archivos.length - 1) {
-                    await delay(500);
+                    await delay(2000);
                   }
                 } else if (metadataArchivo?.sincronizado) {
                   // Ya está sincronizado y no ha cambiado
@@ -975,9 +975,9 @@ router.post('/sincronizar', async (req, res) => {
                 archivosNuevos++;
                 archivosSincronizados++;
                 
-                // Delay entre descargas para evitar rate limiting (500ms)
+                // Delay entre descargas para evitar rate limiting (2000ms)
                 if (i < datosCategoria.archivos.length - 1) {
-                  await delay(500);
+                  await delay(2000);
                 }
               }
             } catch (error) {
@@ -986,8 +986,8 @@ router.post('/sincronizar', async (req, res) => {
               
               // Si es error 429, esperar más tiempo antes de continuar
               if (error.message.includes('429')) {
-                console.log(`⏳ Esperando 5 segundos antes de continuar...`);
-                await delay(5000);
+                console.log(`⏳ Rate limited. Esperando 10 segundos antes de continuar...`);
+                await delay(10000);
               }
             }
           }
