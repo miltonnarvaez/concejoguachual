@@ -1176,6 +1176,286 @@ router.get('/admin/estadisticas', authenticateToken, requireAdmin, (req, res) =>
   }
 });
 
+// Función para determinar la categoría correcta de un archivo basándose en su nombre
+const determinarCategoria = (nombreArchivo) => {
+  const nombreUpper = nombreArchivo.toUpperCase();
+  const nombreLower = nombreArchivo.toLowerCase();
+  
+  // Reglas de clasificación por palabras clave
+  const reglas = [
+    // Actas de Sesión
+    {
+      keywords: ['ACTA', 'ACTA_', 'ACTA-', 'SESION', 'SESIÓN', 'CRONOGRAMA', 'CITACION', 'CITACIÓN', 'INSTALACION', 'INSTALACIÓN', 'PRORROGA', 'PRÓRROGA'],
+      categoria: 'documentos-actas-sesion',
+      prioridad: 10
+    },
+    // Sesiones (imágenes y documentos de sesiones)
+    {
+      keywords: ['SESIONES', 'SESION_', 'SESION-', 'PLENARIA', 'PLENARIA_', 'AUDIENCIA'],
+      categoria: 'sesiones',
+      prioridad: 9
+    },
+    // Acuerdos
+    {
+      keywords: ['ACUERDO', 'ACUERDO_', 'ACUERDO-', 'ACUERDO_NO', 'ACUERDO N'],
+      categoria: 'documentos-acuerdos',
+      prioridad: 10
+    },
+    // Decretos
+    {
+      keywords: ['DECRETO', 'DECRETO_', 'DECRETO-', 'DECRETO_NO', 'DECRETO N'],
+      categoria: 'documentos-decretos',
+      prioridad: 10
+    },
+    // Reglamento Interno
+    {
+      keywords: ['REGLAMENTO', 'REGLAMENTO_INTERNO', 'REGLAMENTO-INTERNO'],
+      categoria: 'reglamento-interno',
+      prioridad: 10
+    },
+    // Gaceta Municipal
+    {
+      keywords: ['GACETA', 'GACETA_MUNICIPAL', 'GACETA-MUNICIPAL'],
+      categoria: 'documentos-gaceta-municipal',
+      prioridad: 10
+    },
+    // Planes
+    {
+      keywords: ['PLAN', 'PLAN_', 'PLAN-', 'PLAN_ANUAL', 'PLAN-ANUAL', 'PLAN_DE_ADQUISICIONES', 'PLAN_DE_COMPRAS', 'PLAN_DE_DESARROLLO', 'PLAN_ACCION', 'PLAN-ACCION'],
+      categoria: 'documentos-planes',
+      prioridad: 9
+    },
+    // Transparencia - Rendición de Cuentas
+    {
+      keywords: ['RENDICION', 'RENDICIÓN', 'RENDICION_DE_CUENTAS', 'INFORME_DE_GESTION', 'INFORME_DE_GESTIÓN', 'INFORME_GESTION', 'INFORME_GESTIÓN'],
+      categoria: 'transparencia-rendicion-cuentas',
+      prioridad: 10
+    },
+    // Transparencia - Presupuesto
+    {
+      keywords: ['PRESUPUESTO', 'PRESUPUESTO_', 'PRESUPUESTO-'],
+      categoria: 'transparencia-presupuesto',
+      prioridad: 10
+    },
+    // Transparencia - Plan Anual de Compras
+    {
+      keywords: ['PLAN_ANUAL_DE_ADQUISICONES', 'PLAN_ANUAL_DE_COMPRAS', 'ADQUISICIONES', 'ADQUISICIONES_'],
+      categoria: 'transparencia-plan-anual-compras',
+      prioridad: 10
+    },
+    // Transparencia - Estados Financieros
+    {
+      keywords: ['ESTADOS_FINANCIEROS', 'ESTADO_FINANCIERO', 'BALANCE', 'ESTADO_DE_RESULTADOS'],
+      categoria: 'transparencia-estados-financieros',
+      prioridad: 10
+    },
+    // Transparencia - Contratación Pública
+    {
+      keywords: ['CONTRATACION', 'CONTRATACIÓN', 'CONTRATO', 'LICITACION', 'LICITACIÓN'],
+      categoria: 'transparencia-contratacion-publica',
+      prioridad: 9
+    },
+    // Transparencia - Control Interno
+    {
+      keywords: ['CONTROL_INTERNO', 'AUDITORIA', 'AUDITORÍA', 'AUDITORIAS', 'AUDITORÍAS'],
+      categoria: 'transparencia-control-interno',
+      prioridad: 9
+    },
+    // Miembros del Concejo
+    {
+      keywords: ['CONCEJALES', 'CONCEJALAS', 'MIEMBROS', 'AUTORIDADES', 'HONORABLES'],
+      categoria: 'miembros',
+      prioridad: 8
+    },
+    // Proyectos
+    {
+      keywords: ['PROYECTO', 'PROYECTO_', 'PROYECTO-', 'PROYECTO_DE_ACUERDO', 'PROYECTO_DE_LEY'],
+      categoria: 'documentos-proyectos',
+      prioridad: 9
+    },
+    // Manuales
+    {
+      keywords: ['MANUAL', 'MANUAL_', 'MANUAL-', 'GUIA', 'GUÍA'],
+      categoria: 'documentos-manuales',
+      prioridad: 8
+    },
+    // Leyes
+    {
+      keywords: ['LEY', 'LEY_', 'LEY-', 'LEY_NO', 'LEY N'],
+      categoria: 'documentos-leyes',
+      prioridad: 9
+    },
+    // Políticas
+    {
+      keywords: ['POLITICA', 'POLÍTICA', 'POLITICA_', 'POLÍTICA_', 'POLITICAS', 'POLÍTICAS'],
+      categoria: 'documentos-politicas',
+      prioridad: 8
+    },
+    // Historia
+    {
+      keywords: ['HISTORIA', 'HISTORICO', 'HISTÓRICO', 'HISTORICA', 'HISTÓRICA'],
+      categoria: 'historia',
+      prioridad: 7
+    },
+    // Gaceta (general)
+    {
+      keywords: ['GACETA'],
+      categoria: 'gaceta',
+      prioridad: 6
+    }
+  ];
+  
+  // Buscar la regla con mayor prioridad que coincida
+  let mejorMatch = null;
+  let mayorPrioridad = 0;
+  
+  for (const regla of reglas) {
+    const coincide = regla.keywords.some(keyword => 
+      nombreUpper.includes(keyword.toUpperCase())
+    );
+    
+    if (coincide && regla.prioridad > mayorPrioridad) {
+      mejorMatch = regla.categoria;
+      mayorPrioridad = regla.prioridad;
+    }
+  }
+  
+  return mejorMatch;
+};
+
+// Organizar automáticamente los documentos del repositorio
+router.post('/admin/organizar', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    console.log('🔄 Iniciando organización automática de documentos...');
+    
+    // Recargar carpetas
+    carpetas = cargarCarpetas();
+    
+    const resultados = {
+      movidos: [],
+      sinCambios: [],
+      errores: [],
+      totalProcesados: 0
+    };
+    
+    // Recorrer todas las carpetas
+    for (const [categoriaId, categoriaNombre] of Object.entries(carpetas)) {
+      const carpetaPath = path.join(repositorioBaseDir, categoriaId);
+      
+      if (!fs.existsSync(carpetaPath)) {
+        continue;
+      }
+      
+      // Listar archivos en la carpeta (excluyendo metadata.json)
+      const archivos = fs.readdirSync(carpetaPath)
+        .filter(archivo => {
+          const archivoPath = path.join(carpetaPath, archivo);
+          return fs.statSync(archivoPath).isFile() && archivo !== 'metadata.json';
+        });
+      
+      for (const archivo of archivos) {
+        resultados.totalProcesados++;
+        
+        try {
+          // Determinar la categoría correcta para este archivo
+          const categoriaCorrecta = determinarCategoria(archivo);
+          
+          // Si no se encontró una categoría o ya está en la correcta, continuar
+          if (!categoriaCorrecta || categoriaCorrecta === categoriaId) {
+            resultados.sinCambios.push({
+              archivo,
+              categoriaActual: categoriaId,
+              razon: categoriaCorrecta ? 'Ya está en la categoría correcta' : 'No se pudo determinar categoría'
+            });
+            continue;
+          }
+          
+          // Verificar que la carpeta destino existe
+          const carpetaDestinoPath = path.join(repositorioBaseDir, categoriaCorrecta);
+          if (!fs.existsSync(carpetaDestinoPath)) {
+            fs.mkdirSync(carpetaDestinoPath, { recursive: true });
+          }
+          
+          // Verificar si el archivo ya existe en el destino
+          const archivoOrigenPath = path.join(carpetaPath, archivo);
+          const archivoDestinoPath = path.join(carpetaDestinoPath, archivo);
+          
+          if (fs.existsSync(archivoDestinoPath)) {
+            resultados.errores.push({
+              archivo,
+              categoriaOrigen: categoriaId,
+              categoriaDestino: categoriaCorrecta,
+              error: 'El archivo ya existe en la carpeta destino'
+            });
+            continue;
+          }
+          
+          // Mover el archivo
+          fs.renameSync(archivoOrigenPath, archivoDestinoPath);
+          
+          // Actualizar metadata si existe
+          try {
+            const metadataOrigen = cargarMetadatos(categoriaId);
+            if (metadataOrigen[archivo]) {
+              const metadataArchivo = metadataOrigen[archivo];
+              delete metadataOrigen[archivo];
+              guardarMetadatos(categoriaId, metadataOrigen);
+              
+              // Guardar en la nueva categoría
+              const metadataDestino = cargarMetadatos(categoriaCorrecta);
+              metadataDestino[archivo] = metadataArchivo;
+              guardarMetadatos(categoriaCorrecta, metadataDestino);
+            }
+          } catch (error) {
+            console.warn(`⚠️ Error actualizando metadata para ${archivo}:`, error.message);
+          }
+          
+          resultados.movidos.push({
+            archivo,
+            categoriaOrigen: categoriaId,
+            categoriaDestino: categoriaCorrecta,
+            nombreCategoriaOrigen: categoriaNombre,
+            nombreCategoriaDestino: carpetas[categoriaCorrecta]
+          });
+          
+          console.log(`✅ Movido: ${archivo} de "${categoriaNombre}" a "${carpetas[categoriaCorrecta]}"`);
+          
+        } catch (error) {
+          console.error(`❌ Error procesando ${archivo}:`, error);
+          resultados.errores.push({
+            archivo,
+            categoriaActual: categoriaId,
+            error: error.message
+          });
+        }
+      }
+    }
+    
+    console.log(`✅ Organización completada: ${resultados.movidos.length} archivos movidos, ${resultados.sinCambios.length} sin cambios, ${resultados.errores.length} errores`);
+    
+    res.json({
+      mensaje: 'Organización completada',
+      resumen: {
+        totalProcesados: resultados.totalProcesados,
+        movidos: resultados.movidos.length,
+        sinCambios: resultados.sinCambios.length,
+        errores: resultados.errores.length
+      },
+      detalles: {
+        movidos: resultados.movidos,
+        errores: resultados.errores.length > 0 ? resultados.errores : undefined
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Error organizando documentos:', error);
+    res.status(500).json({ 
+      error: 'Error organizando documentos', 
+      detalle: error.message 
+    });
+  }
+});
+
 module.exports = router;
 
 

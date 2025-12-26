@@ -14,7 +14,7 @@ import {
   FaDollarSign, FaHandshake, FaChartLine, FaFileInvoiceDollar, FaShieldAlt,
   FaFileSignature, FaSitemap, FaProjectDiagram, FaGavel as FaLaw, FaUserCog,
   FaClipboardCheck, FaLandmark, FaUser, FaImages, FaCalendarAlt, FaComments, FaEnvelope,
-  FaCheckCircle, FaTimes, FaBars, FaClock
+  FaCheckCircle, FaTimes, FaBars, FaClock, FaFolder
 } from 'react-icons/fa';
 import './Header.css';
 
@@ -135,7 +135,8 @@ const Header = () => {
         { label: 'PLANES', path: '/gaceta?tipo=plan', icon: FaProjectDiagram },
         { label: 'REGLAMENTO INTERNO', path: '/gaceta?tipo=reglamento-interno', icon: FaBook },
         { label: 'LEYES', path: '/gaceta?tipo=ley', icon: FaLaw },
-        { label: 'POLÍTICAS', path: '/gaceta?tipo=politica', icon: FaClipboardList }
+        { label: 'POLÍTICAS', path: '/gaceta?tipo=politica', icon: FaClipboardList },
+        { label: 'REPOSITORIO', path: '/repositorio', icon: FaFolder }
       ]
     },
     {

@@ -15,7 +15,8 @@ import {
   FaArrowLeft,
   FaArrowRight,
   FaSync,
-  FaServer
+  FaServer,
+  FaMagic
 } from 'react-icons/fa';
 import AdminNavbar from '../../components/admin/AdminNavbar';
 import './AdminRepositorio.css';
@@ -32,6 +33,9 @@ const AdminRepositorio = () => {
   const [servidorPath, setServidorPath] = useState('C:\\Users\\Milton Narvaez\\Documents\\cursor\\concejo\\server\\uploads\\repositorio-temporal');
   const [sincronizando, setSincronizando] = useState(false);
   const [resultadoSincronizacion, setResultadoSincronizacion] = useState(null);
+  const [organizando, setOrganizando] = useState(false);
+  const [resultadoOrganizacion, setResultadoOrganizacion] = useState(null);
+  const [mostrarOrganizar, setMostrarOrganizar] = useState(false);
 
   // Obtener estadísticas (sin autenticación temporalmente)
   const { data: estadisticas, isLoading: loadingStats } = useQuery({
@@ -204,6 +208,40 @@ const AdminRepositorio = () => {
       setResultadoSincronizacion(null);
     } finally {
       setSincronizando(false);
+    }
+  };
+
+  const handleOrganizar = async () => {
+    if (!window.confirm('¿Estás seguro de que deseas organizar automáticamente todos los documentos? Esta acción moverá los archivos a sus carpetas correspondientes.')) {
+      return;
+    }
+
+    setOrganizando(true);
+    setResultadoOrganizacion(null);
+    setMensaje({ tipo: '', texto: '' });
+
+    try {
+      const response = await api.post('/repositorio/admin/organizar');
+
+      setResultadoOrganizacion(response.data);
+      setMensaje({ 
+        tipo: 'exito', 
+        texto: `Organización completada: ${response.data.resumen.movidos} archivo(s) movido(s)` 
+      });
+      
+      // Recargar datos después de organizar
+      refetch();
+      
+      setTimeout(() => setMensaje({ tipo: '', texto: '' }), 5000);
+    } catch (error) {
+      console.error('Error organizando:', error);
+      setMensaje({ 
+        tipo: 'error', 
+        texto: error.response?.data?.error || 'Error organizando archivos' 
+      });
+      setResultadoOrganizacion(null);
+    } finally {
+      setOrganizando(false);
     }
   };
 
@@ -421,6 +459,126 @@ const AdminRepositorio = () => {
                       <h4>Errores ({resultadoSincronizacion.errores.length}):</h4>
                       <ul>
                         {resultadoSincronizacion.errores.map((error, index) => (
+                          <li key={index}>
+                            <strong>{error.archivo}:</strong> {error.error}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Sección de Organización Automática */}
+        <div className="organizacion-section">
+          <div className="organizacion-header">
+            <div>
+              <h2>
+                <FaMagic /> Organización Automática
+              </h2>
+              <p>Organiza automáticamente los documentos en sus carpetas correspondientes según su nombre</p>
+            </div>
+            <button
+              className="btn-organizar-toggle"
+              onClick={() => {
+                setMostrarOrganizar(!mostrarOrganizar);
+                setResultadoOrganizacion(null);
+              }}
+            >
+              {mostrarOrganizar ? <FaTimes /> : <FaMagic />}
+              {mostrarOrganizar ? 'Ocultar' : 'Organizar'}
+            </button>
+          </div>
+
+          {mostrarOrganizar && (
+            <div className="organizacion-form">
+              <div className="organizacion-info">
+                <FaInfoCircle />
+                <p>
+                  Esta función analizará todos los archivos del repositorio y los moverá automáticamente 
+                  a las carpetas correctas basándose en palabras clave en sus nombres. Por ejemplo:
+                </p>
+                <ul>
+                  <li>Archivos con "ACTA" o "SESION" → Documentos - Actas de Sesión</li>
+                  <li>Archivos con "ACUERDO" → Documentos - Acuerdos</li>
+                  <li>Archivos con "DECRETO" → Documentos - Decretos</li>
+                  <li>Archivos con "PLAN" → Documentos - Planes</li>
+                  <li>Archivos con "REGLAMENTO" → Reglamento Interno</li>
+                  <li>Y muchos más...</li>
+                </ul>
+              </div>
+
+              <button
+                onClick={handleOrganizar}
+                className="btn btn-organizar"
+                disabled={organizando}
+              >
+                {organizando ? (
+                  <>
+                    <FaSpinner className="spinner" />
+                    Organizando...
+                  </>
+                ) : (
+                  <>
+                    <FaMagic /> Iniciar Organización
+                  </>
+                )}
+              </button>
+
+              {resultadoOrganizacion && (
+                <div className="resultado-organizacion">
+                  <h3>
+                    <FaCheckCircle /> Resultado de la Organización
+                  </h3>
+                  <div className="resumen-stats">
+                    <div className="resumen-item resumen-movidos">
+                      <strong>{resultadoOrganizacion.resumen.movidos}</strong>
+                      <span>Movidos</span>
+                    </div>
+                    <div className="resumen-item resumen-sin-cambios">
+                      <strong>{resultadoOrganizacion.resumen.sinCambios}</strong>
+                      <span>Sin Cambios</span>
+                    </div>
+                    <div className="resumen-item resumen-total">
+                      <strong>{resultadoOrganizacion.resumen.totalProcesados}</strong>
+                      <span>Total Procesados</span>
+                    </div>
+                    {resultadoOrganizacion.resumen.errores > 0 && (
+                      <div className="resumen-item resumen-errores">
+                        <strong>{resultadoOrganizacion.resumen.errores}</strong>
+                        <span>Errores</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {resultadoOrganizacion.detalles?.movidos && resultadoOrganizacion.detalles.movidos.length > 0 && (
+                    <div className="archivos-movidos">
+                      <h4>Archivos Movidos ({resultadoOrganizacion.detalles.movidos.length}):</h4>
+                      <div className="lista-movimientos">
+                        {resultadoOrganizacion.detalles.movidos.slice(0, 20).map((movimiento, index) => (
+                          <div key={index} className="movimiento-item">
+                            <strong>{movimiento.archivo}</strong>
+                            <span className="movimiento-flecha">→</span>
+                            <span>{movimiento.nombreCategoriaDestino}</span>
+                          </div>
+                        ))}
+                        {resultadoOrganizacion.detalles.movidos.length > 20 && (
+                          <p className="mas-archivos">
+                            ... y {resultadoOrganizacion.detalles.movidos.length - 20} archivo(s) más
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {resultadoOrganizacion.detalles?.errores && resultadoOrganizacion.detalles.errores.length > 0 && (
+                    <div className="errores-organizacion">
+                      <h4>Errores ({resultadoOrganizacion.detalles.errores.length}):</h4>
+                      <ul>
+                        {resultadoOrganizacion.detalles.errores.map((error, index) => (
                           <li key={index}>
                             <strong>{error.archivo}:</strong> {error.error}
                           </li>

@@ -72,6 +72,7 @@ import AdminOpiniones from './pages/admin/AdminOpiniones';
 import AdminForos from './pages/admin/AdminForos';
 import AdminRepositorio from './pages/admin/AdminRepositorio';
 import RepositorioUpload from './pages/RepositorioUpload';
+import Repositorio from './pages/Repositorio';
 import Tramites from './pages/Tramites';
 import Foros from './pages/Foros';
 import ForoDetalle from './pages/ForoDetalle';
@@ -120,6 +121,7 @@ function App() {
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/historia" element={<Historia />} />
           <Route path="/plan-accion" element={<PlanAccion />} />
+          <Route path="/repositorio" element={<Repositorio />} />
           <Route path="/repositorio-upload" element={<RepositorioUpload />} />
           
           {/* Rutas de administración */}

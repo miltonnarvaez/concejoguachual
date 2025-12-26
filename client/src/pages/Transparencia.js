@@ -54,13 +54,68 @@ const Transparencia = () => {
     }
   }, [categoriaParam]);
   
-  const { data: documentos = [], isLoading } = useQuery({
+  // Mapeo entre categorías de Transparencia y categorías del repositorio
+  const mapeoRepositorio = {
+    'presupuesto': 'transparencia-presupuesto',
+    'contratacion': 'transparencia-contratacion-publica',
+    'plan_compras': 'transparencia-plan-anual-compras',
+    'rendicion_cuentas': 'transparencia-rendicion-cuentas',
+    'estados_financieros': 'transparencia-estados-financieros',
+    'control_interno': 'transparencia-control-interno',
+    'declaracion_renta': 'transparencia-declaracion-renta',
+    'estructura_organizacional': 'transparencia-estructura-organizacional',
+    'plan_desarrollo': 'transparencia-plan-desarrollo',
+    'normatividad': 'transparencia-normatividad',
+    'servicios_ciudadanos': 'transparencia-servicios-ciudadanos',
+    'auditorias': 'transparencia-auditorias',
+    'bienes_inmuebles': 'transparencia-bienes-inmuebles',
+    'personal': 'transparencia-personal'
+  };
+
+  // Obtener documentos de la base de datos
+  const { data: documentos = [], isLoading: loadingBD } = useQuery({
     queryKey: ['transparencia'],
     queryFn: async () => {
       const response = await api.get('/transparencia');
       return response.data;
     }
   });
+
+  // Obtener archivos del repositorio según la categoría seleccionada
+  const categoriaRepositorio = categoriaSeleccionada !== 'todas' 
+    ? mapeoRepositorio[categoriaSeleccionada] 
+    : null;
+  
+  const { data: datosRepositorio, isLoading: loadingRepositorio } = useQuery({
+    queryKey: ['repositorio-transparencia', categoriaRepositorio],
+    queryFn: async () => {
+      if (!categoriaRepositorio) return { archivos: [], total: 0 };
+      try {
+        const response = await api.get(`/repositorio/listar/${categoriaRepositorio}`);
+        return response.data;
+      } catch (error) {
+        console.error('Error cargando archivos del repositorio:', error);
+        return { archivos: [], total: 0 };
+      }
+    },
+    enabled: !!categoriaRepositorio
+  });
+
+  // Cargar archivos del repositorio para todas las categorías (para contadores)
+  const { data: todosLosArchivosRepositorio } = useQuery({
+    queryKey: ['repositorio-transparencia-todos'],
+    queryFn: async () => {
+      try {
+        const response = await api.get('/repositorio/listar');
+        return response.data;
+      } catch (error) {
+        console.error('Error cargando todos los archivos del repositorio:', error);
+        return { categorias: {} };
+      }
+    }
+  });
+
+  const isLoading = loadingBD || loadingRepositorio;
 
   if (isLoading) {
     return <div className="loading">Cargando documentos...</div>;
@@ -85,21 +140,53 @@ const Transparencia = () => {
     { id: 'personal', nombre: 'Personal', icono: FaUser, descripcion: 'Planta de personal, nómina y convocatorias de empleo' }
   ];
 
-  const documentosFiltrados = categoriaSeleccionada === 'todas' 
+  // Filtrar documentos de BD
+  const documentosFiltradosBD = categoriaSeleccionada === 'todas' 
     ? documentos 
     : documentos.filter(doc => doc.categoria === categoriaSeleccionada);
 
+  // Obtener archivos del repositorio
+  const archivosRepositorio = datosRepositorio?.archivos || [];
+  
+  // Convertir archivos del repositorio al formato de documentos
+  const documentosRepositorio = archivosRepositorio.map((archivo, index) => ({
+    id: `repo-${archivo.nombre}-${index}`,
+    categoria: categoriaSeleccionada,
+    titulo: archivo.nombreOriginal || archivo.nombre,
+    descripcion: archivo.nota || '',
+    fecha: archivo.fechaSubida,
+    fecha_publicacion: archivo.fechaSubida,
+    archivo_url: `/api/repositorio/descargar/${categoriaRepositorio}/${encodeURIComponent(archivo.nombre)}`,
+    esRepositorio: true,
+    tamaño: archivo.tamañoMB
+  }));
+
+  // Combinar ambos arrays
+  const documentosFiltrados = [...documentosFiltradosBD, ...documentosRepositorio];
+
+  // Mapear archivos del repositorio a categorías de transparencia
+  const archivosRepositorioPorCategoria = {};
+  Object.entries(mapeoRepositorio).forEach(([catId, repoCat]) => {
+    archivosRepositorioPorCategoria[catId] = [];
+    if (todosLosArchivosRepositorio?.categorias?.[repoCat]) {
+      archivosRepositorioPorCategoria[catId] = todosLosArchivosRepositorio.categorias[repoCat].archivos || [];
+    }
+  });
+
   const documentosPorCategoria = categorias.reduce((acc, cat) => {
     if (cat.id !== 'todas') {
-      acc[cat.id] = documentos.filter(doc => doc.categoria === cat.id);
+      const docsBD = documentos.filter(doc => doc.categoria === cat.id);
+      const archivosRepo = archivosRepositorioPorCategoria[cat.id] || [];
+      acc[cat.id] = [...docsBD, ...archivosRepo];
     }
     return acc;
   }, {});
 
-  // Calcular estadísticas para el dashboard
-  const totalDocumentos = documentos.length;
-  const documentosEsteAno = documentos.filter(doc => {
-    const fecha = doc.fecha_publicacion || doc.creado_en;
+  // Calcular estadísticas para el dashboard (incluyendo repositorio)
+  const totalArchivosRepositorio = Object.values(archivosRepositorioPorCategoria).reduce((sum, archivos) => sum + archivos.length, 0);
+  const totalDocumentos = documentos.length + totalArchivosRepositorio;
+  const documentosEsteAno = [...documentos, ...documentosRepositorio].filter(doc => {
+    const fecha = doc.fecha_publicacion || doc.fecha || doc.creado_en;
     if (!fecha) return false;
     const año = new Date(fecha).getFullYear();
     return año === new Date().getFullYear();
@@ -425,48 +512,103 @@ const Transparencia = () => {
                 </p>
               </div>
 
-              <div className="documentos-grid">
-                {documentosFiltrados.map((documento) => (
-                  <div key={documento.id} className="documento-card">
-                    <div className="documento-header">
-                      <span className="documento-categoria">{documento.categoria}</span>
-                      {documento.fecha && (
-                        <span className="documento-fecha">
-                          {new Date(documento.fecha).toLocaleDateString('es-CO', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
-                        </span>
-                      )}
-                    </div>
-                    <div className="documento-content">
-                      <h3>{documento.titulo}</h3>
-                      {documento.descripcion && <p>{documento.descripcion}</p>}
-                      {(documento.actualizado_en || documento.fecha_actualizacion) && (
-                        <p className="documento-actualizacion">
-                          <strong>Última actualización:</strong>{' '}
-                          {new Date(documento.actualizado_en || documento.fecha_actualizacion).toLocaleDateString('es-CO', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
-                        </p>
-                      )}
-                      {documento.archivo_url && (
-                        <a
-                          href={getFileUrl(documento.archivo_url)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn-documento"
-                        >
-                          <FaFileAlt /> Ver documento →
-                        </a>
-                      )}
-                    </div>
+              {/* Documentos de la Base de Datos */}
+              {documentosFiltradosBD.length > 0 && (
+                <div className="documentos-seccion">
+                  <h3 className="seccion-titulo">Documentos Registrados</h3>
+                  <div className="documentos-grid">
+                    {documentosFiltradosBD.map((documento) => (
+                      <div key={documento.id} className="documento-card">
+                        <div className="documento-header">
+                          <span className="documento-categoria">{documento.categoria}</span>
+                          {documento.fecha && (
+                            <span className="documento-fecha">
+                              {new Date(documento.fecha).toLocaleDateString('es-CO', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                              })}
+                            </span>
+                          )}
+                        </div>
+                        <div className="documento-content">
+                          <h3>{documento.titulo}</h3>
+                          {documento.descripcion && <p>{documento.descripcion}</p>}
+                          {(documento.actualizado_en || documento.fecha_actualizacion) && (
+                            <p className="documento-actualizacion">
+                              <strong>Última actualización:</strong>{' '}
+                              {new Date(documento.actualizado_en || documento.fecha_actualizacion).toLocaleDateString('es-CO', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                              })}
+                            </p>
+                          )}
+                          {documento.archivo_url && (
+                            <a
+                              href={getFileUrl(documento.archivo_url)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn btn-documento"
+                            >
+                              <FaFileAlt /> Ver documento →
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
+
+              {/* Archivos del Repositorio */}
+              {archivosRepositorio.length > 0 && (
+                <div className="documentos-seccion documentos-repositorio-seccion">
+                  <h3 className="seccion-titulo">
+                    <FaFileAlt /> Archivos del Repositorio
+                    <span className="seccion-count">({archivosRepositorio.length})</span>
+                  </h3>
+                  <div className="documentos-grid">
+                    {documentosRepositorio.map((documento) => (
+                      <div key={documento.id} className="documento-card documento-repositorio">
+                        <div className="documento-header">
+                          <span className="documento-badge-repositorio">
+                            <FaFileAlt /> Repositorio
+                          </span>
+                          {documento.fecha && (
+                            <span className="documento-fecha">
+                              {new Date(documento.fecha).toLocaleDateString('es-CO', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                              })}
+                            </span>
+                          )}
+                        </div>
+                        <div className="documento-content">
+                          <h3>{documento.titulo}</h3>
+                          {documento.descripcion && <p>{documento.descripcion}</p>}
+                          {documento.tamaño && (
+                            <p className="documento-tamaño">
+                              Tamaño: {parseFloat(documento.tamaño).toFixed(2)} MB
+                            </p>
+                          )}
+                          {documento.archivo_url && (
+                            <a
+                              href={getFileUrl(documento.archivo_url)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn btn-documento"
+                            >
+                              <FaDownload /> Descargar documento →
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
