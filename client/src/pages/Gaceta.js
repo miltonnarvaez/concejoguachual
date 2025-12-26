@@ -97,18 +97,18 @@ const Gaceta = () => {
           <h1 className="page-title">Gaceta</h1>
 
           <div className="gaceta-filters">
-            <a href="/gaceta" className={`filter-btn ${!tipoFiltro ? 'active' : ''}`}>
+            <Link to="/gaceta" className={`filter-btn ${!tipoFiltro ? 'active' : ''}`}>
               Todos
-            </a>
+            </Link>
             {tipos.map((tipo) => (
-              <a
+              <Link
                 key={tipo.value}
-                href={`/gaceta?tipo=${tipo.value}`}
+                to={`/gaceta?tipo=${tipo.value}`}
                 className={`filter-btn ${tipoFiltro === tipo.value ? 'active' : ''}`}
               >
                 <span className="filter-icon">{React.createElement(tipo.icono)}</span>
                 {tipo.label}
-              </a>
+              </Link>
             ))}
           </div>
 
