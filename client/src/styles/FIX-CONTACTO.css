@@ -1,4 +1,4 @@
-/* FIX ESPECÍFICO PARA CONTACTO - Corregir centrado de la sección y título */
+﻿/* FIX ESPECÍFICO PARA CONTACTO - Corregir centrado de la sección y título */
 
 .contacto,
 .section.contacto,
@@ -105,3 +105,10 @@ section.contacto .container {
     inset: auto !important;
   }
 }
+
+
+
+
+
+
+

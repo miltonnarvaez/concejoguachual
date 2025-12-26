@@ -69,3 +69,10 @@ carpetas.forEach(carpeta => {
 
 console.log('\n✅ Estructura del repositorio temporal creada exitosamente');
 console.log(`📂 Ubicación: ${repositorioBaseDir}`);
+
+
+
+
+
+
+

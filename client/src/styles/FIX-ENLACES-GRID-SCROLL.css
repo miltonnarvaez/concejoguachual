@@ -1,14 +1,24 @@
-/* FIX ULTRA ESPECÍFICO PARA ELIMINAR SCROLL Y DESPLAZAMIENTO EN enlaces-grid */
+﻿/* FIX ULTRA ESPECÍFICO PARA ELIMINAR SCROLL Y DESPLAZAMIENTO EN enlaces-grid */
 /* Este archivo debe cargarse DESPUÉS de todos los demás para tener máxima prioridad */
 
 /* REGLAS ULTRA ESPECÍFICAS CON MÁXIMA PRIORIDAD */
-div#root > div.App > main.main-content > div.home > section.animated-section.enlaces-interes > div.container > div.enlaces-grid,
-div#root > div.App > main.main-content > div.home > section.animated-section.animate-bounceIn.enlaces-interes > div.container > div.enlaces-grid,
-section.animated-section.enlaces-interes .container .enlaces-grid,
-section.animated-section.animate-bounceIn.enlaces-interes .container .enlaces-grid,
-.enlaces-interes .container .enlaces-grid,
-.enlaces-interes .enlaces-grid,
-.enlaces-grid {
+/* EXCLUIR el carrusel - permitir scroll solo en .enlaces-carousel */
+div#root > div.App > main.main-content > div.home > section.animated-section.enlaces-interes > div.container > div.enlaces-carousel-wrapper > div.enlaces-carousel > div.enlaces-grid,
+.enlaces-carousel .enlaces-grid,
+.enlaces-carousel-wrapper .enlaces-carousel .enlaces-grid {
+  /* Permitir scroll en el carrusel */
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  overflow: visible !important;
+  width: max-content !important;
+  min-width: max-content !important;
+}
+
+/* Mantener reglas originales para grid sin carrusel */
+div#root > div.App > main.main-content > div.home > section.animated-section.enlaces-interes > div.container > div.enlaces-grid:not(.enlaces-carousel .enlaces-grid),
+section.animated-section.enlaces-interes .container .enlaces-grid:not(.enlaces-carousel .enlaces-grid),
+.enlaces-interes .container .enlaces-grid:not(.enlaces-carousel .enlaces-grid),
+.enlaces-interes .enlaces-grid:not(.enlaces-carousel .enlaces-grid) {
   /* Eliminar scroll COMPLETAMENTE - Tanto horizontal como vertical */
   overflow-x: hidden !important;
   overflow-y: hidden !important;
@@ -54,13 +64,13 @@ section.animated-section.animate-bounceIn.enlaces-interes .container .enlaces-gr
   will-change: auto !important;
 }
 
-/* Asegurar que el contenedor no cause scroll */
+/* Asegurar que el contenedor permita scroll en el carrusel */
 .enlaces-interes .container,
 section.animated-section.enlaces-interes .container,
 div#root > div.App > main.main-content > div.home > section.animated-section.enlaces-interes > div.container {
-  overflow-x: hidden !important;
-  overflow-y: hidden !important;
-  overflow: hidden !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  overflow: visible !important;
   box-sizing: border-box !important;
   position: relative !important;
   left: 0 !important;
@@ -69,12 +79,12 @@ div#root > div.App > main.main-content > div.home > section.animated-section.enl
   max-height: none !important;
 }
 
-/* Asegurar que la sección completa no cause scroll */
+/* Asegurar que la sección completa permita scroll en el carrusel */
 .enlaces-interes,
 section.animated-section.enlaces-interes {
-  overflow-x: hidden !important;
-  overflow-y: hidden !important;
-  overflow: hidden !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  overflow: visible !important;
   box-sizing: border-box !important;
   position: relative !important;
   left: 0 !important;
@@ -84,3 +94,10 @@ section.animated-section.enlaces-interes {
   height: auto !important;
   max-height: none !important;
 }
+
+
+
+
+
+
+

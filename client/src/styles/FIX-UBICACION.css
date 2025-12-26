@@ -1,4 +1,4 @@
-/* FIX ESPECÍFICO PARA UBICACION - Corregir centrado de la sección y elementos */
+﻿/* FIX ESPECÍFICO PARA UBICACION - Corregir centrado de la sección y elementos */
 
 .ubicacion,
 .section.ubicacion,
@@ -106,3 +106,10 @@ section.animated-section.ubicacion .ubicacion-right {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+
+
+
+
+
+
+

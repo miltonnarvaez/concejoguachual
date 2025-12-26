@@ -1,4 +1,4 @@
-.transparencia-page {
+﻿.transparencia-page {
   position: relative;
   background: #ffffff;
 }
@@ -41,7 +41,7 @@
 }
 
 .transparencia-intro strong {
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .datos-abiertos-link {
@@ -264,7 +264,7 @@
 }
 
 .categorias-filtro h2 {
-  color: #155724;
+  color: #1d5c2f;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   text-align: center !important;
@@ -296,13 +296,13 @@
 }
 
 .categoria-btn:hover {
-  border-color: #28a745;
+  border-color: #2a7a3f;
   box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15);
   transform: translateY(-2px);
 }
 
 .categoria-btn.active {
-  border-color: #28a745;
+  border-color: #2a7a3f;
   background: linear-gradient(135deg, #f8f9fa 0%, #e8f5e9 100%);
   box-shadow: 0 4px 16px rgba(40, 167, 69, 0.2);
 }
@@ -324,7 +324,7 @@
 
 .categoria-nombre {
   font-weight: 600;
-  color: #155724;
+  color: #1d5c2f;
   font-size: 1rem;
 }
 
@@ -338,7 +338,7 @@
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  background: #28a745;
+  background: #2a7a3f;
   color: #fff;
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
@@ -352,11 +352,11 @@
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #28a745;
+  border-bottom: 2px solid #2a7a3f;
 }
 
 .documentos-header h2 {
-  color: #155724;
+  color: #1d5c2f;
   font-size: 1.8rem;
   margin: 0;
 }
@@ -383,7 +383,7 @@
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s;
-  border-left: 4px solid #28a745;
+  border-left: 4px solid #2a7a3f;
   display: flex;
   flex-direction: column;
 }
@@ -403,7 +403,7 @@
 }
 
 .documento-categoria {
-  background: #28a745;
+  background: #2a7a3f;
   color: #fff;
   padding: 0.3rem 0.8rem;
   border-radius: 4px;
@@ -420,7 +420,7 @@
 }
 
 .documento-actualizacion strong {
-  color: #155724;
+  color: #1d5c2f;
   font-weight: 600;
 }
 
@@ -430,7 +430,7 @@
 }
 
 .documento-content h3 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   font-size: 1.2rem;
   line-height: 1.4;
@@ -444,7 +444,7 @@
 }
 
 .btn-documento {
-  background: #28a745;
+  background: #2a7a3f;
   color: #fff;
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
@@ -458,7 +458,7 @@
 }
 
 .btn-documento:hover {
-  background: #155724;
+  background: #1d5c2f;
   color: #fff;
 }
 
@@ -495,7 +495,7 @@
 }
 
 .transparencia-info h2 {
-  color: #155724;
+  color: #1d5c2f;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   text-align: center !important;
@@ -519,7 +519,7 @@
 }
 
 .info-card h3 {
-  color: #155724;
+  color: #1d5c2f;
   font-size: 1.1rem;
   margin-bottom: 1rem;
   display: flex;
@@ -541,13 +541,13 @@
 }
 
 .info-card a {
-  color: #28a745;
+  color: #2a7a3f;
   text-decoration: underline;
   font-weight: 600;
 }
 
 .info-card a:hover {
-  color: #155724;
+  color: #1d5c2f;
 }
 
 @media (max-width: 768px) {

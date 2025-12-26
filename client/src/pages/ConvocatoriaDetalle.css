@@ -1,18 +1,18 @@
-.convocatoria-detalle {
+﻿.convocatoria-detalle {
   padding: 2rem 0;
 }
 
 .back-link {
   display: inline-block;
   margin-bottom: 2rem;
-  color: #28a745;
+  color: #2a7a3f;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.3s;
 }
 
 .back-link:hover {
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .convocatoria-detail-image {
@@ -43,7 +43,7 @@
   align-items: center;
   gap: 0.5rem;
   background: #ffc107;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .convocatoria-destacada-badge svg {
@@ -58,7 +58,7 @@
 }
 
 .convocatoria-header h1 {
-  color: #155724;
+  color: #1d5c2f;
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
   line-height: 1.2;
@@ -81,7 +81,7 @@
 }
 
 .fecha-item strong {
-  color: #155724;
+  color: #1d5c2f;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -119,7 +119,7 @@
 }
 
 .not-found h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
 }
 
@@ -132,6 +132,13 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+
+
+
+
+
 
 
 

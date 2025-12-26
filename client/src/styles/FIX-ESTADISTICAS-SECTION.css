@@ -1,4 +1,4 @@
-/* FIX ESPECÍFICO PARA ESTADISTICAS-SECTION - Corregir centrado de la sección y contenedor */
+﻿/* FIX ESPECÍFICO PARA ESTADISTICAS-SECTION - Corregir centrado de la sección y contenedor */
 
 .estadisticas-section,
 .section.estadisticas-section,
@@ -66,3 +66,10 @@ section.animated-section.estadisticas-section .container {
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+
+
+
+
+
+
+

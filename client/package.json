@@ -2,7 +2,6 @@
   "name": "concejo-frontend",
   "version": "1.0.0",
   "private": true,
-  "homepage": "/concejoguachucal",
   "dependencies": {
     "@tanstack/react-query": "^5.12.2",
     "axios": "^1.6.2",
@@ -22,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "cross-env PUBLIC_URL=/concejoguachucal react-scripts build",
     "build:prod": "node build-prod.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -45,4 +44,5 @@
     ]
   }
 }
+
 

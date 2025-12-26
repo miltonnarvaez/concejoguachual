@@ -1,4 +1,4 @@
-/* Header Styles - Similar to Concejo de Pasto */
+﻿/* Header Styles - Similar to Concejo de Pasto */
 .header {
   background-color: white;
   box-shadow: var(--box-shadow);
@@ -293,6 +293,22 @@
 }
 
 .escudo-colombia {
+  max-width: 65px;
+  max-height: 65px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.escudo-alcaldia-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 0.5rem;
+}
+
+.escudo-alcaldia {
   max-width: 65px;
   max-height: 65px;
   width: auto;
@@ -1037,6 +1053,11 @@ a.mega-menu-item[href="/acerca#contacto"] .mega-menu-item-icon svg {
     max-width: 35px;
     max-height: 35px;
   }
+
+  .escudo-alcaldia {
+    max-width: 35px;
+    max-height: 35px;
+  }
   
   .header-logo .escudo-image,
   .header-logo .escudo-svg {
@@ -1044,8 +1065,10 @@ a.mega-menu-item[href="/acerca#contacto"] .mega-menu-item-icon svg {
     max-height: 35px;
   }
 
-  .escudo-colombia-container {
+  .escudo-colombia-container,
+  .escudo-alcaldia-container {
     gap: 0.2rem;
+    margin-right: 0.3rem;
   }
 
   .header-contact {

@@ -92,7 +92,7 @@ const AdminOpiniones = () => {
   const getEstadoColor = (estado) => {
     const colores = {
       pendiente: '#856404',
-      revisada: '#004085',
+      revisada: '#155724',
       publicada: '#155724',
       rechazada: '#721c24'
     };
@@ -254,6 +254,13 @@ const AdminOpiniones = () => {
 };
 
 export default AdminOpiniones;
+
+
+
+
+
+
+
 
 
 

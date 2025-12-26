@@ -112,3 +112,10 @@ ls -la /var/www/concejoguachual/server/uploads/images/noticia-*.png | head -1
    ```bash
    sudo -u www-data ls /var/www/concejoguachual/server/uploads/images/
    ```
+
+
+
+
+
+
+

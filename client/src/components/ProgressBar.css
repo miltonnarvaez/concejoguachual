@@ -1,4 +1,4 @@
-.progress-bar-container {
+﻿.progress-bar-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -14,6 +14,13 @@
   transition: width 0.1s ease-out;
   box-shadow: 0 0 10px rgba(21, 87, 36, 0.5);
 }
+
+
+
+
+
+
+
 
 
 

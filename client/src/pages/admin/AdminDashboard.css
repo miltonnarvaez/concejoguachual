@@ -4,7 +4,7 @@
 }
 
 .dashboard-header {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #28a745 100%);
   color: #fff;
   padding: 2rem 0;
 }
@@ -12,6 +12,7 @@
 .dashboard-header h1 {
   margin: 0;
   font-size: 2rem;
+  color: #fff;
 }
 
 .dashboard-user {
@@ -47,7 +48,7 @@
 }
 
 .dashboard-card h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
@@ -56,6 +57,13 @@
   color: #6c757d;
   margin: 0;
 }
+
+
+
+
+
+
+
 
 
 

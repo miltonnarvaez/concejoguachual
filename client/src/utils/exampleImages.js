@@ -62,3 +62,10 @@ export const getImageByIndex = (index, category = 'gobierno') => {
 
 
 
+
+
+
+
+
+
+

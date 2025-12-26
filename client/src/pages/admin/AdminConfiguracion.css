@@ -4,7 +4,7 @@
 }
 
 .admin-header {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #28a745 100%);
   color: #fff;
   padding: 2rem 0;
   margin-bottom: 2rem;
@@ -26,7 +26,7 @@
 }
 
 .config-info {
-  background: #e8f5e9;
+  background: #e1f5fe;
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
@@ -58,7 +58,7 @@
 }
 
 .config-list h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
 }
@@ -82,7 +82,7 @@
 
 .config-label label {
   display: block;
-  color: #155724;
+  color: #1d5c2f;
   font-weight: 600;
   font-size: 1rem;
   margin-bottom: 0.5rem;
@@ -133,8 +133,8 @@
 
 .config-input:focus {
   outline: none;
-  border-color: #155724;
-  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+  border-color: #1d5c2f;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
 }
 
 .config-actions {
@@ -170,7 +170,7 @@
 }
 
 .config-help h3 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   font-size: 1.3rem;
 }
@@ -185,7 +185,7 @@
   color: #333;
 }
 
-/* Sección de Documento Institucional */
+/* Secci�n de Documento Institucional */
 .config-section {
   background: #fff;
   padding: 2rem;
@@ -195,7 +195,7 @@
 }
 
 .documento-institucional-admin h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 0.5rem;
   font-size: 1.5rem;
 }
@@ -219,7 +219,7 @@
 }
 
 .form-group label {
-  color: #155724;
+  color: #1d5c2f;
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -238,7 +238,7 @@
 .form-textarea:focus {
   outline: none;
   border-color: #28a745;
-  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
 }
 
 .form-textarea {
@@ -253,7 +253,7 @@
 }
 
 .file-info a {
-  color: #155724;
+  color: #1d5c2f;
   text-decoration: underline;
   font-weight: 600;
 }

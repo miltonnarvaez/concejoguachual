@@ -1,4 +1,4 @@
-.formulario-opinion {
+﻿.formulario-opinion {
   background: #ffffff;
   padding: 2rem;
   border-radius: 12px;
@@ -46,7 +46,7 @@
 
 .form-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+  background: linear-gradient(90deg, #2a7a3f 0%, #20c997 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
   box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
@@ -77,7 +77,7 @@
 }
 
 .opinion-success h3 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
 }
 
@@ -152,6 +152,13 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+
+
+
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-.convocatorias-page {
+﻿.convocatorias-page {
   padding: 2rem 0;
 }
 
@@ -41,7 +41,7 @@
   align-items: center;
   gap: 0.5rem;
   background: #ffc107;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .convocatoria-destacada svg {
@@ -56,7 +56,7 @@
 }
 
 .convocatoria-content h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
@@ -80,7 +80,7 @@
 }
 
 .convocatoria-actualizacion {
-  color: #28a745;
+  color: #2a7a3f;
   font-size: 0.85rem;
   font-style: italic;
   font-weight: 500;

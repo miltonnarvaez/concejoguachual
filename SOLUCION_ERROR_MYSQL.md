@@ -165,3 +165,10 @@ Si el problema persiste, necesitamos verificar `server/config/database.js` y ase
 ### Error: "Access denied for user"
 **Causa**: Credenciales incorrectas
 **Solución**: Verificar usuario y contraseña en `.env`
+
+
+
+
+
+
+

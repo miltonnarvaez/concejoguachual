@@ -82,3 +82,10 @@ ls -la client/build | head -20
 sudo chmod -R 777 client/build
 ```
 ⚠️ **ADVERTENCIA**: Esto da permisos completos a todos. Úsalo solo para debug y luego vuelve a permisos más restrictivos.
+
+
+
+
+
+
+

@@ -164,3 +164,10 @@ sudo systemctl status mysql --no-pager -l
 
 3. **Página de Noticias**: `https://camsoft.com.co/concejoguachucal/noticias`
    - Debería mostrar las noticias o "No se encontraron noticias"
+
+
+
+
+
+
+

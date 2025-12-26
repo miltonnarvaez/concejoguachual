@@ -1,4 +1,4 @@
-.noticias-page {
+﻿.noticias-page {
   position: relative;
   background: #ffffff;
 }
@@ -27,7 +27,7 @@
 
 .page-title {
   font-size: 2.5rem;
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   text-align: center !important;
   margin-left: auto !important;
@@ -54,7 +54,7 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #28a745;
+  border-color: #2a7a3f;
 }
 
 .noticias-grid {
@@ -134,14 +134,14 @@
 }
 
 .noticia-actualizacion {
-  color: #28a745;
+  color: #2a7a3f;
   font-size: 0.85rem;
   font-style: italic;
   font-weight: 500;
 }
 
 .noticia-content h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }

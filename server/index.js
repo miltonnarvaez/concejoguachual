@@ -8,7 +8,12 @@ require('dotenv').config();
 const app = express();
 
 // Trust proxy (necesario cuando está detrás de Nginx)
-app.set('trust proxy', true);
+// Configuración más segura: solo confiar en el primer proxy
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1); // Solo confiar en el primer proxy (Nginx)
+} else {
+  app.set('trust proxy', false); // En desarrollo, no usar trust proxy
+}
 
 // Security Middlewares
 app.use(helmet({

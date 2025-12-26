@@ -1,4 +1,4 @@
-.sesiones-page {
+﻿.sesiones-page {
   padding: 2rem 0;
 }
 
@@ -24,9 +24,9 @@
 
 .filtro-btn {
   padding: 0.75rem 1.5rem;
-  border: 2px solid #28a745;
+  border: 2px solid #2a7a3f;
   background: #fff;
-  color: #28a745;
+  color: #2a7a3f;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
@@ -39,7 +39,7 @@
 }
 
 .filtro-btn.active {
-  background: #28a745;
+  background: #2a7a3f;
   color: #fff;
 }
 
@@ -80,7 +80,7 @@
   padding: 1.5rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   transition: all 0.3s;
-  border-left: 4px solid #28a745;
+  border-left: 4px solid #2a7a3f;
 }
 
 .sesion-card:hover {
@@ -107,7 +107,7 @@
 
 .sesion-tipo.ordinaria {
   background: #d4edda;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .sesion-tipo.extraordinaria {
@@ -139,7 +139,7 @@
 }
 
 .sesion-content h3 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   font-size: 1.3rem;
 }
@@ -170,8 +170,8 @@
 
 .btn-outline {
   background: transparent;
-  border: 2px solid #28a745;
-  color: #28a745;
+  border: 2px solid #2a7a3f;
+  color: #2a7a3f;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   text-decoration: none;
@@ -180,7 +180,7 @@
 }
 
 .btn-outline:hover {
-  background: #28a745;
+  background: #2a7a3f;
   color: #fff;
 }
 
@@ -231,6 +231,13 @@
     width: 100%;
   }
 }
+
+
+
+
+
+
+
 
 
 

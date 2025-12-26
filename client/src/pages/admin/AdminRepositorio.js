@@ -13,7 +13,9 @@ import {
   FaTimes,
   FaInfoCircle,
   FaArrowLeft,
-  FaArrowRight
+  FaArrowRight,
+  FaSync,
+  FaServer
 } from 'react-icons/fa';
 import AdminNavbar from '../../components/admin/AdminNavbar';
 import './AdminRepositorio.css';
@@ -24,6 +26,12 @@ const AdminRepositorio = () => {
   const [mostrarMover, setMostrarMover] = useState(false);
   const [nuevaCategoria, setNuevaCategoria] = useState('');
   const [mensaje, setMensaje] = useState({ tipo: '', texto: '' });
+  const [mostrarSincronizar, setMostrarSincronizar] = useState(false);
+  const [modoSincronizacion, setModoSincronizacion] = useState('api'); // 'api' o 'local'
+  const [servidorUrl, setServidorUrl] = useState('https://camsoft.com.co/concejoguachucal');
+  const [servidorPath, setServidorPath] = useState('C:\\Users\\Milton Narvaez\\Documents\\cursor\\concejo\\server\\uploads\\repositorio-temporal');
+  const [sincronizando, setSincronizando] = useState(false);
+  const [resultadoSincronizacion, setResultadoSincronizacion] = useState(null);
 
   // Obtener estadísticas (sin autenticación temporalmente)
   const { data: estadisticas, isLoading: loadingStats } = useQuery({
@@ -149,6 +157,56 @@ const AdminRepositorio = () => {
     }
   };
 
+  const handleSincronizar = async () => {
+    if (modoSincronizacion === 'api' && !servidorUrl.trim()) {
+      setMensaje({ tipo: 'error', texto: 'Ingresa la URL del servidor' });
+      return;
+    }
+    
+    if (modoSincronizacion === 'local' && !servidorPath.trim()) {
+      setMensaje({ tipo: 'error', texto: 'Ingresa la ruta del servidor local' });
+      return;
+    }
+
+    setSincronizando(true);
+    setResultadoSincronizacion(null);
+    setMensaje({ tipo: '', texto: '' });
+
+    try {
+      const requestBody = {
+        modo: modoSincronizacion
+      };
+      
+      if (modoSincronizacion === 'api') {
+        requestBody.servidorUrl = servidorUrl.trim();
+      } else {
+        requestBody.servidorPath = servidorPath.trim();
+      }
+      
+      const response = await api.post('/repositorio/sincronizar', requestBody);
+
+      setResultadoSincronizacion(response.data);
+      setMensaje({ 
+        tipo: 'exito', 
+        texto: `Sincronización completada: ${response.data.resumen.totalSincronizados} archivo(s) procesado(s)` 
+      });
+      
+      // Recargar datos después de sincronizar
+      refetch();
+      
+      setTimeout(() => setMensaje({ tipo: '', texto: '' }), 5000);
+    } catch (error) {
+      console.error('Error sincronizando:', error);
+      setMensaje({ 
+        tipo: 'error', 
+        texto: error.response?.data?.error || 'Error sincronizando archivos' 
+      });
+      setResultadoSincronizacion(null);
+    } finally {
+      setSincronizando(false);
+    }
+  };
+
   const formatearTamaño = (mb) => {
     return `${mb} MB`;
   };
@@ -242,6 +300,139 @@ const AdminRepositorio = () => {
             </div>
           </div>
         )}
+
+        {/* Sección de Sincronización */}
+        <div className="sincronizacion-section">
+          <div className="sincronizacion-header">
+            <div>
+              <h2>
+                <FaSync /> Sincronización con Servidor
+              </h2>
+              <p>Sincroniza archivos desde el servidor de producción</p>
+            </div>
+            <button
+              className="btn-sincronizar-toggle"
+              onClick={() => {
+                setMostrarSincronizar(!mostrarSincronizar);
+                setResultadoSincronizacion(null);
+              }}
+            >
+              {mostrarSincronizar ? <FaTimes /> : <FaServer />}
+              {mostrarSincronizar ? 'Ocultar' : 'Sincronizar'}
+            </button>
+          </div>
+
+          {mostrarSincronizar && (
+            <div className="sincronizacion-form">
+              <div className="form-group">
+                <label>
+                  <FaServer /> Modo de sincronización:
+                </label>
+                <select
+                  value={modoSincronizacion}
+                  onChange={(e) => setModoSincronizacion(e.target.value)}
+                  disabled={sincronizando}
+                >
+                  <option value="api">Remoto (API)</option>
+                  <option value="local">Local (Ruta del servidor)</option>
+                </select>
+                <small>
+                  {modoSincronizacion === 'api' 
+                    ? 'Sincroniza desde un servidor remoto vía API'
+                    : 'Sincroniza desde una ruta local del servidor'}
+                </small>
+              </div>
+
+              {modoSincronizacion === 'api' ? (
+                <div className="form-group">
+                  <label>
+                    <FaServer /> URL del servidor:
+                  </label>
+                  <input
+                    type="text"
+                    value={servidorUrl}
+                    onChange={(e) => setServidorUrl(e.target.value)}
+                    placeholder="Ej: https://camsoft.com.co/concejoguachucal"
+                    disabled={sincronizando}
+                  />
+                  <small>
+                    Ingresa la URL base del servidor de producción (sin /api al final)
+                  </small>
+                </div>
+              ) : (
+                <div className="form-group">
+                  <label>
+                    <FaFolder /> Ruta del servidor:
+                  </label>
+                  <input
+                    type="text"
+                    value={servidorPath}
+                    onChange={(e) => setServidorPath(e.target.value)}
+                    placeholder="Ej: C:\\ruta\\al\\servidor\\uploads\\repositorio-temporal"
+                    disabled={sincronizando}
+                  />
+                  <small>
+                    Ingresa la ruta completa del directorio del servidor en el sistema de archivos
+                  </small>
+                </div>
+              )}
+
+              <button
+                className="btn btn-sincronizar"
+                onClick={handleSincronizar}
+                disabled={sincronizando || (modoSincronizacion === 'api' ? !servidorUrl.trim() : !servidorPath.trim())}
+              >
+                {sincronizando ? (
+                  <>
+                    <FaSpinner className="spinner" /> Sincronizando...
+                  </>
+                ) : (
+                  <>
+                    <FaSync /> Iniciar Sincronización
+                  </>
+                )}
+              </button>
+
+              {resultadoSincronizacion && (
+                <div className="resultado-sincronizacion">
+                  <h3>
+                    <FaCheckCircle /> Resultado de la Sincronización
+                  </h3>
+                  <div className="resumen-stats">
+                    <div className="resumen-item resumen-nuevos">
+                      <strong>{resultadoSincronizacion.resumen.nuevos}</strong>
+                      <span>Nuevos</span>
+                    </div>
+                    <div className="resumen-item resumen-modificados">
+                      <strong>{resultadoSincronizacion.resumen.modificados}</strong>
+                      <span>Modificados</span>
+                    </div>
+                    <div className="resumen-item resumen-omitidos">
+                      <strong>{resultadoSincronizacion.resumen.omitidos}</strong>
+                      <span>Omitidos</span>
+                    </div>
+                    <div className="resumen-item resumen-total">
+                      <strong>{resultadoSincronizacion.resumen.totalSincronizados}</strong>
+                      <span>Total Procesados</span>
+                    </div>
+                  </div>
+                  {resultadoSincronizacion.errores && resultadoSincronizacion.errores.length > 0 && (
+                    <div className="errores-sincronizacion">
+                      <h4>Errores ({resultadoSincronizacion.errores.length}):</h4>
+                      <ul>
+                        {resultadoSincronizacion.errores.map((error, index) => (
+                          <li key={index}>
+                            <strong>{error.archivo}:</strong> {error.error}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Filtro por categoría */}
         <div className="filtro-categoria">
@@ -417,3 +608,10 @@ const AdminRepositorio = () => {
 };
 
 export default AdminRepositorio;
+
+
+
+
+
+
+

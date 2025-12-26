@@ -2,6 +2,9 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
+const https = require('https');
+const http = require('http');
 const router = express.Router();
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
@@ -167,6 +170,46 @@ const guardarMetadatos = (categoria, metadata) => {
   }
 };
 
+// Función para marcar un archivo como sincronizado
+const marcarArchivoSincronizado = (categoria, nombreArchivo, origen = 'servidor') => {
+  try {
+    const metadata = cargarMetadatos(categoria);
+    const archivoPath = path.join(repositorioBaseDir, categoria, nombreArchivo);
+    
+    if (!fs.existsSync(archivoPath)) {
+      console.warn(`⚠️ No se puede marcar como sincronizado: archivo no existe - ${archivoPath}`);
+      return false;
+    }
+    
+    const fileHash = calcularHash(archivoPath);
+    metadata[nombreArchivo] = {
+      ...metadata[nombreArchivo],
+      sincronizado: true,
+      fechaSincronizacion: new Date().toISOString(),
+      origen: origen,
+      hash: fileHash || null
+    };
+    guardarMetadatos(categoria, metadata);
+    return true;
+  } catch (error) {
+    console.error(`❌ Error marcando archivo como sincronizado: ${nombreArchivo}`, error);
+    return false;
+  }
+};
+
+// Función auxiliar para calcular hash MD5 de un archivo
+const calcularHash = (filePath) => {
+  try {
+    const fileBuffer = fs.readFileSync(filePath);
+    const hashSum = crypto.createHash('md5');
+    hashSum.update(fileBuffer);
+    return hashSum.digest('hex');
+  } catch (error) {
+    console.error('Error calculando hash:', error);
+    return null;
+  }
+};
+
 // Función auxiliar para obtener información de archivos
 const getFileInfo = (filePath, categoria, nota = null) => {
   const stats = fs.statSync(filePath);
@@ -178,6 +221,7 @@ const getFileInfo = (filePath, categoria, nota = null) => {
   // Cargar metadatos si existen
   const metadata = cargarMetadatos(categoria);
   const notaArchivo = nota || metadata[fileName]?.nota || null;
+  const fileHash = calcularHash(filePath);
   
   return {
     nombre: fileName,
@@ -189,7 +233,11 @@ const getFileInfo = (filePath, categoria, nota = null) => {
     tamañoMB: fileSizeMB,
     fechaSubida: fechaSubida,
     extension: path.extname(fileName).toLowerCase(),
-    nota: notaArchivo
+    nota: notaArchivo,
+    hash: fileHash,
+    sincronizado: metadata[fileName]?.sincronizado || false,
+    fechaSincronizacion: metadata[fileName]?.fechaSincronizacion || null,
+    origen: metadata[fileName]?.origen || 'local'
   };
 };
 
@@ -240,6 +288,8 @@ router.get('/categorias', (req, res) => {
 
 // Crear nueva carpeta/categoría
 router.post('/crear-carpeta', (req, res) => {
+  console.log('📁 POST /crear-carpeta recibido');
+  console.log('📁 Body recibido:', req.body);
   try {
     const { nombre } = req.body;
     
@@ -266,6 +316,9 @@ router.post('/crear-carpeta', (req, res) => {
     // Guardar en archivo
     guardarCarpetas(carpetas);
     
+    // Recargar carpetas desde el archivo
+    carpetas = cargarCarpetas();
+    
     // Crear el directorio físico
     const carpetaPath = path.join(repositorioBaseDir, id);
     if (!fs.existsSync(carpetaPath)) {
@@ -283,6 +336,59 @@ router.post('/crear-carpeta', (req, res) => {
   } catch (error) {
     console.error('Error creando carpeta:', error);
     res.status(500).json({ error: 'Error creando carpeta' });
+  }
+});
+
+// Eliminar carpeta/categoría
+router.delete('/eliminar-carpeta/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Recargar carpetas
+    carpetas = cargarCarpetas();
+    
+    // Verificar que la carpeta existe
+    if (!carpetas[id]) {
+      return res.status(404).json({ error: 'Carpeta no encontrada' });
+    }
+    
+    // Verificar que no sea una carpeta del sistema (opcional - puedes ajustar esto)
+    const carpetasSistema = ['acerca-de', 'miembros', 'historia', 'gaceta', 'sesiones', 'transparencia', 'documentos-oficiales', 'documentos-generales'];
+    if (carpetasSistema.includes(id)) {
+      return res.status(400).json({ error: 'No se pueden eliminar carpetas del sistema' });
+    }
+    
+    // Eliminar el directorio físico si existe
+    const carpetaPath = path.join(repositorioBaseDir, id);
+    if (fs.existsSync(carpetaPath)) {
+      // Eliminar todos los archivos dentro de la carpeta
+      const archivos = fs.readdirSync(carpetaPath);
+      archivos.forEach(archivo => {
+        const archivoPath = path.join(carpetaPath, archivo);
+        if (fs.statSync(archivoPath).isFile()) {
+          fs.unlinkSync(archivoPath);
+        }
+      });
+      // Eliminar la carpeta
+      fs.rmdirSync(carpetaPath);
+    }
+    
+    // Eliminar de la lista de carpetas
+    delete carpetas[id];
+    
+    // Guardar cambios
+    guardarCarpetas(carpetas);
+    
+    // Recargar carpetas
+    carpetas = cargarCarpetas();
+    
+    res.json({
+      mensaje: 'Carpeta eliminada exitosamente',
+      id: id
+    });
+  } catch (error) {
+    console.error('Error eliminando carpeta:', error);
+    res.status(500).json({ error: 'Error eliminando carpeta' });
   }
 });
 
@@ -576,6 +682,392 @@ router.put('/admin/mover', authenticateToken, requireAdmin, async (req, res) => 
   } catch (error) {
     console.error('Error moviendo archivo:', error);
     res.status(500).json({ error: 'Error moviendo archivo' });
+  }
+});
+
+// Endpoint para sincronización remota - Listar todos los archivos con hashes
+router.get('/sincronizacion/listar', (req, res) => {
+  try {
+    carpetas = cargarCarpetas();
+    const todasLasCategorias = {};
+    
+    Object.keys(carpetas).forEach(cat => {
+      const archivos = listarArchivosCarpeta(cat);
+      todasLasCategorias[cat] = {
+        nombre: carpetas[cat],
+        archivos: archivos.map(archivo => ({
+          nombre: archivo.nombre,
+          hash: archivo.hash,
+          tamaño: archivo.tamaño,
+          fechaSubida: archivo.fechaSubida,
+          extension: archivo.extension
+        })),
+        total: archivos.length
+      };
+    });
+    
+    res.json({
+      categorias: todasLasCategorias,
+      fechaConsulta: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error listando archivos para sincronización:', error);
+    res.status(500).json({ error: 'Error listando archivos' });
+  }
+});
+
+// Función auxiliar para hacer peticiones HTTP
+const hacerPeticionHTTP = (url, options = {}) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const urlObj = new URL(url);
+      const protocol = urlObj.protocol === 'https:' ? https : http;
+      
+      const req = protocol.request(url, { ...options, timeout: 30000 }, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            try {
+              resolve(JSON.parse(data));
+            } catch (e) {
+              resolve(data);
+            }
+          } else {
+            reject(new Error(`HTTP ${res.statusCode}: ${data}`));
+          }
+        });
+      });
+      
+      req.on('error', (error) => {
+        console.error('Error en petición HTTP:', error);
+        reject(error);
+      });
+      
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Timeout al conectar con el servidor remoto'));
+      });
+      
+      if (options.body) {
+        req.write(options.body);
+      }
+      req.end();
+    } catch (error) {
+      console.error('Error construyendo petición HTTP:', error);
+      reject(error);
+    }
+  });
+};
+
+// Función auxiliar para descargar archivo desde URL remota
+const descargarArchivoRemoto = (url, destino) => {
+  return new Promise((resolve, reject) => {
+    const urlObj = new URL(url);
+    const protocol = urlObj.protocol === 'https:' ? https : http;
+    
+    const req = protocol.get(url, (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`HTTP ${res.statusCode}`));
+        return;
+      }
+      
+      const fileStream = fs.createWriteStream(destino);
+      res.pipe(fileStream);
+      
+      fileStream.on('finish', () => {
+        fileStream.close();
+        resolve();
+      });
+      
+      fileStream.on('error', reject);
+    });
+    
+    req.on('error', reject);
+  });
+};
+
+// Sincronizar archivos desde servidor remoto o directorio local
+router.post('/sincronizar', async (req, res) => {
+  try {
+    console.log('🔄 Iniciando sincronización...');
+    console.log('📦 Body recibido:', JSON.stringify(req.body, null, 2));
+    
+    const { servidorUrl, servidorPath, mapeoCarpetas, modo = 'api' } = req.body;
+    
+    // Validar que se haya enviado el modo correcto
+    if (!modo || (modo !== 'api' && modo !== 'local')) {
+      return res.status(400).json({ 
+        error: 'Modo de sincronización inválido',
+        modosSoportados: ['api', 'local']
+      });
+    }
+    
+    // Validar parámetros según el modo
+    if (modo === 'api' && !servidorUrl) {
+      return res.status(400).json({ 
+        error: 'servidorUrl es requerido para modo api'
+      });
+    }
+    
+    if (modo === 'local' && !servidorPath) {
+      return res.status(400).json({ 
+        error: 'servidorPath es requerido para modo local'
+      });
+    }
+    
+    // Mapeo por defecto de carpetas del servidor a nuestras carpetas
+    const mapeoDefault = {
+      'Documentos - Acta de sesion': 'documentos-actas-sesion',
+      'Documentos - Actas de Sesión': 'documentos-actas-sesion',
+      'Documentos - Actas de sesion': 'documentos-actas-sesion',
+      'Documentos - Gaceta Municipal': 'documentos-gaceta-municipal',
+      'Documentos - Acuerdos': 'documentos-acuerdos',
+      'Documentos - Decretos': 'documentos-decretos',
+      'Documentos - Proyectos': 'documentos-proyectos',
+      'Documentos - Manuales': 'documentos-manuales',
+      'Documentos - Planes': 'documentos-planes',
+      'Documentos - Leyes': 'documentos-leyes',
+      'Documentos - Políticas': 'documentos-politicas',
+      'Reglamento Interno': 'reglamento-interno',
+      'Sesiones': 'sesiones',
+      'Gaceta': 'gaceta',
+      'Transparencia': 'transparencia',
+      'Acerca del Concejo': 'acerca-de',
+      'Miembros del Concejo': 'miembros',
+      'Historia': 'historia'
+    };
+
+    const mapeoFinal = { ...mapeoDefault, ...mapeoCarpetas };
+    
+    let archivosSincronizados = 0;
+    let archivosNuevos = 0;
+    let archivosModificados = 0;
+    let archivosOmitidos = 0;
+    const errores = [];
+
+    if (modo === 'api' && servidorUrl) {
+      // Sincronización desde servidor remoto vía API
+      try {
+        // Normalizar URL (agregar /api/repositorio si no está)
+        const baseUrl = servidorUrl.endsWith('/') ? servidorUrl.slice(0, -1) : servidorUrl;
+        const listarUrl = `${baseUrl}/api/repositorio/sincronizacion/listar`;
+        
+        console.log(`🔄 Obteniendo lista de archivos desde: ${listarUrl}`);
+        
+        // Obtener lista de archivos del servidor remoto
+        const datosRemotos = await hacerPeticionHTTP(listarUrl);
+        
+        if (!datosRemotos.categorias) {
+          return res.status(400).json({ error: 'Respuesta inválida del servidor remoto' });
+        }
+
+        // Recorrer categorías del servidor remoto
+        for (const [categoriaRemota, datosCategoria] of Object.entries(datosRemotos.categorias)) {
+          // Buscar mapeo de la categoría remota
+          const categoriaLocal = mapeoFinal[categoriaRemota] || mapeoFinal[datosCategoria.nombre];
+          
+          if (!categoriaLocal) {
+            console.warn(`⚠️ Categoría "${categoriaRemota}" no tiene mapeo, se omite`);
+            continue;
+          }
+
+          // Asegurar que la carpeta local existe
+          const carpetaLocalPath = path.join(repositorioBaseDir, categoriaLocal);
+          if (!fs.existsSync(carpetaLocalPath)) {
+            fs.mkdirSync(carpetaLocalPath, { recursive: true });
+          }
+
+          // Cargar metadata local para comparar
+          const metadataLocal = cargarMetadatos(categoriaLocal);
+
+          // Procesar cada archivo del servidor remoto
+          for (const archivoRemoto of datosCategoria.archivos || []) {
+            try {
+              const archivoLocalPath = path.join(carpetaLocalPath, archivoRemoto.nombre);
+              const metadataArchivo = metadataLocal[archivoRemoto.nombre];
+              
+              // Verificar si el archivo ya existe localmente
+              if (fs.existsSync(archivoLocalPath)) {
+                const hashLocal = calcularHash(archivoLocalPath);
+                
+                // Si el hash es diferente, el archivo fue modificado
+                if (hashLocal !== archivoRemoto.hash) {
+                  // Descargar archivo actualizado
+                  const descargarUrl = `${baseUrl}/api/repositorio/descargar/${categoriaRemota}/${encodeURIComponent(archivoRemoto.nombre)}`;
+                  await descargarArchivoRemoto(descargarUrl, archivoLocalPath);
+                  marcarArchivoSincronizado(categoriaLocal, archivoRemoto.nombre, 'servidor');
+                  archivosModificados++;
+                  archivosSincronizados++;
+                } else if (metadataArchivo?.sincronizado) {
+                  // Ya está sincronizado y no ha cambiado
+                  archivosOmitidos++;
+                } else {
+                  // Existe pero no está marcado como sincronizado
+                  marcarArchivoSincronizado(categoriaLocal, archivoRemoto.nombre, 'servidor');
+                  archivosSincronizados++;
+                }
+              } else {
+                // Archivo nuevo, descargar
+                const descargarUrl = `${baseUrl}/api/repositorio/descargar/${categoriaRemota}/${encodeURIComponent(archivoRemoto.nombre)}`;
+                await descargarArchivoRemoto(descargarUrl, archivoLocalPath);
+                marcarArchivoSincronizado(categoriaLocal, archivoRemoto.nombre, 'servidor');
+                archivosNuevos++;
+                archivosSincronizados++;
+              }
+            } catch (error) {
+              console.error(`❌ Error sincronizando ${archivoRemoto.nombre}:`, error);
+              errores.push({ archivo: archivoRemoto.nombre, error: error.message });
+            }
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error conectando con servidor remoto:', error);
+        console.error('❌ Stack:', error.stack);
+        return res.status(500).json({ 
+          error: 'Error conectando con servidor remoto', 
+          detalle: error.message,
+          stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
+      }
+    } else if (modo === 'local' && servidorPath) {
+      // Sincronización desde directorio local (acceso directo al servidor)
+      console.log(`📁 Modo local - Ruta del servidor: ${servidorPath}`);
+      
+      if (!fs.existsSync(servidorPath)) {
+        console.error(`❌ Ruta del servidor no existe: ${servidorPath}`);
+        return res.status(400).json({ error: 'Ruta del servidor no existe' });
+      }
+      
+      if (!fs.statSync(servidorPath).isDirectory()) {
+        console.error(`❌ La ruta no es un directorio: ${servidorPath}`);
+        return res.status(400).json({ error: 'La ruta especificada no es un directorio' });
+      }
+
+      // Recorrer carpetas del servidor
+      const carpetasServidor = fs.readdirSync(servidorPath, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => dirent.name);
+
+      for (const carpetaServidor of carpetasServidor) {
+        const carpetaLocal = mapeoFinal[carpetaServidor];
+        
+        if (!carpetaLocal) {
+          console.warn(`Carpeta "${carpetaServidor}" no tiene mapeo, se omite`);
+          continue;
+        }
+
+        // Asegurar que la carpeta local existe
+        const carpetaLocalPath = path.join(repositorioBaseDir, carpetaLocal);
+        if (!fs.existsSync(carpetaLocalPath)) {
+          fs.mkdirSync(carpetaLocalPath, { recursive: true });
+        }
+
+        const carpetaServidorPath = path.join(servidorPath, carpetaServidor);
+        const archivosServidor = fs.readdirSync(carpetaServidorPath)
+          .filter(archivo => {
+            const archivoPath = path.join(carpetaServidorPath, archivo);
+            return fs.statSync(archivoPath).isFile() && archivo !== 'metadata.json';
+          });
+
+        // Cargar metadata local para comparar
+        const metadataLocal = cargarMetadatos(carpetaLocal);
+
+        for (const archivoServidor of archivosServidor) {
+          try {
+            const archivoServidorPath = path.join(carpetaServidorPath, archivoServidor);
+            const archivoLocalPath = path.join(carpetaLocalPath, archivoServidor);
+            
+            // Verificar que el archivo existe antes de calcular hash
+            if (!fs.existsSync(archivoServidorPath)) {
+              console.warn(`⚠️ Archivo no existe: ${archivoServidorPath}`);
+              continue;
+            }
+            
+            const hashServidor = calcularHash(archivoServidorPath);
+            
+            if (!hashServidor) {
+              console.warn(`⚠️ No se pudo calcular hash para: ${archivoServidor}`);
+              errores.push({ archivo: archivoServidor, error: 'No se pudo calcular hash' });
+              continue;
+            }
+            
+            // Verificar si el archivo ya existe localmente
+            if (fs.existsSync(archivoLocalPath)) {
+              const hashLocal = calcularHash(archivoLocalPath);
+              
+              if (!hashLocal) {
+                console.warn(`⚠️ No se pudo calcular hash local para: ${archivoServidor}`);
+                // Continuar como si fuera nuevo
+                fs.copyFileSync(archivoServidorPath, archivoLocalPath);
+                marcarArchivoSincronizado(carpetaLocal, archivoServidor, 'servidor');
+                archivosNuevos++;
+                archivosSincronizados++;
+                continue;
+              }
+              
+              const metadataArchivo = metadataLocal[archivoServidor];
+              
+              // Si el hash es diferente, el archivo fue modificado
+              if (hashLocal !== hashServidor) {
+                // Copiar archivo actualizado
+                fs.copyFileSync(archivoServidorPath, archivoLocalPath);
+                marcarArchivoSincronizado(carpetaLocal, archivoServidor, 'servidor');
+                archivosModificados++;
+                archivosSincronizados++;
+              } else if (metadataArchivo?.sincronizado) {
+                // Ya está sincronizado y no ha cambiado
+                archivosOmitidos++;
+              } else {
+                // Existe pero no está marcado como sincronizado
+                marcarArchivoSincronizado(carpetaLocal, archivoServidor, 'servidor');
+                archivosSincronizados++;
+              }
+            } else {
+              // Archivo nuevo, copiar
+              fs.copyFileSync(archivoServidorPath, archivoLocalPath);
+              marcarArchivoSincronizado(carpetaLocal, archivoServidor, 'servidor');
+              archivosNuevos++;
+              archivosSincronizados++;
+            }
+          } catch (error) {
+            console.error(`Error sincronizando ${archivoServidor}:`, error);
+            errores.push({ archivo: archivoServidor, error: error.message });
+          }
+        }
+      }
+    } else {
+      console.error('❌ Modo de sincronización no válido o parámetros faltantes');
+      console.error('   Modo recibido:', modo);
+      console.error('   servidorUrl:', servidorUrl);
+      console.error('   servidorPath:', servidorPath);
+      return res.status(400).json({ 
+        error: 'Modo de sincronización no soportado o parámetros faltantes',
+        modosSoportados: ['api', 'local'],
+        requerido: modo === 'api' ? 'servidorUrl' : 'servidorPath',
+        recibido: { modo, servidorUrl: !!servidorUrl, servidorPath: !!servidorPath }
+      });
+    }
+    
+    res.json({
+      mensaje: 'Sincronización completada',
+      resumen: {
+        totalSincronizados: archivosSincronizados,
+        nuevos: archivosNuevos,
+        modificados: archivosModificados,
+        omitidos: archivosOmitidos,
+        errores: errores.length
+      },
+      errores: errores.length > 0 ? errores : undefined
+    });
+  } catch (error) {
+    console.error('❌ Error sincronizando:', error);
+    console.error('❌ Stack:', error.stack);
+    res.status(500).json({ 
+      error: 'Error sincronizando archivos', 
+      detalle: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 });
 

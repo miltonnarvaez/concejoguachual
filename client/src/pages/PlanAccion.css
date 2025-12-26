@@ -1,4 +1,4 @@
-.plan-accion-page {
+﻿.plan-accion-page {
   min-height: 100vh;
   background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
   width: 100% !important;
@@ -154,7 +154,7 @@
 
 /* Hero Section */
 .plan-hero {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   padding: 4rem 0;
   text-align: center;
@@ -269,7 +269,7 @@
   padding: 2rem;
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border-top: 4px solid #28a745;
+  border-top: 4px solid #2a7a3f;
   transition: all 0.3s ease;
 }
 
@@ -280,7 +280,7 @@
 
 .mesa-directiva-cargo {
   font-size: 1rem;
-  color: #28a745;
+  color: #2a7a3f;
   font-weight: 700;
   margin-bottom: 1rem;
   text-transform: uppercase;
@@ -338,7 +338,7 @@
   border-radius: 12px;
   padding: 2.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border-left: 5px solid #28a745;
+  border-left: 5px solid #2a7a3f;
   transition: all 0.3s ease;
 }
 
@@ -349,13 +349,13 @@
 
 .mision-vision-icon {
   font-size: 3rem;
-  color: #28a745;
+  color: #2a7a3f;
   margin-bottom: 1.5rem;
 }
 
 .mision-vision-card h3 {
   font-size: 1.8rem;
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1.5rem;
   font-weight: 700;
 }
@@ -392,13 +392,13 @@
 
 .valor-card:hover {
   transform: translateY(-5px);
-  border-color: #28a745;
+  border-color: #2a7a3f;
   box-shadow: 0 8px 25px rgba(40, 167, 69, 0.2);
 }
 
 .valor-icon {
   font-size: 2.5rem;
-  color: #28a745;
+  color: #2a7a3f;
   margin-bottom: 1rem;
 }
 
@@ -432,7 +432,7 @@
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border-left: 4px solid #28a745;
+  border-left: 4px solid #2a7a3f;
   transition: all 0.3s ease;
 }
 
@@ -481,7 +481,7 @@
 }
 
 .progreso-completado {
-  background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+  background: linear-gradient(90deg, #2a7a3f 0%, #20c997 100%);
 }
 
 .progreso-en-progreso {
@@ -509,7 +509,7 @@
 
 .objetivo-estado.estado-completado {
   background: rgba(40, 167, 69, 0.15);
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .objetivo-estado.estado-en-progreso {
@@ -531,7 +531,7 @@
 .politica-icon,
 .objetivo-icon {
   font-size: 1.5rem;
-  color: #28a745;
+  color: #2a7a3f;
   flex-shrink: 0;
   margin-top: 0.25rem;
 }
@@ -564,7 +564,7 @@
   padding: 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  border-top: 4px solid #28a745;
+  border-top: 4px solid #2a7a3f;
 }
 
 .fortalecimiento-item:hover {
@@ -574,13 +574,13 @@
 
 .fortalecimiento-icon {
   font-size: 2.5rem;
-  color: #28a745;
+  color: #2a7a3f;
   margin-bottom: 1rem;
 }
 
 .fortalecimiento-item h3 {
   font-size: 1.5rem;
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   font-weight: 700;
 }
@@ -613,7 +613,7 @@
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border-left: 4px solid #28a745;
+  border-left: 4px solid #2a7a3f;
   transition: all 0.3s ease;
   position: relative;
   overflow: visible !important;
@@ -638,7 +638,7 @@
 
 .herramienta-icon {
   font-size: 1.5rem;
-  color: #28a745;
+  color: #2a7a3f;
   flex-shrink: 0;
 }
 
@@ -667,7 +667,7 @@
   padding: 2.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   text-align: center;
-  border-top: 4px solid #28a745;
+  border-top: 4px solid #2a7a3f;
   transition: all 0.3s ease;
 }
 
@@ -678,13 +678,13 @@
 
 .plazo-seguimiento-icon {
   font-size: 3rem;
-  color: #28a745;
+  color: #2a7a3f;
   margin-bottom: 1.5rem;
 }
 
 .plazo-seguimiento-card h3 {
   font-size: 1.8rem;
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1.5rem;
   font-weight: 700;
 }
@@ -780,7 +780,7 @@
   border-radius: 12px;
   padding: 2.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border-top: 4px solid #28a745;
+  border-top: 4px solid #2a7a3f;
   transition: all 0.3s ease;
 }
 
@@ -791,13 +791,13 @@
 
 .proyeccion-icon {
   font-size: 2.5rem;
-  color: #28a745;
+  color: #2a7a3f;
   margin-bottom: 1rem;
 }
 
 .proyeccion-item h3 {
   font-size: 1.5rem;
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   font-weight: 700;
 }
@@ -818,7 +818,7 @@
 
 .beneficios-list h4 {
   font-size: 1.2rem;
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
   font-weight: 700;
 }
@@ -843,7 +843,7 @@
   content: '✓';
   position: absolute;
   left: 0;
-  color: #28a745;
+  color: #2a7a3f;
   font-weight: 700;
   font-size: 1.1rem;
 }
@@ -888,20 +888,20 @@
 
 .estructura-icon {
   font-size: 2.5rem;
-  color: #28a745;
+  color: #2a7a3f;
   margin-bottom: 1rem;
 }
 
 .estructura-card h3 {
   font-size: 1.3rem;
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 0.75rem;
   font-weight: 700;
 }
 
 .estructura-card h4 {
   font-size: 1.1rem;
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 0.75rem;
   font-weight: 700;
 }
@@ -915,7 +915,7 @@
 
 .estructura-cargo {
   display: inline-block;
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   padding: 0.35rem 1rem;
   border-radius: 20px;
@@ -937,12 +937,12 @@
 
 /* Niveles específicos */
 .nivel-1 .estructura-card {
-  border-top: 5px solid #155724;
+  border-top: 5px solid #1d5c2f;
   background: linear-gradient(135deg, #f0f8f0 0%, #ffffff 100%);
 }
 
 .nivel-2 .estructura-card {
-  border-top: 4px solid #28a745;
+  border-top: 4px solid #2a7a3f;
 }
 
 .nivel-3 .estructura-card {
@@ -966,7 +966,7 @@
 
 .estructura-funciones p {
   font-weight: 600;
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 0.75rem;
 }
 
@@ -988,7 +988,7 @@
   content: '→';
   position: absolute;
   left: 0;
-  color: #28a745;
+  color: #2a7a3f;
   font-weight: 700;
 }
 
@@ -1000,7 +1000,7 @@
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(to bottom, #28a745, transparent);
+  background: linear-gradient(to bottom, #2a7a3f, transparent);
   transform: translateX(-50%);
   z-index: 0;
   opacity: 0.3;
@@ -1045,7 +1045,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(90deg, #1d5c2f 0%, #2a7a3f 100%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.4s ease;
@@ -1062,7 +1062,7 @@
 
 .estadistica-plan-icon {
   font-size: 3.5rem;
-  color: #28a745;
+  color: #2a7a3f;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
@@ -1083,7 +1083,7 @@
 .estadistica-plan-numero {
   font-size: 3rem;
   font-weight: 700;
-  color: #155724;
+  color: #1d5c2f;
   margin: 0;
   line-height: 1;
 }
@@ -1111,7 +1111,7 @@
   height: 56px;
   border-radius: 50%;
   background: linear-gradient(135deg, #BBED00 0%, #cbe900 100%);
-  color: #155724;
+  color: #1d5c2f;
   border: none;
   box-shadow: 0 4px 20px rgba(187, 237, 0, 0.4);
   cursor: pointer;
@@ -1161,7 +1161,7 @@
 
 .plan-nav-header h3 {
   margin: 0;
-  color: #155724;
+  color: #1d5c2f;
   font-size: 1.2rem;
 }
 
@@ -1176,7 +1176,7 @@
 }
 
 .plan-nav-header button:hover {
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .plan-nav-list {
@@ -1207,14 +1207,14 @@
 
 .plan-nav-item:hover {
   background: rgba(21, 87, 36, 0.1);
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .plan-nav-item.active {
   background: linear-gradient(135deg, rgba(21, 87, 36, 0.15) 0%, rgba(40, 167, 69, 0.15) 100%);
-  color: #155724;
+  color: #1d5c2f;
   font-weight: 600;
-  border-left: 3px solid #28a745;
+  border-left: 3px solid #2a7a3f;
 }
 
 .plan-nav-icon {
@@ -1263,13 +1263,13 @@
 .timeline-line {
   width: 2px;
   height: calc(100% + 3rem);
-  background: linear-gradient(to bottom, #28a745, #e0e0e0);
+  background: linear-gradient(to bottom, #2a7a3f, #e0e0e0);
   margin-top: 5px;
 }
 
 .timeline-item.timeline-completado .timeline-dot {
-  background: #28a745;
-  border-color: #28a745;
+  background: #2a7a3f;
+  border-color: #2a7a3f;
   box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.2);
 }
 
@@ -1317,7 +1317,7 @@
 .timeline-trimestre {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .timeline-meses {
@@ -1342,7 +1342,7 @@
 
 .estado-completado {
   background: rgba(40, 167, 69, 0.15);
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .estado-en-progreso {
@@ -1510,4 +1510,11 @@
     width: 100%;
   }
 }
+
+
+
+
+
+
+
 

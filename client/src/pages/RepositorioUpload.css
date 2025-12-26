@@ -258,17 +258,23 @@
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
-  padding: 2rem 1.5rem;
+  padding: 0;
   text-align: center;
-  cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
 .drive-folder-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-color: #4285f4;
+}
+
+.drive-folder-card-content {
+  padding: 2rem 1.5rem;
+  cursor: pointer;
 }
 
 .folder-icon {
@@ -288,6 +294,38 @@
   margin: 0;
   color: #666;
   font-size: 0.85rem;
+}
+
+.folder-delete-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: #ea4335;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  z-index: 10;
+}
+
+.drive-folder-card:hover .folder-delete-btn {
+  opacity: 1;
+}
+
+.folder-delete-btn:hover {
+  background: #d33b2c;
+  transform: scale(1.1);
+}
+
+.folder-delete-btn svg {
+  font-size: 0.9rem;
 }
 
 /* Breadcrumb */

@@ -1,4 +1,4 @@
-.language-selector {
+﻿.language-selector {
   position: relative;
   z-index: 10000;
   isolation: isolate;
@@ -11,11 +11,11 @@
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   background: #fff;
-  border: 1px solid #28a745;
+  border: 1px solid #2a7a3f;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
-  color: #155724;
+  color: #1d5c2f;
   transition: all 0.3s;
   white-space: nowrap;
   flex-shrink: 0;
@@ -26,7 +26,7 @@
 
 .language-button:hover {
   background: #f8f9fa;
-  border-color: #155724;
+  border-color: #1d5c2f;
 }
 
 .language-flag {
@@ -73,7 +73,7 @@
   text-align: left;
   cursor: pointer;
   font-size: 0.9rem;
-  color: #155724;
+  color: #1d5c2f;
   transition: background-color 0.3s;
   position: relative;
   z-index: 10002;

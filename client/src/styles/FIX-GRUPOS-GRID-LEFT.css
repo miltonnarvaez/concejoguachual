@@ -1,4 +1,4 @@
-/* FIX ESPECÍFICO PARA CORREGIR left=24px EN grupos-grid */
+﻿/* FIX ESPECÍFICO PARA CORREGIR left=24px EN grupos-grid */
 
 /* REGLAS ULTRA ESPECÍFICAS - Máxima prioridad para corregir el desplazamiento */
 section.animated-section.animate-fadeInUp.grupos-interes .container .grupos-grid,
@@ -125,3 +125,10 @@ section.animated-section.grupos-interes .container .grupos-grid .grupo-card {
     margin-right: auto !important;
   }
 }
+
+
+
+
+
+
+

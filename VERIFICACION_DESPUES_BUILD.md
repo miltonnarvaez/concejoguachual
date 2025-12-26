@@ -107,3 +107,10 @@ sudo find client/build -type f -exec chmod 644 {} \;
 sudo nginx -t && sudo systemctl reload nginx
 pm2 status
 ```
+
+
+
+
+
+
+

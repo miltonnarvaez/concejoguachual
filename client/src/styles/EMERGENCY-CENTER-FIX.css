@@ -1,4 +1,4 @@
-/* SOLUCIÓN DE EMERGENCIA - FORZAR CENTRADO ABSOLUTO */
+﻿/* SOLUCIÓN DE EMERGENCIA - FORZAR CENTRADO ABSOLUTO */
 /* Este archivo debe tener MÁXIMA PRIORIDAD - Cargar al final */
 
 /* RESET COMPLETO - Asegurar que no haya desplazamientos */
@@ -278,3 +278,10 @@ section.animated-section.section .container .section-title::after,
     width: 100% !important;
   }
 }
+
+
+
+
+
+
+

@@ -37,3 +37,10 @@ ADD COLUMN IF NOT EXISTS documento_url VARCHAR(255) DEFAULT NULL COMMENT 'URL de
 
 
 
+
+
+
+
+
+
+

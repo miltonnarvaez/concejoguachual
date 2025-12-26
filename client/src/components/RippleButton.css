@@ -1,4 +1,4 @@
-.ripple-button {
+﻿.ripple-button {
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -41,6 +41,13 @@
 .ripple-button.btn-danger .ripple {
   background: rgba(255, 255, 255, 0.5);
 }
+
+
+
+
+
+
+
 
 
 

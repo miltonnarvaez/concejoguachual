@@ -10,7 +10,7 @@
 }
 
 .admin-header h1 {
-  color: #155724;
+  color: #218838;
   margin: 0;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .encuesta-form-container h2 {
-  color: #155724;
+  color: #218838;
   margin-bottom: 1.5rem;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .preguntas-header h3 {
-  color: #155724;
+  color: #218838;
   margin: 0;
 }
 
@@ -116,7 +116,7 @@
 
 .pregunta-numero {
   font-weight: 600;
-  color: #155724;
+  color: #218838;
   font-size: 1.1rem;
 }
 
@@ -137,7 +137,7 @@
 }
 
 .encuestas-list h2 {
-  color: #155724;
+  color: #218838;
   margin-bottom: 1.5rem;
 }
 
@@ -154,7 +154,7 @@
 }
 
 .encuestas-table thead {
-  background: #155724;
+  background: #218838;
   color: #fff;
 }
 
@@ -192,7 +192,7 @@
 
 .estado-badge.activa {
   background: #d4edda;
-  color: #155724;
+  color: #218838;
 }
 
 .estado-badge.finalizada {
@@ -220,12 +220,12 @@
 }
 
 .btn-results {
-  background: #1976d2;
+  background: #28a745;
   color: #fff;
 }
 
 .btn-results:hover {
-  background: #1565c0;
+  background: #218838;
 }
 
 .btn-delete {
@@ -267,7 +267,7 @@
   align-items: center;
   padding: 1.5rem 2rem;
   border-bottom: 2px solid #e9ecef;
-  background: #155724;
+  background: #218838;
   color: #fff;
 }
 
@@ -301,7 +301,7 @@
 
 .total-respuestas-admin {
   font-size: 1.2rem;
-  color: #155724;
+  color: #218838;
   margin-bottom: 2rem;
   padding: 1rem;
   background: #f8f9fa;
@@ -319,7 +319,7 @@
 }
 
 .resultado-item-admin h3 {
-  color: #155724;
+  color: #218838;
   margin-bottom: 1rem;
 }
 
@@ -443,6 +443,13 @@
     max-height: 95vh;
   }
 }
+
+
+
+
+
+
+
 
 
 

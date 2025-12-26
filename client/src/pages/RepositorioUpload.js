@@ -39,6 +39,7 @@ const RepositorioUpload = () => {
   const [creandoCarpeta, setCreandoCarpeta] = useState(false); // Estado de carga al crear carpeta
   const timeoutRef = useRef(null);
   const isMountedRef = useRef(true);
+  const loadCategoriasRef = useRef(null);
 
   // Cargar categorías disponibles
   useEffect(() => {
@@ -99,6 +100,9 @@ const RepositorioUpload = () => {
         }
       }
     };
+    
+    // Guardar referencia para poder llamarla desde otros lugares
+    loadCategoriasRef.current = loadCategorias;
     
     loadCategorias();
     
@@ -293,6 +297,49 @@ const RepositorioUpload = () => {
     });
   };
 
+  // Función para eliminar una carpeta
+  const handleEliminarCarpeta = async (categoriaId, categoriaNombre) => {
+    if (!window.confirm(`¿Estás seguro de que quieres eliminar la carpeta "${categoriaNombre}"? Esta acción eliminará todos los archivos dentro de la carpeta y no se puede deshacer.`)) {
+      return;
+    }
+
+    try {
+      await api.delete(`/repositorio/eliminar-carpeta/${categoriaId}`);
+      
+      setMensaje({ 
+        tipo: 'exito', 
+        texto: `Carpeta "${categoriaNombre}" eliminada exitosamente` 
+      });
+      
+      // Recargar categorías
+      try {
+        const categoriasResponse = await api.get('/repositorio/categorias');
+        if (categoriasResponse.data && Array.isArray(categoriasResponse.data)) {
+          setCategorias(categoriasResponse.data);
+          console.log('✅ Categorías recargadas después de eliminar carpeta:', categoriasResponse.data);
+        }
+      } catch (error) {
+        console.error('Error recargando categorías:', error);
+        if (loadCategoriasRef.current) {
+          setTimeout(() => {
+            loadCategoriasRef.current();
+          }, 1000);
+        }
+      }
+      
+      // Si la carpeta eliminada estaba seleccionada, volver a la vista de carpetas
+      if (categoriaSeleccionada === categoriaId) {
+        setCategoriaSeleccionada(null);
+      }
+    } catch (error) {
+      console.error('Error eliminando carpeta:', error);
+      setMensaje({ 
+        tipo: 'error', 
+        texto: error.response?.data?.error || 'Error eliminando carpeta. Por favor intenta de nuevo.' 
+      });
+    }
+  };
+
   // Función para eliminar un archivo
   const handleEliminar = async (categoria, nombreArchivo) => {
     if (!window.confirm(`¿Estás seguro de que quieres eliminar "${nombreArchivo}"?`)) {
@@ -346,8 +393,6 @@ const RepositorioUpload = () => {
       });
 
       if (response.data && response.data.carpeta) {
-        // Agregar la nueva carpeta a la lista
-        setCategorias([...categorias, response.data.carpeta]);
         setMensaje({ 
           tipo: 'exito', 
           texto: `Carpeta "${response.data.carpeta.nombre}" creada exitosamente` 
@@ -356,6 +401,23 @@ const RepositorioUpload = () => {
         // Limpiar formulario
         setNombreNuevaCarpeta('');
         setMostrarCrearCarpeta(false);
+        
+        // Recargar categorías inmediatamente
+        try {
+          const categoriasResponse = await api.get('/repositorio/categorias');
+          if (categoriasResponse.data && Array.isArray(categoriasResponse.data)) {
+            setCategorias(categoriasResponse.data);
+            console.log('✅ Categorías recargadas después de crear carpeta:', categoriasResponse.data);
+          }
+        } catch (error) {
+          console.error('Error recargando categorías:', error);
+          // Si falla, intentar con la referencia
+          if (loadCategoriasRef.current) {
+            setTimeout(() => {
+              loadCategoriasRef.current();
+            }, 1000);
+          }
+        }
       }
     } catch (error) {
       console.error('Error creando carpeta:', error);
@@ -484,11 +546,25 @@ const RepositorioUpload = () => {
                       <div 
                         key={cat.id} 
                         className="drive-folder-card"
-                        onClick={() => setCategoriaSeleccionada(cat.id)}
                       >
-                        <FaFolder className="folder-icon" />
-                        <h3>{cat.nombre}</h3>
-                        <p>{cat.cantidadArchivos || 0} archivo(s)</p>
+                        <div 
+                          className="drive-folder-card-content"
+                          onClick={() => setCategoriaSeleccionada(cat.id)}
+                        >
+                          <FaFolder className="folder-icon" />
+                          <h3>{cat.nombre}</h3>
+                          <p>{cat.cantidadArchivos || 0} archivo(s)</p>
+                        </div>
+                        <button
+                          className="folder-delete-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEliminarCarpeta(cat.id, cat.nombre);
+                          }}
+                          title="Eliminar carpeta"
+                        >
+                          <FaTrash />
+                        </button>
                       </div>
                     ))}
                   </div>

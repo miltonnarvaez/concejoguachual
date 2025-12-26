@@ -1,4 +1,4 @@
-/* FIX ESPECÍFICO PARA ACCESO-RAPIDO - Corregir centrado del título */
+﻿/* FIX ESPECÍFICO PARA ACCESO-RAPIDO - Corregir centrado del título */
 
 .acceso-rapido,
 .section.acceso-rapido,
@@ -117,3 +117,10 @@ section.animated-section.acceso-rapido .container h2.section-title {
   box-sizing: border-box !important;
   transform: none !important;
 }
+
+
+
+
+
+
+

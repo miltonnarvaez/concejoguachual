@@ -33,3 +33,10 @@ try {
 Write-Host ""
 Write-Host "Presione cualquier tecla para continuar..." -ForegroundColor Gray
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
+
+
+
+
+
+

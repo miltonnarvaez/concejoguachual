@@ -1,10 +1,10 @@
-.historia-page {
+﻿.historia-page {
   min-height: 100vh;
   background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
 }
 
 .historia-hero {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   padding: 4rem 0;
   text-align: center;
@@ -67,15 +67,15 @@
 }
 
 .filtro-btn:hover {
-  border-color: #28a745;
-  color: #28a745;
+  border-color: #2a7a3f;
+  color: #2a7a3f;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
 }
 
 .filtro-btn.active {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
-  border-color: #28a745;
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
+  border-color: #2a7a3f;
   color: white;
   box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
 }
@@ -103,7 +103,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: linear-gradient(to bottom, #28a745, #155724);
+  background: linear-gradient(to bottom, #2a7a3f, #1d5c2f);
   transform: translateX(-50%);
   border-radius: 2px;
 }
@@ -146,7 +146,7 @@
   height: 20px;
   border-radius: 50%;
   background: white;
-  border: 4px solid #28a745;
+  border: 4px solid #2a7a3f;
   box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.2);
   transition: all 0.3s ease;
 }
@@ -157,7 +157,7 @@
 }
 
 .timeline-year {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
@@ -243,7 +243,7 @@
 }
 
 .timeline-categoria-badge {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   padding: 0.35rem 1rem;
   border-radius: 20px;
@@ -273,7 +273,7 @@
 }
 
 .btn-timeline-ver-mas {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -322,7 +322,7 @@
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  border: 2px solid #28a745;
+  border: 2px solid #2a7a3f;
   position: relative;
 }
 
@@ -336,18 +336,18 @@
   height: 0;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid #28a745;
+  border-bottom: 10px solid #2a7a3f;
 }
 
 .tooltip-content h4 {
-  color: #155724;
+  color: #1d5c2f;
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
   font-weight: 700;
 }
 
 .tooltip-categoria {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   padding: 0.35rem 1rem;
   border-radius: 20px;
@@ -374,11 +374,11 @@
 }
 
 .tooltip-fecha svg {
-  color: #28a745;
+  color: #2a7a3f;
 }
 
 .tooltip-btn-ver-mas {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -515,7 +515,7 @@
 }
 
 .historia-modal-categoria {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   padding: 0.35rem 1rem;
   border-radius: 20px;
@@ -617,4 +617,11 @@
     opacity: 1;
   }
 }
+
+
+
+
+
+
+
 

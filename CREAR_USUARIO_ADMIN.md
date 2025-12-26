@@ -76,3 +76,10 @@ node scripts/reset-admin-password.js
    ```bash
    mysql -u concejo_user -pConcejo_2025*+- concejo_guachucal -e "SHOW TABLES LIKE 'usuarios';"
    ```
+
+
+
+
+
+
+

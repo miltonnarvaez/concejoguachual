@@ -4,7 +4,7 @@
 }
 
 .admin-header {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #28a745 100%);
   color: #fff;
   padding: 2rem 0;
 }
@@ -33,7 +33,7 @@
 .convocatorias-form h2 {
   margin-top: 0;
   margin-bottom: 1.5rem;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .form-group {
@@ -110,7 +110,7 @@
 .convocatorias-list h2 {
   margin-top: 0;
   margin-bottom: 1.5rem;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .convocatorias-table {
@@ -130,7 +130,7 @@
 }
 
 .convocatorias-table th {
-  background: #155724;
+  background: #1d5c2f;
   color: #fff;
   font-weight: 600;
 }
@@ -184,7 +184,7 @@
 
 .btn-edit {
   background: #ffc107;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .btn-edit:hover {

@@ -1,4 +1,4 @@
-.foros-page {
+﻿.foros-page {
   min-height: 80vh;
 }
 
@@ -145,6 +145,13 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+
+
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-/* FIX ESPECÍFICO PARA GRUPOS-INTERES - Corregir centrado de la sección y contenedor */
+﻿/* FIX ESPECÍFICO PARA GRUPOS-INTERES - Corregir centrado de la sección y contenedor */
 
 .grupos-interes,
 .section.grupos-interes,
@@ -186,3 +186,10 @@ div#root > div.App > main.main-content > div.home > section.animated-section.gru
     place-items: unset !important;
   }
 }
+
+
+
+
+
+
+

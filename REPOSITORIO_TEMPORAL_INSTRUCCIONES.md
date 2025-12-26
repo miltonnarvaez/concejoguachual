@@ -100,3 +100,10 @@ server/uploads/repositorio-temporal/
 ## 📞 Soporte
 
 Si tienes problemas o preguntas, contacta al administrador del sistema.
+
+
+
+
+
+
+

@@ -1,11 +1,11 @@
-/* Estilos comunes para todas las p√°ginas admin */
+/* Estilos comunes para todas las p·ginas admin */
 .admin-content-wrapper {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-/* Asegurar que las p√°ginas admin tengan fondo consistente */
+/* Asegurar que las p·ginas admin tengan fondo consistente */
 .admin-noticias,
 .admin-convocatorias,
 .admin-gaceta,
@@ -62,6 +62,13 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+
+
+
+
+
+
 
 
 

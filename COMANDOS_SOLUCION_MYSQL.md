@@ -107,3 +107,10 @@ cat .env | grep DB_
    ```bash
    sudo tail -f /var/log/mysql/error.log
    ```
+
+
+
+
+
+
+

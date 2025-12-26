@@ -125,7 +125,7 @@ const AdminPQRSD = () => {
   const getEstadoColor = (estado) => {
     const colores = {
       pendiente: '#856404',
-      en_proceso: '#004085',
+      en_proceso: '#155724',
       resuelto: '#155724',
       cerrado: '#6c757d'
     };

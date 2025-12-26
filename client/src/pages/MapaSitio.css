@@ -1,4 +1,4 @@
-.mapa-sitio-page {
+﻿.mapa-sitio-page {
   padding: 2rem 0;
 }
 
@@ -7,7 +7,7 @@
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
-  border-left: 4px solid #28a745;
+  border-left: 4px solid #2a7a3f;
 }
 
 .mapa-intro p {
@@ -29,11 +29,11 @@
 }
 
 .mapa-seccion h2 {
-  color: #155724;
+  color: #1d5c2f;
   font-size: 1.3rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #28a745;
+  border-bottom: 2px solid #2a7a3f;
 }
 
 .mapa-enlaces {
@@ -55,7 +55,7 @@
 }
 
 .mapa-enlaces a {
-  color: #28a745;
+  color: #2a7a3f;
   font-weight: 600;
   font-size: 1.1rem;
   text-decoration: none;
@@ -63,7 +63,7 @@
 }
 
 .mapa-enlaces a:hover {
-  color: #155724;
+  color: #1d5c2f;
   text-decoration: underline;
 }
 
@@ -82,11 +82,11 @@
 }
 
 .mapa-enlaces-externos h2 {
-  color: #155724;
+  color: #1d5c2f;
   font-size: 1.3rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #28a745;
+  border-bottom: 2px solid #2a7a3f;
 }
 
 .mapa-enlaces-externos ul {
@@ -105,18 +105,18 @@
   content: '→';
   position: absolute;
   left: 0;
-  color: #28a745;
+  color: #2a7a3f;
   font-weight: bold;
 }
 
 .mapa-enlaces-externos a {
-  color: #28a745;
+  color: #2a7a3f;
   text-decoration: none;
   transition: color 0.3s;
 }
 
 .mapa-enlaces-externos a:hover {
-  color: #155724;
+  color: #1d5c2f;
   text-decoration: underline;
 }
 
@@ -126,6 +126,13 @@
     padding: 1rem;
   }
 }
+
+
+
+
+
+
+
 
 
 

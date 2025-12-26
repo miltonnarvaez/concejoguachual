@@ -1,4 +1,4 @@
-.pqrsd-page {
+﻿.pqrsd-page {
   padding: 2rem 0;
 }
 
@@ -7,7 +7,7 @@
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
-  border-left: 4px solid #28a745;
+  border-left: 4px solid #2a7a3f;
 }
 
 .pqrsd-info p {
@@ -40,7 +40,7 @@
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #155724;
+  color: #1d5c2f;
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -61,7 +61,7 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #28a745;
+  border-color: #2a7a3f;
   box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
 }
 
@@ -91,12 +91,12 @@
 }
 
 .checkbox-group a {
-  color: #28a745;
+  color: #2a7a3f;
   text-decoration: underline;
 }
 
 .btn-primary {
-  background: #28a745;
+  background: #2a7a3f;
   color: #fff;
   padding: 0.75rem 2rem;
   border: none;
@@ -108,13 +108,13 @@
 }
 
 .btn-primary:hover {
-  background: #155724;
+  background: #1d5c2f;
 }
 
 .pqrsd-success {
   background: #d4edda;
   border: 1px solid #c3e6cb;
-  color: #155724;
+  color: #1d5c2f;
   padding: 2rem;
   border-radius: 8px;
   text-align: center;
@@ -122,7 +122,7 @@
 }
 
 .pqrsd-success h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
 }
 
@@ -138,7 +138,7 @@
 }
 
 .pqrsd-contact h3 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1rem;
 }
 

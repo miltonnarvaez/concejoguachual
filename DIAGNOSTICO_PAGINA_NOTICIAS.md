@@ -248,3 +248,10 @@ echo -e "\n=========================================="
 1. Ver logs de PM2: `pm2 logs concejo-backend`
 2. Verificar conexión a BD
 3. Verificar que las tablas existen
+
+
+
+
+
+
+

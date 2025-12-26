@@ -31,3 +31,10 @@ FROM INFORMATION_SCHEMA.COLUMNS
 WHERE TABLE_SCHEMA = 'concejo_guachucal' 
 AND TABLE_NAME = 'noticias' 
 AND COLUMN_NAME = 'documentos_adicionales';
+
+
+
+
+
+
+

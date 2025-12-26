@@ -1,4 +1,4 @@
-/* Reset y estilos base */
+﻿/* Reset y estilos base */
 * {
   margin: 0;
   padding: 0;
@@ -6,15 +6,15 @@
 }
 
 :root {
-  /* Colores principales - Verde solo para header/footer */
-  --color-primary: #155724;
+  /* Colores principales - Verde institucional del Concejo */
+  --color-primary: #1d5c2f;
   --color-primary-dark: #0d3d1a;
-  --color-primary-light: #28a745;
+  --color-primary-light: #2a7a3f;
   --color-secondary: #f4ff10;
   
-  /* Color verde destacado para textos - inspirado en turismoantioquia.travel */
+  /* Color verde destacado para textos */
   --color-accent: #018d38;
-  --color-accent-light: #28a745;
+  --color-accent-light: #2a9d4a;
   --color-accent-dark: #0b5640;
   
   /* Colores verde lima para hero y destacados - turismoantioquia.travel */

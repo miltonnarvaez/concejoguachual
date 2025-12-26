@@ -1,4 +1,4 @@
-* {
+﻿* {
   box-sizing: border-box;
 }
 
@@ -251,7 +251,7 @@ body[style*="font-size"] .btn i {
 
 /* Mejoras de foco para accesibilidad */
 *:focus-visible {
-  outline: 3px solid #28a745 !important;
+  outline: 3px solid #2a7a3f !important;
   outline-offset: 2px !important;
 }
 

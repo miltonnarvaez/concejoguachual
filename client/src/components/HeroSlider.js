@@ -10,7 +10,7 @@ const HeroSlider = ({ slides = [] }) => {
   const defaultSlides = [
     {
       id: 1,
-      image: `${process.env.PUBLIC_URL || ''}/images/slider1.JPEG`,
+      image: `${process.env.PUBLIC_URL || ''}/images/slider1.jpeg`,
     },
     {
       id: 2,

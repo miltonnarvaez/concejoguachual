@@ -104,3 +104,10 @@ ls -la /var/www/concejoguachual/server/uploads/repositorio-temporal/documentos-g
 ```
 
 3. Verifica que aparece en la interfaz web al recargar
+
+
+
+
+
+
+

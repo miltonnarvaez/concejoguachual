@@ -27,7 +27,16 @@ router.get('/', async (req, res) => {
     res.json(sesiones);
   } catch (error) {
     console.error('Error obteniendo sesiones:', error);
-    res.status(500).json({ error: 'Error obteniendo sesiones' });
+    console.error('Detalles del error:', {
+      message: error.message,
+      code: error.code,
+      sqlState: error.sqlState,
+      sqlMessage: error.sqlMessage
+    });
+    res.status(500).json({ 
+      error: 'Error obteniendo sesiones',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 

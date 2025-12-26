@@ -169,15 +169,22 @@ const Contacto = () => {
 
   return (
     <div className="contacto-page page-container">
+      {/* Hero Section con imagen de fondo */}
+      <section 
+        className="contacto-hero"
+        style={{
+          backgroundImage: `linear-gradient(rgba(21, 92, 47, 0.85), rgba(13, 61, 26, 0.9)), url('/images/g1.jpg')`
+        }}
+      >
+        <div className="contacto-hero-content">
+          <div className="contacto-hero-icon"><FaEnvelope /></div>
+          <h1>Contacto</h1>
+          <p>Estamos aquí para ayudarte. Envíanos tu mensaje y te responderemos lo antes posible.</p>
+        </div>
+      </section>
+
       <section className="section">
         <div className="container">
-          <div className="page-header">
-            <div className="page-header-icon"><FaEnvelope /></div>
-            <div>
-              <h1>Contacto</h1>
-              <p>Estamos aquí para ayudarte. Envíanos tu mensaje y te responderemos lo antes posible.</p>
-            </div>
-          </div>
 
           <div className="contacto-cards-grid">
             <div className="contacto-card contacto-info-card">
@@ -371,6 +378,13 @@ const Contacto = () => {
 };
 
 export default Contacto;
+
+
+
+
+
+
+
 
 
 

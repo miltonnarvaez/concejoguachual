@@ -4,7 +4,7 @@
 }
 
 .admin-header {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #28a745 100%);
   color: #fff;
   padding: 2rem 0;
   margin-bottom: 2rem;
@@ -38,7 +38,7 @@
 }
 
 .sesiones-form h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
 }
@@ -50,7 +50,7 @@
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #155724;
+  color: #1d5c2f;
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -72,7 +72,7 @@
 .form-group textarea:focus {
   outline: none;
   border-color: #28a745;
-  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
 }
 
 .form-group textarea {
@@ -121,7 +121,7 @@
 }
 
 .sesiones-list h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
 }
@@ -147,7 +147,7 @@
   padding: 1rem;
   text-align: left;
   font-weight: 600;
-  color: #155724;
+  color: #1d5c2f;
   border-bottom: 2px solid #28a745;
 }
 
@@ -175,7 +175,7 @@
 
 .tipo-badge.ordinaria {
   background: #d4edda;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .tipo-badge.extraordinaria {
@@ -199,7 +199,7 @@
 
 .status-badge.published {
   background: #d4edda;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .status-badge.draft {
@@ -258,6 +258,13 @@
     flex-direction: column;
   }
 }
+
+
+
+
+
+
+
 
 
 

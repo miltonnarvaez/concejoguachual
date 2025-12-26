@@ -1,4 +1,4 @@
-.encuestas-page {
+﻿.encuestas-page {
   padding: 2rem 0;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .encuesta-header h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin: 0;
   font-size: 1.5rem;
   flex: 1;
@@ -60,7 +60,7 @@
 
 .encuesta-estado.activa {
   background: #d4edda;
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .encuesta-estado.finalizada {
@@ -89,7 +89,7 @@
 }
 
 .info-item strong {
-  color: #155724;
+  color: #1d5c2f;
 }
 
 .info-item span {
@@ -124,6 +124,13 @@
     flex-direction: column;
   }
 }
+
+
+
+
+
+
+
 
 
 

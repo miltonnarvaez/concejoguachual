@@ -66,3 +66,10 @@ CREATE TABLE IF NOT EXISTS asistentes_sesion (
 
 
 
+
+
+
+
+
+
+

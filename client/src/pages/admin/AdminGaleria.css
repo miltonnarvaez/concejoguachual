@@ -31,7 +31,7 @@
 }
 
 .galeria-form-container h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1.5rem;
 }
 
@@ -105,7 +105,7 @@
 }
 
 .galeria-list h2 {
-  color: #155724;
+  color: #1d5c2f;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
   font-weight: 700;
@@ -205,7 +205,7 @@
 }
 
 .item-info h3 {
-  color: #155724;
+  color: #1d5c2f;
   margin: 0 0 0.5rem 0;
   font-size: 1.2rem;
   font-weight: 700;
@@ -219,7 +219,7 @@
 
 .item-tipo,
 .item-categoria {
-  background: #155724;
+  background: #1d5c2f;
   color: #ffffff;
   padding: 0.35rem 0.7rem;
   border-radius: 6px;

@@ -1,4 +1,4 @@
-/* Animaciones de entrada para secciones */
+﻿/* Animaciones de entrada para secciones */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -207,6 +207,13 @@
     left: 100%;
   }
 }
+
+
+
+
+
+
+
 
 
 

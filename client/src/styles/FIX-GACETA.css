@@ -1,4 +1,4 @@
-/* FIX ESPECÍFICO PARA GACETA - Corregir centrado de la sección y título */
+﻿/* FIX ESPECÍFICO PARA GACETA - Corregir centrado de la sección y título */
 
 .gaceta,
 .section.gaceta,
@@ -92,3 +92,10 @@ section.animated-section.animate-scaleIn.gaceta .container h2.section-title {
   box-sizing: border-box !important;
   transform: none !important;
 }
+
+
+
+
+
+
+

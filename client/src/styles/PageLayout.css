@@ -1,4 +1,4 @@
-/* Page Layout Styles - Common styles for all pages */
+﻿/* Page Layout Styles - Common styles for all pages */
 .page-container {
   min-height: 100vh;
   padding-top: var(--spacing-md);
@@ -16,7 +16,7 @@
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   border: 1px solid #e0e0e0;
-  border-bottom: 3px solid #155724;
+  border-bottom: 3px solid #1d5c2f;
 }
 
 .page-header-icon {
@@ -184,16 +184,16 @@
 }
 
 .filter-btn:hover {
-  border-color: #155724;
+  border-color: #1d5c2f;
   background: #e8f5e9;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .filter-btn.active {
-  background: #155724;
+  background: #1d5c2f;
   color: #ffffff;
-  border-color: #155724;
+  border-color: #1d5c2f;
   box-shadow: 0 4px 12px rgba(21, 87, 36, 0.3);
 }
 

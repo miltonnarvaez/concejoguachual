@@ -1,3 +1,69 @@
+﻿/* Hero Section con imagen de fondo */
+.contacto-hero {
+  position: relative;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  margin-bottom: 2rem;
+}
+
+.contacto-hero-content {
+  text-align: center;
+  color: white;
+  padding: 3rem 2rem;
+  max-width: 800px;
+}
+
+.contacto-hero-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  color: #cbe900;
+}
+
+.contacto-hero-icon svg {
+  width: 4rem;
+  height: 4rem;
+}
+
+.contacto-hero h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.contacto-hero p {
+  font-size: 1.25rem;
+  opacity: 0.95;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .contacto-hero {
+    min-height: 250px;
+    background-attachment: scroll;
+  }
+  
+  .contacto-hero h1 {
+    font-size: 2rem;
+  }
+  
+  .contacto-hero p {
+    font-size: 1rem;
+  }
+  
+  .contacto-hero-icon {
+    font-size: 3rem;
+  }
+}
+
 .contacto-page {
   padding: 2rem 0;
 }
@@ -32,7 +98,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #155724 0%, #28a745 50%, #6cbf47 100%);
+  background: linear-gradient(90deg, #1d5c2f 0%, #2a7a3f 50%, #6cbf47 100%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s ease;
@@ -61,7 +127,7 @@
 .contacto-card-icon {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -160,7 +226,7 @@
 }
 
 .contacto-card-button {
-  background: linear-gradient(135deg, #155724 0%, #28a745 100%);
+  background: linear-gradient(135deg, #1d5c2f 0%, #2a7a3f 100%);
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 12px;
@@ -254,7 +320,7 @@
 
 .form-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+  background: linear-gradient(90deg, #2a7a3f 0%, #20c997 100%);
   border-radius: 4px;
   transition: width 0.3s ease;
   box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
@@ -415,6 +481,13 @@
     font-size: 0.95rem;
   }
 }
+
+
+
+
+
+
+
 
 
 

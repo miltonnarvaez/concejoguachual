@@ -69,3 +69,10 @@ El `curl` local puede devolver 404 o 301 porque:
 - El sitio no está habilitado correctamente
 
 **Lo importante es probar desde el navegador con el dominio real.**
+
+
+
+
+
+
+

@@ -161,3 +161,10 @@ chmod -R 755 /var/www/concejoguachucal/server/uploads/repositorio-temporal
 chown -R usuario:usuario /var/www/concejoguachucal/server/uploads/repositorio-temporal
 chmod -R 755 /var/www/concejoguachucal/server/uploads/repositorio-temporal
 ```
+
+
+
+
+
+
+

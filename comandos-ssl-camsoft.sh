@@ -32,3 +32,10 @@ echo "sudo certbot --nginx -d camsoft.com.co -d www.camsoft.com.co"
 
 
 
+
+
+
+
+
+
+

@@ -167,3 +167,10 @@ pm2 restart concejo-backend
 ```
 
 Luego, cuando tengas tiempo, crea el usuario específico con permisos limitados por seguridad.
+
+
+
+
+
+
+

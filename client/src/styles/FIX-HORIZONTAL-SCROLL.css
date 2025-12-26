@@ -1,4 +1,4 @@
-/* FIX: Eliminar scroll horizontal causado por elementos fixed fuera del viewport */
+﻿/* FIX: Eliminar scroll horizontal causado por elementos fixed fuera del viewport */
 /* Este archivo debe cargarse al final para tener máxima prioridad */
 
 /* Asegurar que body y html no tengan scroll horizontal */
@@ -65,3 +65,10 @@ body {
   max-width: 100vw !important;
   width: 100% !important;
 }
+
+
+
+
+
+
+

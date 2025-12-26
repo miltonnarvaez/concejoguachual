@@ -88,3 +88,10 @@ sudo tail -f /var/log/nginx/error.log  # Ver logs de errores
 
 
 
+
+
+
+
+
+
+

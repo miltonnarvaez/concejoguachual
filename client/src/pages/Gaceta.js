@@ -29,6 +29,8 @@ const Gaceta = () => {
     { value: 'decreto', label: 'DECRETOS', icono: FaFileContract },
     { value: 'proyecto', label: 'PROYECTOS', icono: FaProjectDiagram },
     { value: 'manual', label: 'MANUALES', icono: FaBook },
+    { value: 'plan', label: 'PLANES', icono: FaProjectDiagram },
+    { value: 'reglamento-interno', label: 'REGLAMENTO INTERNO', icono: FaBook },
     { value: 'ley', label: 'LEYES', icono: FaBalanceScale },
     { value: 'politica', label: 'POLÍTICAS', icono: FaClipboardCheck }
   ];

@@ -1,8 +1,8 @@
-/* Modo Oscuro */
+﻿/* Modo Oscuro */
 :root.dark-mode {
   /* Colores principales - ajustados para modo oscuro */
-  --color-primary: #28a745;
-  --color-primary-dark: #155724;
+  --color-primary: #2a7a3f;
+  --color-primary-dark: #1d5c2f;
   --color-primary-light: #48d66a;
   --color-secondary: #f4ff10;
   
@@ -139,6 +139,13 @@
 .dark-mode .breadcrumb-link:hover {
   color: var(--color-primary-light);
 }
+
+
+
+
+
+
+
 
 
 

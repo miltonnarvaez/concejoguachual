@@ -1,4 +1,4 @@
-/* FIX ESPECÍFICO PARA ENLACES-INTERES - Corregir centrado de la sección y título */
+﻿/* FIX ESPECÍFICO PARA ENLACES-INTERES - Corregir centrado de la sección y título */
 
 .enlaces-interes,
 .section.enlaces-interes,
@@ -37,8 +37,30 @@ section.animated-section.enlaces-interes .container {
   right: 0 !important;
   top: 0 !important;
   transform: none !important;
-  overflow-x: hidden !important;
+  overflow-x: visible !important;
   overflow-y: visible !important;
+  overflow: visible !important;
+}
+
+/* Asegurar que el wrapper del carrusel y los botones sean visibles */
+.enlaces-carousel-wrapper,
+.enlaces-interes .enlaces-carousel-wrapper,
+.enlaces-interes .container .enlaces-carousel-wrapper {
+  overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
+
+.enlaces-carousel-btn,
+.enlaces-carousel-btn-prev,
+.enlaces-carousel-btn-next,
+.enlaces-interes .enlaces-carousel-btn,
+.enlaces-interes .enlaces-carousel-btn-next {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 30 !important;
 }
 
 /* Asegurar que el enlaces-grid dentro del container no tenga padding adicional */
@@ -153,3 +175,39 @@ div#root > div.App > main.main-content > div.home > section.animated-section.enl
   max-width: 100% !important;
   min-width: 0 !important;
 }
+
+/* Asegurar que el wrapper del carrusel y los botones sean visibles */
+.enlaces-carousel-wrapper,
+.enlaces-interes .enlaces-carousel-wrapper,
+.enlaces-interes .container .enlaces-carousel-wrapper,
+section.animated-section.enlaces-interes .enlaces-carousel-wrapper,
+section.animated-section.enlaces-interes .container .enlaces-carousel-wrapper {
+  overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+  position: relative !important;
+}
+
+.enlaces-carousel-btn,
+.enlaces-carousel-btn-prev,
+.enlaces-carousel-btn-next,
+.enlaces-interes .enlaces-carousel-btn,
+.enlaces-interes .enlaces-carousel-btn-prev,
+.enlaces-interes .enlaces-carousel-btn-next,
+.enlaces-interes .container .enlaces-carousel-btn,
+.enlaces-interes .container .enlaces-carousel-btn-next {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 30 !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+
+
+
+
+
+

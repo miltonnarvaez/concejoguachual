@@ -71,3 +71,10 @@ Si el endpoint no funciona a través de Nginx:
 ## 📝 Nota
 
 El endpoint devuelve `[]` porque probablemente no hay noticias en la base de datos. Esto es normal y correcto. La página debería mostrar "No se encontraron noticias" en lugar de un error de conexión.
+
+
+
+
+
+
+

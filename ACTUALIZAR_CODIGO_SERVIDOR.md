@@ -71,3 +71,10 @@ git pull origin 2025-12-16-x7ce
 **Nota**: Esto actualiza el código fuente, pero **NO actualiza el build**. El build solo se actualiza cuando:
 - Subes un nuevo build manualmente, o
 - Haces un nuevo build en el servidor con `npm run build`
+
+
+
+
+
+
+

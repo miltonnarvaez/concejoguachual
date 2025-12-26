@@ -1,4 +1,4 @@
-/* FIX PARA ELIMINAR DIVS BLANCAS QUE BLOQUEAN INTERACCIÓN */
+﻿/* FIX PARA ELIMINAR DIVS BLANCAS QUE BLOQUEAN INTERACCIÓN */
 /* Este archivo corrige overlays blancos que bloquean la interacción en TODAS las páginas */
 
 /* ============================================
@@ -296,3 +296,10 @@ select,
   pointer-events: none !important;
   z-index: -999 !important;
 }
+
+
+
+
+
+
+
