@@ -138,6 +138,11 @@ const buscarEnRepositorio = (searchTerm) => {
             }
           }
           
+          // Si no hay nombreOriginal en metadata, remover el timestamp del nombre del archivo
+          if (nombreOriginal === archivo) {
+            nombreOriginal = archivo.replace(/^\d+-/, '');
+          }
+          
           return {
             id: `repo-${categoria}-${archivo}`,
             titulo: nombreOriginal,
