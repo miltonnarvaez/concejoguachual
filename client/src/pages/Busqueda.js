@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api from '../services/api';
+import { getFileUrl } from '../utils/fileUtils';
 import { 
   FaSearch, 
   FaTimes,
@@ -116,7 +117,7 @@ const Busqueda = () => {
   // Actualizar URL cuando cambien los filtros
   useEffect(() => {
     const params = new URLSearchParams();
-    if (searchQuery) params.set('q', searchQuery);
+    if (searchQuery && searchQuery.trim()) params.set('q', searchQuery.trim());
     if (tipo !== 'todos') params.set('tipo', tipo);
     if (categoria !== 'todas') params.set('categoria', categoria);
     if (fechaDesde) params.set('fecha_desde', fechaDesde);
@@ -124,10 +125,16 @@ const Busqueda = () => {
     setSearchParams(params, { replace: true });
   }, [searchQuery, tipo, categoria, fechaDesde, fechaHasta, setSearchParams]);
 
+  // Debug: Log cuando cambia searchQuery
+  useEffect(() => {
+    console.log('searchQuery actualizado:', searchQuery);
+  }, [searchQuery]);
+
   // Realizar búsqueda
-  const { data: resultados, isLoading } = useQuery({
+  const { data: resultados, isLoading, error } = useQuery({
     queryKey: ['busqueda', searchQuery, tipo, categoria, fechaDesde, fechaHasta],
     queryFn: async () => {
+      console.log('🔍 Iniciando queryFn con searchQuery:', searchQuery);
       if (!searchQuery || searchQuery.trim() === '') {
         return {
           noticias: [],
@@ -135,28 +142,64 @@ const Busqueda = () => {
           gaceta: [],
           sesiones: [],
           convocatorias: [],
+          repositorio: [],
           total: 0
         };
       }
 
       const params = new URLSearchParams();
-      params.append('q', searchQuery);
+      params.append('q', searchQuery.trim());
       if (tipo !== 'todos') params.append('tipo', tipo);
       if (categoria !== 'todas') params.append('categoria', categoria);
       if (fechaDesde) params.append('fecha_desde', fechaDesde);
       if (fechaHasta) params.append('fecha_hasta', fechaHasta);
 
-      const response = await api.get(`/busqueda?${params.toString()}`);
-      return response.data;
+      try {
+        const response = await api.get(`/busqueda?${params.toString()}`);
+        console.log('Resultados de búsqueda completos:', JSON.stringify(response.data, null, 2));
+        console.log('Repositorio resultados:', response.data.repositorio);
+        console.log('Total resultados:', response.data.total);
+        if (response.data.repositorio && response.data.repositorio.length > 0) {
+          console.log('✅ Archivos del repositorio encontrados:', response.data.repositorio.map(r => r.titulo));
+        } else {
+          console.log('⚠️ No se encontraron archivos en el repositorio');
+        }
+        return response.data;
+      } catch (error) {
+        console.error('Error en búsqueda:', error);
+        throw error;
+      }
     },
-    enabled: !!searchQuery && searchQuery.trim() !== ''
+    enabled: !!searchQuery && searchQuery.trim() !== '',
+    retry: 1,
+    refetchOnWindowFocus: false,
+    staleTime: 0 // Forzar que siempre busque datos frescos
   });
+
+  // Debug: Log del estado de la query
+  useEffect(() => {
+    console.log('Estado de búsqueda:', {
+      searchQuery,
+      enabled: !!searchQuery && searchQuery.trim() !== '',
+      isLoading,
+      hasResults: !!resultados,
+      error: error?.message
+    });
+  }, [searchQuery, isLoading, resultados, error]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setSearchQuery(inputValue);
-    setShowSuggestions(false);
-    // La búsqueda se ejecuta automáticamente por el useQuery
+    const trimmedValue = inputValue.trim();
+    console.log('handleSearch llamado con:', trimmedValue);
+    if (trimmedValue) {
+      console.log('Actualizando searchQuery a:', trimmedValue);
+      setSearchQuery(trimmedValue);
+      setShowSuggestions(false);
+      // La búsqueda se ejecuta automáticamente por el useQuery
+    } else {
+      console.log('Limpiando searchQuery');
+      setSearchQuery('');
+    }
   };
 
   const handleInputChange = (e) => {
@@ -180,7 +223,8 @@ const Busqueda = () => {
       transparencia: FaEye,
       gaceta: FaFileAlt,
       sesion: FaCalendarAlt,
-      convocatoria: FaCalendarAlt
+      convocatoria: FaCalendarAlt,
+      repositorio: FaFileAlt
     };
     return icons[tipo] || FaSearch;
   };
@@ -199,18 +243,20 @@ const Busqueda = () => {
       transparencia: 'Transparencia',
       gaceta: 'Gaceta',
       sesion: 'Sesión',
-      convocatoria: 'Convocatoria'
+      convocatoria: 'Convocatoria',
+      repositorio: 'Repositorio'
     };
     return labels[tipo] || tipo;
   };
 
-  const getTipoRoute = (tipo, id) => {
+  const getTipoRoute = (tipo, id, archivo_url) => {
     const routes = {
       noticia: `/noticias/${id}`,
       transparencia: `/transparencia/${id}`,
       gaceta: `/gaceta/${id}`,
       sesion: `/sesiones/${id}`,
-      convocatoria: `/convocatorias/${id}`
+      convocatoria: `/convocatorias/${id}`,
+      repositorio: archivo_url || '#'
     };
     return routes[tipo] || '#';
   };
@@ -262,6 +308,12 @@ const Busqueda = () => {
                 placeholder="Buscar en todo el sitio..."
                 value={inputValue}
                 onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearch(e);
+                  }
+                }}
                 onFocus={() => inputValue.trim().length >= 2 && setShowSuggestions(true)}
                 className="busqueda-input"
               />
@@ -274,7 +326,14 @@ const Busqueda = () => {
               >
                 {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
               </button>
-              <button type="submit" className="busqueda-btn">
+              <button 
+                type="submit" 
+                className="busqueda-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSearch(e);
+                }}
+              >
                 <FaSearch /> Buscar
               </button>
               
@@ -319,6 +378,7 @@ const Busqueda = () => {
                     <option value="gaceta">Gaceta</option>
                     <option value="sesiones">Sesiones</option>
                     <option value="convocatorias">Convocatorias</option>
+                    <option value="repositorio">Repositorio</option>
                   </select>
                 </div>
 
@@ -369,6 +429,11 @@ const Busqueda = () => {
           {isLoading ? (
             <div className="busqueda-loading">
               <p>Buscando...</p>
+            </div>
+          ) : error ? (
+            <div className="busqueda-error">
+              <p>Error al realizar la búsqueda. Por favor, intenta nuevamente.</p>
+              <p style={{ fontSize: '0.9rem', color: '#6c757d' }}>{error.message}</p>
             </div>
           ) : searchQuery && resultados ? (
             <>
@@ -539,6 +604,38 @@ const Busqueda = () => {
                               </span>
                             </div>
                           </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {resultados.repositorio && resultados.repositorio.length > 0 && (
+                    <div className="resultados-seccion">
+                      <h3>Repositorio ({resultados.repositorio.length})</h3>
+                      <div className="resultados-grid">
+                        {resultados.repositorio.map((item) => (
+                          <a
+                            key={item.id}
+                            href={getFileUrl(item.archivo_url)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="resultado-card"
+                          >
+                            <h4>{highlightText(item.titulo, searchQuery)}</h4>
+                            <p>{highlightText((item.descripcion?.substring(0, 150)) + '...', searchQuery)}</p>
+                            <div className="resultado-meta">
+                              <span className="resultado-tipo">{getTipoLabel(item.tipo_resultado)}</span>
+                              {item.categoria && (
+                                <span className="resultado-categoria">{item.categoria}</span>
+                              )}
+                              {item.tamaño && (
+                                <span className="resultado-tamaño">{item.tamaño} MB</span>
+                              )}
+                              <span className="resultado-fecha">
+                                {formatDate(item.fecha_publicacion || item.creado_en)}
+                              </span>
+                            </div>
+                          </a>
                         ))}
                       </div>
                     </div>

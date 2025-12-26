@@ -302,9 +302,102 @@ const Acerca = () => {
                 <Bandera />
               </div>
             </div>
+
+            {/* Documentos del Repositorio - Acerca */}
+            <DocumentosRepositorioAcerca />
           </div>
         </div>
       </section>
+    </div>
+  );
+};
+
+// Componente para mostrar documentos del repositorio relacionados con Acerca
+const DocumentosRepositorioAcerca = () => {
+  const categoriasAcerca = ['acerca-de', 'miembros', 'historia', 'acerca-mision', 'acerca-vision', 
+                            'acerca-estructura-jerarquica', 'acerca-autoridades', 'acerca-contacto', 'acerca-simbolos'];
+  
+  const { data: todosLosArchivos } = useQuery({
+    queryKey: ['repositorio-acerca'],
+    queryFn: async () => {
+      try {
+        const response = await api.get('/repositorio/listar');
+        return response.data;
+      } catch (error) {
+        console.error('Error cargando archivos del repositorio:', error);
+        return { categorias: {} };
+      }
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  // Filtrar solo las categorías de Acerca
+  const documentosAcerca = categoriasAcerca
+    .filter(cat => todosLosArchivos?.categorias?.[cat]?.archivos?.length > 0)
+    .flatMap(cat => 
+      todosLosArchivos.categorias[cat].archivos.map((archivo, index) => ({
+        id: `repo-${cat}-${archivo.nombre}-${index}`,
+        categoria: cat,
+        nombreCategoria: todosLosArchivos.categorias[cat].nombre,
+        titulo: archivo.nombreOriginal || archivo.nombre,
+        descripcion: archivo.nota || '',
+        fecha: archivo.fechaSubida,
+        archivo_url: `/api/repositorio/descargar/${cat}/${encodeURIComponent(archivo.nombre)}`,
+        tamaño: archivo.tamañoMB
+      }))
+    );
+
+  if (documentosAcerca.length === 0) {
+    return null;
+  }
+
+  return (
+    <div id="documentos-acerca" className="acerca-section documentos-repositorio-section">
+      <h2>
+        <FaFileAlt /> Documentos del Repositorio
+        <span className="seccion-count">({documentosAcerca.length})</span>
+      </h2>
+      <div className="documentos-grid">
+        {documentosAcerca.map((documento) => (
+          <div key={documento.id} className="documento-card documento-repositorio">
+            <div className="documento-content">
+              <span className="documento-badge-repositorio">
+                <FaFileAlt /> Repositorio
+              </span>
+              <span className="documento-categoria-badge">{documento.nombreCategoria}</span>
+              <h3>{documento.titulo}</h3>
+              {documento.descripcion && <p>{documento.descripcion}</p>}
+              {documento.fecha && (
+                <p className="documento-fecha">
+                  Fecha: {new Date(documento.fecha).toLocaleDateString('es-CO', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </p>
+              )}
+              {documento.tamaño && (
+                <p className="documento-tamaño">
+                  Tamaño: {parseFloat(documento.tamaño).toFixed(2)} MB
+                </p>
+              )}
+              <div className="documento-actions">
+                {documento.archivo_url && (
+                  <a
+                    href={getFileUrl(documento.archivo_url)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary"
+                  >
+                    <FaDownload /> Descargar documento →
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

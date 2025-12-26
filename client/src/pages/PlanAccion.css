@@ -1511,6 +1511,124 @@
   }
 }
 
+/* Estilos para documentos del repositorio */
+.documentos-plan-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+.seccion-titulo {
+  color: #1d5c2f;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.seccion-count {
+  color: #6c757d;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.documentos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2.5rem;
+  margin-top: 2rem;
+  align-items: start;
+}
+
+.documento-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-left: 4px solid #2a7a3f;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.documento-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  position: relative;
+}
+
+.documento-repositorio {
+  border-left-color: #0056b3;
+  position: relative;
+}
+
+.documento-badge-repositorio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #0056b3;
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.documento-badge-repositorio svg {
+  font-size: 0.9rem;
+}
+
+.documento-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 0.75rem;
+}
+
+.documento-content h3 {
+  color: #1d5c2f;
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.documento-fecha {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.documento-tamaño {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.documento-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .documentos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 
 

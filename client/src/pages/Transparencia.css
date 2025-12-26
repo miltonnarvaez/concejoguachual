@@ -589,7 +589,7 @@
 
 /* Estilos para documentos del repositorio */
 .documento-repositorio {
-  border-left-color: #6f42c1;
+  border-left-color: #0056b3;
   position: relative;
 }
 
@@ -597,7 +597,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: #6f42c1;
+  background: #0056b3;
   color: #fff;
   padding: 0.25rem 0.75rem;
   border-radius: 4px;

@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import AnimatedSection from '../components/AnimatedSection';
 import CountUp from '../components/CountUp';
 import Breadcrumbs from '../components/Breadcrumbs';
+import api from '../services/api';
+import { getFileUrl } from '../utils/fileUtils';
 import { 
   FaFileAlt, FaUsers, FaChartLine, FaCheckCircle, FaCalendarAlt,
   FaBullseye, FaEye, FaHandshake, FaGavel, FaBook, FaLaptop,
@@ -14,6 +17,35 @@ import {
 import './PlanAccion.css';
 
 const PlanAccion = () => {
+  // Obtener documentos del repositorio para plan-accion
+  const { data: datosRepositorio } = useQuery({
+    queryKey: ['repositorio-plan-accion'],
+    queryFn: async () => {
+      try {
+        const response = await api.get('/repositorio/listar/plan-accion');
+        return response.data;
+      } catch (error) {
+        console.error('Error cargando archivos del repositorio:', error);
+        return { archivos: [] };
+      }
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+
+  const archivosRepositorio = datosRepositorio?.archivos || [];
+  
+  // Convertir archivos del repositorio al formato de documentos
+  const documentosRepositorio = archivosRepositorio.map((archivo, index) => ({
+    id: `repo-${archivo.nombre}-${index}`,
+    titulo: archivo.nombreOriginal || archivo.nombre,
+    descripcion: archivo.nota || '',
+    fecha: archivo.fechaSubida,
+    archivo_url: `/api/repositorio/descargar/plan-accion/${encodeURIComponent(archivo.nombre)}`,
+    esRepositorio: true,
+    tamaño: archivo.tamañoMB
+  }));
+
   const mesaDirectiva = [
     {
       nombre: 'JOHANA ELIZABETH CUATIN GALINDRES',
@@ -901,6 +933,57 @@ const PlanAccion = () => {
           </div>
         </div>
       </AnimatedSection>
+
+      {/* Documentos del Repositorio */}
+      {archivosRepositorio.length > 0 && (
+        <AnimatedSection id="documentos-plan" className="section documentos-plan-section" animationType="fadeInUp">
+          <div className="container">
+            <h2 className="section-title">
+              <FaFileAlt /> Documentos del Plan de Acción
+              <span className="seccion-count">({archivosRepositorio.length})</span>
+            </h2>
+            <div className="documentos-grid">
+              {documentosRepositorio.map((documento) => (
+                <div key={documento.id} className="documento-card documento-repositorio">
+                  <div className="documento-content">
+                    <span className="documento-badge-repositorio">
+                      <FaFileAlt /> Repositorio
+                    </span>
+                    <h3>{documento.titulo}</h3>
+                    {documento.descripcion && <p>{documento.descripcion}</p>}
+                    {documento.fecha && (
+                      <p className="documento-fecha">
+                        Fecha: {new Date(documento.fecha).toLocaleDateString('es-CO', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
+                        })}
+                      </p>
+                    )}
+                    {documento.tamaño && (
+                      <p className="documento-tamaño">
+                        Tamaño: {parseFloat(documento.tamaño).toFixed(2)} MB
+                      </p>
+                    )}
+                    <div className="documento-actions">
+                      {documento.archivo_url && (
+                        <a
+                          href={getFileUrl(documento.archivo_url)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-primary"
+                        >
+                          <FaDownload /> Descargar documento →
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </AnimatedSection>
+      )}
     </div>
   );
 };
